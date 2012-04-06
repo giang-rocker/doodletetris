@@ -176,9 +176,5 @@ public class SelectLevelScreen extends Screen {
 			AndroidGraphics g = game.getGraphics();
 				g.drawImage( Asset.number[(int)c-48].bitmap,x,y);
 			}
-		
-		public void k (){return;}
-		public void b(){ int k = 0; return;}
-		// them test svn
-		public void s(){return;}
+	
 }
