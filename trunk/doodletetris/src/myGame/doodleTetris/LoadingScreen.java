@@ -34,7 +34,7 @@ public class LoadingScreen extends Screen {
 		
 		
 		// set bg main;
-		Asset.list_bg = new Image[8];
+		Asset.list_bg = new Image[6];
 		for (int i =0; i< Asset.list_bg.length;i++)
 		Asset.list_bg[i] = new Image (g.newBitmap("Background/bg_"+ Integer.toString(i)  +".jpg"),0,0);
 		
