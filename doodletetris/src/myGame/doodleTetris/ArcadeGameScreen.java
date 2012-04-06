@@ -9,7 +9,7 @@ import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.SingleTouch;
 
 public class ArcadeGameScreen extends ClassicGameScreen {
-	int k;
+	
 
 	public ArcadeGameScreen(Game game, int id) {
 		// TODO Auto-generated constructor stub
