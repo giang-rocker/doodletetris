@@ -177,4 +177,6 @@ public class SelectLevelScreen extends Screen {
 				g.drawImage( Asset.number[(int)c-48].bitmap,x,y);
 			}
 		
+		public void k (){return;}
+		public void b(){return;}
 }
