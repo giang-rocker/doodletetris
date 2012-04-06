@@ -3,14 +3,13 @@ package myGame.doodleTetris;
 import java.io.IOException;
 
 import myGame.doodleTetris.Block.BlockType;
-import myGame.doodleTetris.ClassicGameScreen.GameState;
 import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.SingleTouch;
 
 public class ArcadeGameScreen extends ClassicGameScreen {
-	
+	int k;
 
 	public ArcadeGameScreen(Game game, int id) {
 		// TODO Auto-generated constructor stub
