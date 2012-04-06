@@ -1,0 +1,245 @@
+[
+    {
+        "klass": "InputGate",
+        "params": {
+            "positionFromTop": 131,
+            "editable": true
+        }
+    },
+    {
+        "klass": "Redirector",
+        "params": {
+            "radius": 73.4,
+            "startAngle": 212.7,
+            "endAngle": 180,
+            "colorScheme": "red",
+            "flipped": -1,
+            "editable": true,
+            "rotation": 39.6,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 290.6,
+                    "y": 300.6
+                }
+            }
+        }
+    },
+    {
+        "klass": "Redirector",
+        "params": {
+            "radius": 77.7,
+            "startAngle": 220.7,
+            "endAngle": 180,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": -162.9,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 653.3,
+                    "y": 279.3
+                }
+            }
+        }
+    },
+    {
+        "klass": "Pendulum",
+        "params": {
+            "radius": 96,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": 7.4,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 642,
+                    "y": 324
+                }
+            }
+        }
+    },
+    {
+        "klass": "Obstacle",
+        "params": {
+            "width": 96,
+            "height": 12,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": -0.8,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 318,
+                    "y": 121
+                }
+            }
+        }
+    },
+    {
+        "klass": "Redirector",
+        "params": {
+            "radius": 70.1,
+            "startAngle": 212.3,
+            "endAngle": 180,
+            "colorScheme": "yellow",
+            "flipped": 1,
+            "editable": true,
+            "rotation": 14,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 452.9,
+                    "y": 307.9
+                }
+            }
+        }
+    },
+    {
+        "klass": "Obstacle",
+        "params": {
+            "width": 60.9,
+            "height": 12,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": 43.7,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 395.6,
+                    "y": 478
+                }
+            }
+        }
+    },
+    {
+        "klass": "Redirector",
+        "params": {
+            "radius": 122.4,
+            "startAngle": 243.3,
+            "endAngle": 180,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": -156,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 39.6,
+                    "y": 217.6
+                }
+            }
+        }
+    },
+    {
+        "klass": "Obstacle",
+        "params": {
+            "width": 138.4,
+            "height": 12,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": -19.7,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 793.8,
+                    "y": 110
+                }
+            }
+        }
+    },
+    {
+        "klass": "Pendulum",
+        "params": {
+            "radius": 89.6,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": -136.1,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 915.4,
+                    "y": 235.4
+                }
+            }
+        }
+    },
+    {
+        "klass": "Redirector",
+        "params": {
+            "radius": 99.4,
+            "startAngle": 178.6,
+            "endAngle": 13.8,
+            "colorScheme": "blue",
+            "flipped": 1,
+            "editable": true,
+            "rotation": 81.3,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 911.6,
+                    "y": 233.6
+                }
+            }
+        }
+    },
+    {
+        "klass": "Elevator",
+        "params": {
+            "radius": 155,
+            "colorScheme": "green",
+            "flipped": 1,
+            "editable": true,
+            "rotation": 89,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 720,
+                    "y": 106
+                }
+            }
+        }
+    },
+    {
+        "klass": "OutputGate",
+        "params": {
+            "positionFromTop": 134,
+            "editable": true
+        }
+    },
+    {
+        "klass": "Elevator",
+        "params": {
+            "radius": 96,
+            "colorScheme": "blue",
+            "flipped": -1,
+            "editable": true,
+            "rotation": 0,
+            "scale": 1,
+            "position": {
+                "klass": "Point",
+                "params": {
+                    "x": 160,
+                    "y": 262
+                }
+            }
+        }
+    }
+]
