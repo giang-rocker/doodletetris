@@ -87,12 +87,13 @@ public abstract class AndroidGame extends Activity implements Game {
 		wakelock.release();
 		renderView.pause();
 		screen.pause();
-		if (isFinishing() ) {screen.dispose(); }
+		if (isFinishing() ) { System.gc(); screen.dispose(); }
 	
 		}
 
 	public void onDestroy() {
 	super.onDestroy();
+	 System.gc();
     System.runFinalizersOnExit(true);
     System.exit(0);
 	}

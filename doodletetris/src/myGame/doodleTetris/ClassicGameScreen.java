@@ -35,7 +35,7 @@ public class ClassicGameScreen extends Screen {
 		Asset.icon_sound.setPosition(360+48,24);
 		
 		Random r = new Random ();
-		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(7)];
+		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(5)];
 		
 		
 	}
@@ -240,6 +240,7 @@ public class ClassicGameScreen extends Screen {
 		
 		
 		int duration = 80000000;
+		
 		if (timeExpired(start,duration))	{
 			start = (int)System.nanoTime();
 			if ( Asset.btn_rotate.isTouch(TouchEvent)   )
