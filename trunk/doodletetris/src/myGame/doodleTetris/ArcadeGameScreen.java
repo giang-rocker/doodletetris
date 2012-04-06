@@ -167,5 +167,5 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		}// switch case
 	}
 	
-	public int f () { return 10;}
+	
 }
