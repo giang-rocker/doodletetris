@@ -54,17 +54,19 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	@Override
 	void updateRunning (float deltaTime){
 	SingleTouch TouchEvent = game.getTouchEvent();
-		int duration = 200000000;
-		if (timeExpired(start,duration))	{
-			start = (int)System.nanoTime();
-			if ( Asset.btn_rotate.isTouch(TouchEvent)   )
-				board.currentBlock.rotation(board);
+	int duration = 80000000;
+	if (timeExpired(start,duration))	{
+		start = (int)System.nanoTime();
+		
+		if ( Asset.btn_rotate.isTouch(TouchEvent)   )
+			{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); }
 			
-			if ( Asset.btn_left.isTouch(TouchEvent)   )
-				board.currentBlock.goLeft(board);
-			
-			if ( Asset.btn_right.isTouch(TouchEvent)   )
-				board.currentBlock.goRight(board);
+		
+		if ( Asset.btn_left.isTouch(TouchEvent)   )
+		{	board.currentBlock.goLeft(board);	 Asset.sound_move.play(); }
+		
+		if ( Asset.btn_right.isTouch(TouchEvent)   )
+			{board.currentBlock.goRight(board); 	 Asset.sound_move.play(); }
 		}
 		
 		if ( Asset.btn_down.isTouch(TouchEvent)   )
