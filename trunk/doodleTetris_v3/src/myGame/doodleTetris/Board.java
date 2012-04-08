@@ -7,14 +7,14 @@ public class Board {
 	public static int BOARD_WIDTH = 13;
 	public static int BOARD_HEIGHT =32;
 	
-	public static float TICK_INTIAL = 0.5f; //Thời gian quy định ban đầu cho phiên làm việc
-	public static float TICK_DECREMENT = 0.05f;//Độ giảm thời gian làm việc
+	public static float TICK_INTIAL = 0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
+	public static float TICK_DECREMENT = 0.05f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
 	public static int SCORE_LV_STEP = 1000; 
 	
 	public static int SCORE_INCREMENT = 100;
 	
-	float tickTime = 0f;//Thời gian đã qua của 1 phiên làm việc
-	float tick = TICK_INTIAL;//Thời gian hiện tại của 1 phiên làm việc
+	float tickTime = 0f;//Thá»�i gian Ä‘Ã£ qua cá»§a 1 phiÃªn lÃ m viá»‡c
+	float tick = TICK_INTIAL;//Thá»�i gian hiá»‡n táº¡i cá»§a 1 phiÃªn lÃ m viá»‡c
 	
 	public Block.BlockType map [][] = new Block.BlockType[BOARD_WIDTH][BOARD_HEIGHT];
 	public Block currentBlock;
@@ -41,7 +41,7 @@ public class Board {
 			for (int j=row;j>0;j--)
 				   map[i][j] = map[i][j-1];
 	
-		for (int j=0;j<Board.BOARD_WIDTH;j++)//Không cần cái này
+		for (int j=0;j<Board.BOARD_WIDTH;j++)//KhÃ´ng cáº§n cÃ¡i nÃ y
 			map[j][0] = BlockType.NULL;
 	
 	}
@@ -65,20 +65,17 @@ public class Board {
 		while (tickTime>tick){
 			tickTime-=tick;
 			if (!currentBlock.goDown(this)){
-				this.addBlock(currentBlock);
+			
+				this.addBlock(currentBlock); // add block to board
 				int row = checkFullRow();
 				//(row is bonus)
 				
-				//Duong update sound
-				try {
-					Sound.startSound();
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
+				if (row>0) Asset.sound_cleanRow.play(); // an diem
+				else 	Asset.sound_endFall.play(); // ko an diem
 				
 				//
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
-				if (checkOver ()) gameOver = true;
+				if (checkOver (row)) gameOver = true;
 				currentBlock = Block.Next_Block();
 				
 			}
@@ -93,36 +90,29 @@ public class Board {
 		while (tickTime>tick){
 			tickTime-=tick;
 			if (!currentBlock.goDown(this)){
+			
 				this.addBlock(currentBlock);
 				int row = checkFullRow();
-				//(row is bonus)
-				
-				//Duong update sound
-				try {
-					Sound.startSound();
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-				
-				//
+				  
+				if (row>=1) Asset.sound_cleanRow.play(); // an diem
+				else 	Asset.sound_endFall.play(); // ko an diem
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
-				if (checkOver ()) gameOver = true;
+				// kiem tra over ( - so dong an )
+				if (checkOver (row)) gameOver = true;
 				currentBlock = Block.Next_Block();
 				//Duong check finish map
 				if(LoadMap.rowNum==0){
 					nextMap = true;	
 				}
-				//
-				
 			}
 			if (score>level *SCORE_LV_STEP && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
 		}
 	}
 	//
-	public boolean checkOver () {
+	public boolean checkOver (int row) {
 		for (int i=0;i<Block.BLOCK_WIDTH;i++)
 			for (int j=0;j<Block.BLOCK_HEIGHT;j++)
-				if(currentBlock.status[i][j]==true &&  (j+currentBlock.y)<4)
+				if(currentBlock.status[i][j]==true &&  (j+currentBlock.y)<=4 - row)
 	            {
 	              return true;
 	            }

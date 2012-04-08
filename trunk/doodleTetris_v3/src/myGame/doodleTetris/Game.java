@@ -2,6 +2,8 @@ package myGame.doodleTetris;
 
 import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.Screen;
+
+import android.content.res.AssetManager;
 import android.util.Log;
 
 import android.view.KeyEvent;
@@ -27,4 +29,9 @@ public class Game  extends AndroidGame{
 	return true;
 	}
 	
+	  public AssetManager getAsset () {
+		return getAssets();
+	  }
+
+	  
 }

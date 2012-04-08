@@ -1,13 +1,12 @@
 package myGame.doodleTetris;
 
 import java.io.IOException;
-import java.util.Random;
 
-import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.Screen;
 import myGame.doodleTetris.framework.SingleTouch;
+import android.content.res.AssetManager;
 
 
 public class SelectLevelScreen extends Screen {
@@ -21,14 +20,24 @@ public class SelectLevelScreen extends Screen {
 	int moveY =0;
 	
 	String list[]= new String[1];
+	// them doi tuong assetmanager
+	AssetManager assetManager ;
+	
+	// them doi tuong Status MAp
+	StatusMap statusMap;
 	
 	public SelectLevelScreen(Game game) {
 		super(game);
 		// TODO Auto-generated constructor stub
+		// Giang - bo static
+		statusMap = new StatusMap(game);
 		//Duong cap nhat set select level
-		StatusMap.setFirstStatus(AndroidGame.am);
+		assetManager = game.getContext().getAssets();
+		
+		statusMap.setFirstStatus( );
+	
 		try {
-			list= AndroidGame.am.list("Map");
+			list= assetManager.list("Map");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,23 +46,25 @@ public class SelectLevelScreen extends Screen {
 		listLevel = new LevelInfo[list.length];
 		
 		//Random r = new Random();
+		String[] data;
 		boolean unlock=true;
 		for (int i=0;i<listLevel.length;i++) 
 			{
-				StatusMap.openStatus(list[i]);
-				if(StatusMap.data[4].equals("0")){
+				data = statusMap.getData(list[i]);
+				if(data[4].equals("0")){
 					unlock=false;
 				}
 				else{
 					unlock= true;
 				}
-				listLevel[i] = new LevelInfo(Integer.parseInt(StatusMap.data[0].trim()),Float.parseFloat(StatusMap.data[1].trim()),Integer.parseInt(StatusMap.data[2].trim()),Integer.parseInt(StatusMap.data[3].trim()),unlock);
+				listLevel[i] = new LevelInfo(Integer.parseInt(data[0].trim()),Float.parseFloat(data[1].trim()),Integer.parseInt(data[2].trim()),Integer.parseInt(data[3].trim()),unlock);
 
 			}
 		startY = 96;
 	}
 
 	int currentScollY, startScrollY=-1;
+	
 	@Override
 	public void update(float deltaTime) {
 		// TODO Auto-generated method stub

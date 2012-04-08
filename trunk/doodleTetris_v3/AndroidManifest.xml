@@ -22,5 +22,5 @@
     </application>
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> 
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-        <uses-sdk android:minSdkVersion="3" android:targetSdkVersion="9"/> 
+        <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="9"/> 
 </manifest>

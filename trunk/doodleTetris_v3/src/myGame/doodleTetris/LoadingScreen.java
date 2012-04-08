@@ -4,7 +4,10 @@ package myGame.doodleTetris;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Image;
 import myGame.doodleTetris.framework.ImgButton;
+import myGame.doodleTetris.framework.Music;
 import myGame.doodleTetris.framework.Screen;
+import myGame.doodleTetris.framework.Sound;
+import android.content.Context;
 import android.util.Log;
 
 public class LoadingScreen extends Screen {
@@ -18,6 +21,7 @@ public class LoadingScreen extends Screen {
 	@Override
 	public void update(float deltaTime) {
 		AndroidGraphics g = game.getGraphics();
+
 		//loading
 		Asset.bg_loading = new Image (g.newBitmap("Background/bg_loading.jpg"),0,0);
 		g.drawImage(Asset.bg_loading.bitmap, (int )Asset.bg_loading.x,(int ) Asset.bg_loading.y);
@@ -112,6 +116,18 @@ public class LoadingScreen extends Screen {
 		for (int i =3;i<=4;i++){
 		Asset.bonusImg[i] = new Image (g.newBitmap("Button/bonusX"+ Integer.toString(i)+".png"),0,0);
 		}
+		
+		// load sound
+		Asset.sound_endFall = new Sound ((Context) game, R.raw.endfall);
+//		/Asset.sound_ready = new Sound ((Context) game, R.raw.ready);
+		Asset.sound_fall = new Sound ((Context) game, R.raw.fall);
+		Asset.sound_endFall = new Sound ((Context) game, R.raw.endfall);
+		Asset.sound_move = new Sound ((Context) game, R.raw.move);
+		Asset.sound_cleanRow = new Sound ((Context)game, R.raw.cleanrow);
+		Asset.sound_gameOver = new Sound ((Context)game, R.raw.game_over);
+		
+		// load track
+		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
 		
 		game.setScreen(new MainMenu(game));
 	}

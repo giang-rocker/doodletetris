@@ -1,7 +1,5 @@
 package myGame.doodleTetris.framework;
 
-
-
 import android.util.Log;
 
 public abstract class Screen  { 

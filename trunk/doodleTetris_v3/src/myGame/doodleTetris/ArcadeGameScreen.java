@@ -3,24 +3,22 @@ package myGame.doodleTetris;
 import java.io.IOException;
 
 import myGame.doodleTetris.Block.BlockType;
-import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.SingleTouch;
 
 public class ArcadeGameScreen extends ClassicGameScreen {
+	// create doi tuiong load map
 	
+	LoadMap loadMap;
 
 	public ArcadeGameScreen(Game game, int id) {
 		// TODO Auto-generated constructor stub
 		super(game);
+		loadMap = new LoadMap(game);
 		setBoardMap(id);
 		setupButton();
-		//Duong insert method sound and music
-		setSound();
-		setMusic();
 		
-		//
 	}
 	
 	public void setBoardMap(int id){
@@ -40,17 +38,17 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	void setMap(int id) throws IOException{
 		switch (id) {
 		case 1:
-			LoadMap.accessFile("Map/mapHeart");
+			loadMap.accessFile("Map/mapHeart");
 			break;
 		case 2:
-			LoadMap.accessFile("Map/mapRocket");
+			loadMap.accessFile("Map/mapRocket");
 			break;
 		default:
-			LoadMap.accessFile("Map/map1");
+			loadMap.accessFile("Map/map1");
 			break;
 		}
-		LoadMap.readFile();
-		LoadMap.addMapToBoard(board);
+		loadMap.readFile();
+		loadMap.addMapToBoard(board);
 	}
 	
 	@Override
@@ -87,11 +85,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-				Music.pauseMusic();
+			//	Music.pauseMusic();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-				Music.startMusic();
+			//	Music.startMusic();
 			}
 			
 			isMusic = !isMusic;
@@ -101,13 +99,13 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
-				Sound.unloadSound();
+			//	Sound.unloadSound();
 			}
 			else 
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
-				Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
-				Sound.loadSound(AndroidGame.getContext());
+		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
+		//		Sound.loadSound(AndroidGame.getContext());
 			}
 		
 			isSound= !isSound;
