@@ -43,7 +43,9 @@ public class MainMenu extends Screen  {
 			game.setScreen(new SelectLevelScreen(game));
 			//game.setScreen(new ArcadeGameScreen(game, 1));
 		
-		
+		if ( Asset.btn_about.isTouch(TouchEvent)   )
+			game.setScreen(new CrazyGameScreen(game));
+			//game.setScreen(new ArcadeGameScreen(game, 1));
 	}
 
 	@Override

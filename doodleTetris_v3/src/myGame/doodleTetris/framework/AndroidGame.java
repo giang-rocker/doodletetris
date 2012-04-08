@@ -23,9 +23,12 @@ public abstract class AndroidGame extends Activity implements Game {
 	AndroidGraphics graphics;
 	SingleTouch touchEvent;
 	KeyPress keyPressEvent;
+	AssetManager assetManager;
+// doi tuong sound voi context game
+	Sound sound ;
+	// class soun
 	//Duong set variable
-	public static Context context;
-	public static AssetManager am;
+	public Context context;
 	//
 	@Override 
     public void onCreate(Bundle savedInstanceState) { 
@@ -57,17 +60,15 @@ public abstract class AndroidGame extends Activity implements Game {
         PowerManager powerManager = (PowerManager) 
         getSystemService(Context.POWER_SERVICE); 
         wakelock = powerManager.newWakeLock(PowerManager.FULL_WAKE_LOCK, "GLGame"); 
-    	Log.d("endStart", "endStart");
-    	//Duong set variable context
+
+	//Duong set variable context
     	context=this;
-    	am = getAssets();
-    	//
-    	
-    	
-    	
+    	assetManager = getAssets();
+    	Log.d("end","end");
     } 
+	
 	//Duong get context game
-	public static Context getContext(){
+	public Context getContext(){
 		return context;
 	}
 	//
@@ -132,9 +133,9 @@ public abstract class AndroidGame extends Activity implements Game {
 	public Screen getStartScreen() {
 		// TODO Auto-generated method stub
 		return null;
-	
-		
 	}
-	 
 
+	  public AssetManager getAsset () {
+		return assetManager;
+	  }
 }

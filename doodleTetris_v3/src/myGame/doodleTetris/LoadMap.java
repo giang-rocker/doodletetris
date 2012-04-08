@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import myGame.doodleTetris.framework.AndroidGame;
+import myGame.doodleTetris.framework.Game;
 
 public class LoadMap {
 	
@@ -15,18 +15,23 @@ public class LoadMap {
 	public static int rowNum=1;
 	public static int colNum=1;
 	public static boolean map[][] = new boolean[colNum][rowNum];
+	public Game game;
 	
-	public static void resetMap(){
+	public LoadMap (Game game) {
+		this.game = game;
+		
+	}
+	public  void resetMap(){
 		for(int col=0;col<colNum;col++)
 			for(int row=0;row<rowNum;row++)
 				map[col][row]=false;
 	}
 	
-	public static void accessFile(String path){
+	public  void accessFile(String path){
 		//is = AndroidGame.getContext().getResources().openRawResource(id);
 		
 		try {
-			is=AndroidGame.getContext().getAssets().open(path);
+			is=game.getContext().getAssets().open(path);
 			inputreader = new InputStreamReader(is);
 			buffreader = new BufferedReader(inputreader);
 		} catch (IOException e) {
@@ -38,7 +43,7 @@ public class LoadMap {
 		
 	}
 	
-	public static void readFile() throws IOException{
+	public  void readFile() throws IOException{
 		String strRow="";
 		//resetMap();
 		int indexRow =0;
@@ -72,7 +77,7 @@ public class LoadMap {
 		
 	}
 	
-	public static void addMapToBoard(Board board){
+	public  void addMapToBoard(Board board){
 		for(int col=0;col<colNum;col++){
 			for(int row=0;row<rowNum;row++){
 				//System.out.println("col="+col+" row="+row);

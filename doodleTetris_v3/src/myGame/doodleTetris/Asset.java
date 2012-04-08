@@ -3,6 +3,8 @@ package myGame.doodleTetris;
 
 import myGame.doodleTetris.framework.Image;
 import myGame.doodleTetris.framework.ImgButton;
+import myGame.doodleTetris.framework.Music;
+import myGame.doodleTetris.framework.Sound;
 
 	public class Asset {
 		// bgg
@@ -82,5 +84,17 @@ import myGame.doodleTetris.framework.ImgButton;
 	// bonus
 	public static Image[] bonusImg;
 	
+	// sound
+	public static Sound sound_endFall;
+	public static Sound	sound_cleanRow;
+	public static Sound sound_ready;
+	public static Sound sound_gameOver;
+	public static Sound sound_go;
+	public static Sound sound_move;
+	public static Sound sound_rotation;
+	public static Sound sound_fall;
+	// music
 	
+	public static Music bg_track;
+
 }

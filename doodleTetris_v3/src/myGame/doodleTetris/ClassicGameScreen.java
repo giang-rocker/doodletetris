@@ -3,7 +3,6 @@ package myGame.doodleTetris;
 import java.util.Random;
 
 import myGame.doodleTetris.Block.BlockType;
-import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.Screen;
@@ -58,21 +57,11 @@ public class ClassicGameScreen extends Screen {
 		super(game);
 		board = new Board();
 		setupButton ();
-		setSound();
-		setMusic();
 		// TODO Auto-generated constructor stub
+	//	play track
+//		Asset.bg_track.play ();
 	}
-	//Duong setSound()
-		void setSound(){
-			Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
-			Sound.loadSound(AndroidGame.getContext());
-		}
-		void setMusic(){
-			Music.setMusic(AndroidGame.getContext(), myGame.doodleTetris.R.raw.music_1);
-			Music.startMusic();
-		}
-		//
-
+	
 	@Override
 	public void update(float deltaTime) {
 		// TODO Auto-generated method stub
@@ -242,16 +231,18 @@ public class ClassicGameScreen extends Screen {
 		int duration = 80000000;
 		if (timeExpired(start,duration))	{
 			start = (int)System.nanoTime();
+			
 			if ( Asset.btn_rotate.isTouch(TouchEvent)   )
-				board.currentBlock.rotation(board);
+				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); }
+				
 			
 			if ( Asset.btn_left.isTouch(TouchEvent)   )
-				board.currentBlock.goLeft(board);
+			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play(); }
 			
 			if ( Asset.btn_right.isTouch(TouchEvent)   )
-				board.currentBlock.goRight(board);
-		}
-		
+				{board.currentBlock.goRight(board); 	 Asset.sound_move.play(); }
+			}
+	
 		if ( Asset.btn_down.isTouch(TouchEvent)   )
 			board.currentBlock.goDown(board);
 		
@@ -270,11 +261,11 @@ public class ClassicGameScreen extends Screen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-				Music.pauseMusic();
+		//		Music.pauseMusic();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-				Music.startMusic();
+		//		Music.startMusic();
 			}
 			
 			isMusic = !isMusic;
@@ -284,20 +275,20 @@ public class ClassicGameScreen extends Screen {
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
-				Sound.unloadSound();
+		//		Sound.unloadSound();
 			}
 			else 
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
-				Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
-				Sound.loadSound(AndroidGame.getContext());
+		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
+		//		Sound.loadSound(AndroidGame.getContext());
 			}
 		
 			isSound= !isSound;
 		}
 		
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
-		if (board.gameOver) {gameState = GameState.GameOver; return;}
+		if (board.gameOver) { Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 
 		board.update(deltaTime);
 		
@@ -315,10 +306,10 @@ public class ClassicGameScreen extends Screen {
 	// kiem tra trang thai on pause
 	void updatePause (){
 		SingleTouch TouchEvent = game.getTouchEvent();
-		Music.pauseMusic();
+		Asset.bg_track.pause();
 		if ( Asset.UI_Pause.isTouch(TouchEvent)   ){
 			gameState = GameState.Running;
-			Music.startMusic();
+	//			Music.startMusic();
 		}
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
