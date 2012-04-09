@@ -2,7 +2,10 @@ package myGame.doodleTetris;
 
 import java.io.IOException;
 
+import android.util.Log;
+
 import myGame.doodleTetris.Block.BlockType;
+import myGame.doodleTetris.ClassicGameScreen.GameState;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.SingleTouch;
@@ -36,39 +39,34 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 
 	//Duong set map
 	void setMap(int id) throws IOException{
-		switch (id) {
-		case 1:
-			loadMap.accessFile("Map/mapHeart");
-			break;
-		case 2:
-			loadMap.accessFile("Map/mapRocket");
-			break;
-		default:
-			loadMap.accessFile("Map/map1");
-			break;
-		}
-		loadMap.readFile();
-		loadMap.addMapToBoard(board);
+		String pathDir="Map";
+	
+			String list[]= game.getAsset().list(pathDir);
+			loadMap.accessFile(pathDir + "/" +list[id]);
+			loadMap.readFile();
+			loadMap.addMapToBoard(board);
 	}
 	
 	@Override
 	void updateRunning (float deltaTime){
 	SingleTouch TouchEvent = game.getTouchEvent();
-	int duration = 80000000;
-	if (timeExpired(start,duration))	{
-		start = (int)System.nanoTime();
 		
-		if ( Asset.btn_rotate.isTouch(TouchEvent)   )
-			{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); }
+		
+		int duration = 80000000;
+		if (timeExpired(start,duration))	{
+			start = (int)System.nanoTime();
 			
-		
-		if ( Asset.btn_left.isTouch(TouchEvent)   )
-		{	board.currentBlock.goLeft(board);	 Asset.sound_move.play(); }
-		
-		if ( Asset.btn_right.isTouch(TouchEvent)   )
-			{board.currentBlock.goRight(board); 	 Asset.sound_move.play(); }
-		}
-		
+			if ( Asset.btn_rotate.isTouch(TouchEvent)   )
+				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); }
+				
+			
+			if ( Asset.btn_left.isTouch(TouchEvent)   )
+			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play(); }
+			
+			if ( Asset.btn_right.isTouch(TouchEvent)   )
+				{board.currentBlock.goRight(board); 	 Asset.sound_move.play(); }
+			}
+	
 		if ( Asset.btn_down.isTouch(TouchEvent)   )
 			board.currentBlock.goDown(board);
 		
@@ -87,11 +85,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-			//	Music.pauseMusic();
+		//		Music.pauseMusic();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-			//	Music.startMusic();
+		//		Music.startMusic();
 			}
 			
 			isMusic = !isMusic;
@@ -101,7 +99,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
-			//	Sound.unloadSound();
+		//		Sound.unloadSound();
 			}
 			else 
 			{
@@ -114,16 +112,23 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		}
 		
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
-		if (board.gameOver) {gameState = GameState.GameOver; return;}
+		if (board.gameOver) { Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 
 		board.updateForArcadeGameScreen(deltaTime);
 		
 			
-		if (oldScore != board.score){
-			oldScore = oldScore+5;
-			strScore = "" + oldScore;
+		if (currentScore != board.score){
+			// kiem tra level
+			if (level != board.level ) { Asset.sound_nextLevel.play();  level = board.level;}
+			else Asset.sound_cleanRow.play();
+			currentScore = board.score;
 		}
 		
+		if (tempScore!=currentScore) { tempScore+=1; strScore = "" + tempScore;}
+		
+		
+		// time running
+		time++;
 		
 		
 	}

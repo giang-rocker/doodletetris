@@ -48,7 +48,8 @@ public class ClassicGameScreen extends Screen {
 	
 	GameState gameState = GameState.Running;
 	Board board;
-	int oldScore=0;
+	int currentScore;
+	int tempScore=0;
 	String strScore="0";
 	int level=1;
 	int time=0;
@@ -292,13 +293,17 @@ public class ClassicGameScreen extends Screen {
 
 		board.update(deltaTime);
 		
-			
-		if (oldScore != board.score){
-			oldScore = oldScore+5;
-			strScore = "" + oldScore;
+		
+		if (currentScore != board.score){
+			// kiem tra level
+			if (level != board.level ) { Asset.sound_nextLevel.play();  level = board.level;}
+			else Asset.sound_cleanRow.play();
+			currentScore = board.score;
 		}
 		
-		level = board.level;
+		if (tempScore!=currentScore) { tempScore+=1; strScore = "" + tempScore;}
+		
+		
 		// finis all
 		time++;
 	}
