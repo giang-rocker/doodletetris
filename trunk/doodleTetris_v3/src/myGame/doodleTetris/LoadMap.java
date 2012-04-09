@@ -39,6 +39,7 @@ public class LoadMap {
 			e.printStackTrace();
 		}
 	}
+	
 	public void getRow(){
 		
 	}

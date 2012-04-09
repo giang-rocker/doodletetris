@@ -11,7 +11,8 @@ public class Board {
 	public static float TICK_DECREMENT = 0.05f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
 	public static int SCORE_LV_STEP = 1000; 
 	
-	public static int SCORE_INCREMENT = 100;
+	// diem 1 row
+	public static int SCORE_INCREMENT = 500;
 	
 	float tickTime = 0f;//Thá»�i gian Ä‘Ã£ qua cá»§a 1 phiÃªn lÃ m viá»‡c
 	float tick = TICK_INTIAL;//Thá»�i gian hiá»‡n táº¡i cá»§a 1 phiÃªn lÃ m viá»‡c
@@ -68,18 +69,18 @@ public class Board {
 			
 				this.addBlock(currentBlock); // add block to board
 				int row = checkFullRow();
+				if (row==0) Asset.sound_endFall.play();
 				//(row is bonus)
-				
-				if (row>0) Asset.sound_cleanRow.play(); // an diem
-				else 	Asset.sound_endFall.play(); // ko an diem
-				
-				//
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
-				if (checkOver (row)) gameOver = true;
-				currentBlock = Block.Next_Block();
+				// tăng level
+				if (score>level *SCORE_LV_STEP && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
 				
+				// check over
+				if (checkOver (row)) gameOver = true;
+				// next block
+				currentBlock = Block.Next_Block();
 			}
-			if (score>level *SCORE_LV_STEP && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
+			
 		}
 	}
 	
@@ -93,9 +94,10 @@ public class Board {
 			
 				this.addBlock(currentBlock);
 				int row = checkFullRow();
-				  
-				if (row>=1) Asset.sound_cleanRow.play(); // an diem
-				else 	Asset.sound_endFall.play(); // ko an diem
+				
+				if (row==0) Asset.sound_endFall.play(); // khong an diem
+				//(row is bonus)
+				
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
 				// kiem tra over ( - so dong an )
 				if (checkOver (row)) gameOver = true;

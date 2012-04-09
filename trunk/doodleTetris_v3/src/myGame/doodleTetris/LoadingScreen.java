@@ -125,9 +125,12 @@ public class LoadingScreen extends Screen {
 		Asset.sound_move = new Sound ((Context) game, R.raw.move);
 		Asset.sound_cleanRow = new Sound ((Context)game, R.raw.cleanrow);
 		Asset.sound_gameOver = new Sound ((Context)game, R.raw.game_over);
+		Asset.sound_nextLevel = new Sound ((Context)game, R.raw.next_level);
 		
 		// load track
 		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
+		StatusMap statusMap= new StatusMap(game);
+		statusMap.isMapInfoExist();
 		
 		game.setScreen(new MainMenu(game));
 	}

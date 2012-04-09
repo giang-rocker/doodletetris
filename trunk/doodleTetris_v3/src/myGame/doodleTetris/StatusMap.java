@@ -1,14 +1,18 @@
 package myGame.doodleTetris;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.ConsoleHandler;
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
 import myGame.doodleTetris.framework.Game;
+import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
 
 public class StatusMap {
 	public  int mapID;
@@ -33,6 +37,27 @@ public class StatusMap {
 		score = Score;
 		rate = Rate;
 	}
+	
+	public  void saveStatus(String filename, LevelInfo lvInfo){
+		
+		try {
+			FileOutputStream fos = game.getContext().openFileOutput(filename,Context.MODE_WORLD_READABLE);
+			fos.write((lvInfo.id+" ").getBytes());
+			fos.write((lvInfo.timeRecord+" ").getBytes());
+			fos.write((lvInfo.scoreRecord+" ").getBytes());
+			fos.write((lvInfo.rate+" ").getBytes());
+			fos.write((lvInfo.isUnlock+"").getBytes());
+			fos.close();
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public  void saveStatus(String filename){
 		try {
 			FileOutputStream fos = game.getContext().openFileOutput(filename,Context.MODE_WORLD_READABLE);
@@ -82,7 +107,7 @@ public class StatusMap {
 			
 				if(list!=null){
 					for(int i=0;i<list.length;i++){
-						setVariable(i, 0, 0, 0, 0);
+						setVariable(i, 1, 1, 1, 1);
 						saveStatus(list[i]);
 						System.out.println("Create file: "+list[i]);
 						Log.d("System.out.println","Create file");
@@ -105,4 +130,117 @@ public class StatusMap {
 		
 	}
 	
+	
+	// Giang - try to write text file on external Memory
+	
+	public void isMapInfoExist (){
+		File root = Environment.getExternalStorageDirectory();
+		String path = root+"/DoodleTetris/";
+		boolean exists = (new File(path).exists());
+		if (!exists) {new File(path).mkdirs();}
+		
+		File mapInfo = new File(path+"mapInfo"+".txt");
+		if (!mapInfo.exists()){
+		try {
+			mapInfo.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		FileWriter info = null ;
+		try {
+			info = new FileWriter(mapInfo);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedWriter outer = new BufferedWriter(info);
+		// Write log entries to file
+		
+		try {
+			String list[]= game.getAsset().list("Map");
+		
+			if(list!=null){
+				for(int i=0;i<list.length;i++){
+					outer.write( Integer.toString(i) +" 0 0 0 0\n");
+				}
+			}
+			else
+				System.out.println("List is null");
+	
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Cannot create files");
+		}
+		
+		try {
+			outer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		else {
+			Log.d("exst", "exst");
+			
+		}
+	}
+	
+	public void saveMapInfo (int id, int score, int time, int rate, boolean isUnlock){
+		File root = Environment.getExternalStorageDirectory();
+		String path = root+"/DoodleTetris/";
+		boolean exists = (new File(path).exists());
+		if (!exists) {new File(path).mkdirs();}
+		
+		File mapInfo = new File(path+"mapInfo"+".txt");
+		if (!mapInfo.exists()){
+		try {
+			mapInfo.createNewFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		FileWriter info = null ;
+		try {
+			info = new FileWriter(mapInfo);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		BufferedWriter outer = new BufferedWriter(info);
+		// Write log entries to file
+		
+		try {
+			String list[]= game.getAsset().list("Map");
+		
+			if(list!=null){
+				for(int i=0;i<list.length;i++){
+					outer.write( Integer.toString(i) +" 0 0 0 0\n");
+				}
+			}
+			else
+				System.out.println("List is null");
+	
+		} catch (IOException e) {
+			e.printStackTrace();
+			System.out.println("Cannot create files");
+		}
+		
+		try {
+			outer.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		else {
+			Log.d("exst", "exst");
+			
+		}
+	}
+	
+	public void loadToListLevelInfo (LevelInfo[] lvInfo) {
+		
+		
+	}
 }

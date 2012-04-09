@@ -93,6 +93,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static Sound sound_move;
 	public static Sound sound_rotation;
 	public static Sound sound_fall;
+	public static Sound sound_nextLevel;
 	// music
 	
 	public static Music bg_track;

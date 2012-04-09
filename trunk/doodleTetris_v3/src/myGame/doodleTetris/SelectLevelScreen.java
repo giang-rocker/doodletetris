@@ -43,7 +43,11 @@ public class SelectLevelScreen extends Screen {
 			e.printStackTrace();
 		}
 		
+		
 		listLevel = new LevelInfo[list.length];
+		
+		statusMap.saveStatus(list[0], new LevelInfo(0, 10f, 10, 3, true) );
+		
 		
 		//Random r = new Random();
 		String[] data;
