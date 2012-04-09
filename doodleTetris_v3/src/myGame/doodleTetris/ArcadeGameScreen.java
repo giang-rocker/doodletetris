@@ -38,6 +38,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	
 
 	//Duong set map
+	// Giang - sửa load theo ID
 	void setMap(int id) throws IOException{
 		String pathDir="Map";
 	
