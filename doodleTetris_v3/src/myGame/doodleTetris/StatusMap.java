@@ -186,13 +186,16 @@ public class StatusMap {
 		}
 	}
 	
+	
+	
+	//test luu the nho
 	public void saveMapInfo (int id, int score, int time, int rate, boolean isUnlock){
 		File root = Environment.getExternalStorageDirectory();
 		String path = root+"/DoodleTetris/";
 		boolean exists = (new File(path).exists());
 		if (!exists) {new File(path).mkdirs();}
 		
-		File mapInfo = new File(path+"mapInfo"+".txt");
+		File mapInfo = new File(path+"mapInfo");
 		if (!mapInfo.exists()){
 		try {
 			mapInfo.createNewFile();
