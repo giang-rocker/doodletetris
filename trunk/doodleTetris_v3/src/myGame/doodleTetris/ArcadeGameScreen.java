@@ -2,33 +2,48 @@ package myGame.doodleTetris;
 
 import java.io.IOException;
 
-import android.util.Log;
-
 import myGame.doodleTetris.Block.BlockType;
-import myGame.doodleTetris.ClassicGameScreen.GameState;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.SingleTouch;
 
 public class ArcadeGameScreen extends ClassicGameScreen {
 	// create doi tuiong load map
-	
+	int id_stage;
 	LoadMap loadMap;
 
+	@Override
+	public void setupButton() {
+		super.setupButton();
+		// set lai menu button
+		Asset.btn_nextStage.setPosition(48, 312);
+		Asset.btn_playAgain.setPosition(48, 552);
+		Asset.btn_menuStage.setPosition(48, 432);
+				
+	};
+	
 	public ArcadeGameScreen(Game game, int id) {
 		// TODO Auto-generated constructor stub
 		super(game);
+		id_stage = id;
 		loadMap = new LoadMap(game);
 		setBoardMap(id);
 		setupButton();
 		
 	}
-	
+	//Duong set map
+		// Giang - sửa load theo ID
+
 	public void setBoardMap(int id){
 		board = new Board();
 		//set map
 		try {
-			setMap(id);
+			String pathDir="Map";
+			
+			String list[]= game.getAsset().list(pathDir);
+			loadMap.accessFile(pathDir + "/" +list[id]);
+			loadMap.readFile();
+			loadMap.addMapToBoard(board);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -37,16 +52,6 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	}
 	
 
-	//Duong set map
-	// Giang - sửa load theo ID
-	void setMap(int id) throws IOException{
-		String pathDir="Map";
-	
-			String list[]= game.getAsset().list(pathDir);
-			loadMap.accessFile(pathDir + "/" +list[id]);
-			loadMap.readFile();
-			loadMap.addMapToBoard(board);
-	}
 	
 	@Override
 	void updateRunning (float deltaTime){
@@ -114,10 +119,20 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
 		if (board.gameOver) { Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
-
+		
+		// check stageClean state
+		if (checkStageClean ())  {
+			// stageCelan 
+			 strScore = ""+currentScore;  
+			gameState = GameState.StageClean; 
+			Asset.sound_stageClean.play();
+			return;
+			
+		}
 		board.updateForArcadeGameScreen(deltaTime);
 		
 			
+		// check an diem
 		if (currentScore != board.score){
 			// kiem tra level
 			if (level != board.level ) { Asset.sound_nextLevel.play();  level = board.level;}
@@ -125,8 +140,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			currentScore = board.score;
 		}
 		
-		if (tempScore!=currentScore) { tempScore+=1; strScore = "" + tempScore;}
+		// set diem
+		if (tempScore<currentScore-5) { tempScore+=5; }
+		else { tempScore=currentScore; }
 		
+		strScore = "" + tempScore;
 		
 		// time running
 		time++;
@@ -134,42 +152,65 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		
 	}
 	@Override
-	public void drawCell(BlockType blocktype, int x, int y){
+	void drawStageCleanUI (){
 		AndroidGraphics g = game.getGraphics();
-			
-		switch (blocktype){
-		case RED:
-			g.drawImage( Asset.block_red.bitmap,x,y);
-			break;
-		case BLUE:
-			g.drawImage(Asset.block_blue.bitmap,x,y);
-			break;
-		case GREEN:
-			g.drawImage(Asset.block_green.bitmap,x,y);
-			break;
-		case WHITE:
-			g.drawImage(Asset.block_white.bitmap,x,y);
-			break;
-		case YELLOW:
-			g.drawImage(Asset.block_yellow.bitmap,x,y);
-			break;
-		case ORANGE:
-			g.drawImage(Asset.block_orange.bitmap,x,y);
-			break;
-		case PURPLE:
-			g.drawImage(Asset.block_purple.bitmap,x,y);
-			break;
-		case BOOMB:
-			g.drawImage(Asset.item_boomb.bitmap,x,y);
-			break;
-		case NULL:
-			g.drawImage(Asset.block_null.bitmap,x,y);
-			break;
-			//Duong insert case MAP
-		case MAP:
-			g.drawImage(Asset.block_map.bitmap,x,y);
-			break;
-		}// switch case
+		g.drawImage(Asset.UI_StageClear);
+		g.drawImage(Asset.btn_nextStage);
+		
+		// set lai position play Again
+		Asset.btn_playAgain.setPosition(48, 552);
+		g.drawImage(Asset.btn_playAgain);
+		g.drawImage(Asset.btn_menuStage);
+		drawScore(""+currentScore, 84,180);
+		drawTime (time, 192, 180);
+		drawStar (2, 138 ,192+36);
+		
+	}
+	@Override
+	public void updateStageClean () {
+		SingleTouch TouchEvent = game.getTouchEvent();
+		
+		if ( Asset.UI_GameOver.isTouch(TouchEvent)   )
+			game.setScreen(new MainMenu(game));
+		if ( Asset.btn_nextStage.isTouch(TouchEvent)   )
+			game.setScreen(new ArcadeGameScreen(game,++id_stage));
+		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
+			game.setScreen(new ArcadeGameScreen(game,id_stage));
+		if ( Asset.btn_menuStage.isTouch(TouchEvent)   )
+			game.setScreen(new SelectLevelScreen(game));
 	}
 	
+	@Override
+	void drawPauseUI (){
+		AndroidGraphics g = game.getGraphics();
+		g.drawImage(Asset.UI_Pause);
+		Asset.btn_playAgain.setPosition(48, 312);
+		g.drawImage(Asset.btn_playAgain);
+		g.drawImage(Asset.btn_menuStage);
+		
+	}
+	@Override
+	public void updatePause () {
+		SingleTouch TouchEvent = game.getTouchEvent();
+		
+		if (TouchEvent.isStillTouch(150)) {
+		if ( Asset.UI_Pause.isTouch(TouchEvent)   )
+			{gameState = GameState.Running;}
+		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
+			game.setScreen(new ArcadeGameScreen(game,id_stage));
+		if ( Asset.btn_menuStage.isTouch(TouchEvent)   )
+			game.setScreen(new SelectLevelScreen(game));
+		}
+	}
+	
+	boolean checkStageClean () {
+		for (int i=0;i<Board.BOARD_WIDTH;i++) {
+			
+			if (board.map[i][Board.BOARD_HEIGHT-1] == BlockType.MAP) return false;
+		}
+		
+		return true;
+	}
+	
+
 }

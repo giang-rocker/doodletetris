@@ -110,7 +110,7 @@ public class SelectLevelScreen extends Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-		
+	//	game.setScreen(new MainMenu(game));
 	}
 
 	@Override
@@ -173,7 +173,7 @@ public class SelectLevelScreen extends Screen {
 			drawNumber(s.charAt(i),startX+UNIT_CHAR*i,startY);
 		}
 	}
-		void drawStar (int rate, int startX, int startY) {
+	void drawStar (int rate, int startX, int startY) {
 			AndroidGraphics g = game.getGraphics();
 			int len  = 3;
 			int UNIT_CHAR = 36;
@@ -192,4 +192,5 @@ public class SelectLevelScreen extends Screen {
 				g.drawImage( Asset.number[(int)c-48].bitmap,x,y);
 			}
 	
+		
 }

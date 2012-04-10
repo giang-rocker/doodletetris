@@ -2,10 +2,8 @@ package myGame.doodleTetris;
 
 import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.Screen;
-
 import android.content.res.AssetManager;
 import android.util.Log;
-
 import android.view.KeyEvent;
 import android.view.View.OnTouchListener;
 
@@ -22,15 +20,28 @@ public class Game  extends AndroidGame{
 	
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
 		if (keyCode == KeyEvent.KEYCODE_BACK)
 			if (getCurrentScreen().screenName != "MainMenu")
-				this.setScreen(new MainMenu(this));
-			else {finish();}
+				getCurrentScreen().pause ();
+			else {
+				android.os.Process.killProcess(this.getTaskId());
+				System.exit(0);
+		}
+			
+		
+		
 	return true;
 	}
 	
+	
+	
 	  public AssetManager getAsset () {
 		return getAssets();
+	  }
+	
+	  public int getTaskID (){
+		  return this.getTaskId();
 	  }
 
 	  

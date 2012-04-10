@@ -23,7 +23,7 @@ public class ClassicGameScreen extends Screen {
 		
 		// set menu button
 		Asset.btn_mainMenu.setPosition(48, 312);
-		Asset.btn_newGame.setPosition(48, 432);
+		Asset.btn_playAgain.setPosition(48, 432);
 		
 		// set icon
 		Asset.icon_boomb.setPosition(384,360);
@@ -43,7 +43,9 @@ public class ClassicGameScreen extends Screen {
 		Ready,
 		Running,
 		Paused,
-		GameOver
+		StageClean,
+		GameOver,
+		Exit,
 	}
 	
 	GameState gameState = GameState.Running;
@@ -72,6 +74,10 @@ public class ClassicGameScreen extends Screen {
 			updatePause();
 		if (gameState == GameState.GameOver)
 			updateGameOver();
+		if (gameState == GameState.StageClean)
+			updateStageClean();
+		if (gameState == GameState.Exit)
+			updateExit();
 		
 	}
 	
@@ -98,7 +104,7 @@ public class ClassicGameScreen extends Screen {
 	g.drawImage(Asset.icon_music);
 	g.drawImage(Asset.icon_sound);
 
-	drawScore(strScore);
+	drawScore(strScore,360,240);
 	drawLevel( level);
 	drawTime (time,360,312);
 
@@ -113,18 +119,23 @@ public class ClassicGameScreen extends Screen {
 	
 	if (gameState == GameState.GameOver )
 	{drawGameOverUI();}
+	if (gameState == GameState.StageClean )
+	{drawStageCleanUI();}
+	
+	if (gameState == GameState.Exit )
+		{drawExitUI();}
+	
 	}
 
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
 		if (gameState == GameState.Running)
-			gameState = GameState.Paused;
+			gameState = GameState.Exit;
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -185,24 +196,15 @@ public class ClassicGameScreen extends Screen {
 		case NULL:
 			g.drawImage(Asset.block_null.bitmap,x,y);
 			break;
-			
+			//Duong insert case MAP
+		case MAP:
+			g.drawImage(Asset.block_map.bitmap,x,y);
+			break;
 		}// switch case
 	}
+	
 	// ve diem
-	public void drawScore(String score){
-		String o ="0000";
-		
-		int len  = score.length();
-		score = o.substring(len) + score;
-		
-		int UNIT_CHAR = 24;
-		int startX = 360;
-		int startY = 240;
-		for (int i=0;i<4;i++){
-			drawNumber(score.charAt(i),startX+i*UNIT_CHAR,startY);
-		
-		}
-	}
+	
 	
 	//ve level
 	public void drawLevel(int level){
@@ -289,7 +291,7 @@ public class ClassicGameScreen extends Screen {
 		}
 		
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
-		if (board.gameOver) { Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
+		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 
 		board.update(deltaTime);
 		
@@ -301,7 +303,8 @@ public class ClassicGameScreen extends Screen {
 			currentScore = board.score;
 		}
 		
-		if (tempScore!=currentScore) { tempScore+=1; strScore = "" + tempScore;}
+		if (tempScore<currentScore-5) { tempScore+=5; strScore = "" + tempScore;}
+		else { tempScore=currentScore; strScore = "" + tempScore;}
 		
 		
 		// finis all
@@ -316,10 +319,13 @@ public class ClassicGameScreen extends Screen {
 			gameState = GameState.Running;
 	//			Music.startMusic();
 		}
+		// kiem tra xac nhan bam
+		if (TouchEvent.isStillTouch(150)){
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
-		if ( Asset.btn_newGame.isTouch(TouchEvent)   )
+		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
 			game.setScreen(new ClassicGameScreen(game));
+		}
 	}
 
 	// kiem tra trang thai on game over
@@ -330,8 +336,29 @@ public class ClassicGameScreen extends Screen {
 			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
-		if ( Asset.btn_newGame.isTouch(TouchEvent)   )
+		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
 			game.setScreen(new ClassicGameScreen(game));
+	}
+	
+	// stage Clean mode
+	public void updateStageClean () {
+	}
+	
+	public void updateExit () {
+		gameState  = GameState.Exit;
+		SingleTouch TouchEvent = game.getTouchEvent();
+		{
+		if (Asset.btn_yes.isTouch(TouchEvent)){
+			
+			System.gc();
+			// try to kill this process
+			android.os.Process.killProcess(game.getTaskId());
+			System.exit(0);
+			}
+			else if (Asset.btn_no.isTouch(TouchEvent))  {
+				gameState  = GameState.Paused;
+			}
+		}
 	}
 	
 	// ve pause
@@ -339,7 +366,7 @@ public class ClassicGameScreen extends Screen {
 		AndroidGraphics g = game.getGraphics();
 		g.drawImage(Asset.UI_Pause);
 		g.drawImage(Asset.btn_mainMenu);
-		g.drawImage(Asset.btn_newGame);
+		g.drawImage(Asset.btn_playAgain);
 		
 	}
 	
@@ -349,9 +376,22 @@ public class ClassicGameScreen extends Screen {
 		g.drawImage(Asset.UI_GameOver);
 		g.drawImage(Asset.btn_mainMenu);
 		g.drawImage(Asset.btn_newGame);
-		drawStringNumber (strScore, 84,192);
+		drawStringNumber (""+currentScore, 84,192);
 		drawTime (time, 192, 192);
 		
+	}
+	//StaeClean mode;
+	
+	void drawStageCleanUI (){
+	
+	}
+	void drawExitUI (){
+		Asset.btn_yes.setPosition(144, 288);
+		Asset.btn_no.setPosition(240, 288);
+		AndroidGraphics g = game.getGraphics();
+		g.drawImage(Asset.UI_Exit);
+		g.drawImage(Asset.btn_yes);
+		g.drawImage(Asset.btn_no);
 	}
 	// ve chuoi so s tai vi tri bat dau X, Y
 	void drawStringNumber (String s, int startX, int startY) {
@@ -378,6 +418,31 @@ public class ClassicGameScreen extends Screen {
 		drawStringNumber (":",StartX+48,StartY);
 		drawStringNumber (second,StartX+44+12,StartY);
 	}
+	// ve ngoi sao
+	void drawStar (int rate, int startX, int startY) {
+		AndroidGraphics g = game.getGraphics();
+		int len  = 3;
+		int UNIT_CHAR = 36;
+		for (int i=0;i<len;i++){
+			if (i<rate)
+			g.drawImage(Asset.icon_star.bitmap,startX+UNIT_CHAR*i,startY);
+			else 
+				g.drawImage(Asset.icon_star_dis.bitmap,startX+UNIT_CHAR*i,startY);
+		}
+	}
+	// ve diem tai vi tri X,Y;
+	public void drawScore(String score, int startX, int startY){
+		String o ="0000";
+		int len  = score.length();
+		score = o.substring(len) + score;
+		
+		int UNIT_CHAR = 24;
+		
+		for (int i=0;i<4;i++){
+			drawNumber(score.charAt(i),startX+i*UNIT_CHAR,startY);
+		
+		}
+	}
 	// kiem tra ki han
 	public boolean timeExpired (int startTime, int duration)
 	{
@@ -387,4 +452,6 @@ public class ClassicGameScreen extends Screen {
 	}
 
 
+	
+	
 }

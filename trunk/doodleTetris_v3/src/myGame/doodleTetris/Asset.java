@@ -29,6 +29,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton UI_Ready;
 	public static ImgButton UI_GameOver;
 	public static ImgButton UI_StageClear;
+	public static ImgButton UI_Exit;
 	
 	// main menu Button
 	public static ImgButton btn_setting;
@@ -50,6 +51,11 @@ import myGame.doodleTetris.framework.Sound;
 	// game menu button
 	public static ImgButton btn_mainMenu;
 	public static ImgButton btn_newGame;
+	public static ImgButton btn_nextStage;
+	public static ImgButton btn_playAgain;
+	public static ImgButton btn_menuStage;
+	public static ImgButton btn_yes;
+	public static ImgButton btn_no;
 	
 	//block
 	public static Image block_red;
@@ -94,6 +100,8 @@ import myGame.doodleTetris.framework.Sound;
 	public static Sound sound_rotation;
 	public static Sound sound_fall;
 	public static Sound sound_nextLevel;
+	public static Sound sound_star;
+	public static Sound sound_stageClean;
 	// music
 	
 	public static Music bg_track;

@@ -71,7 +71,7 @@ public class  SingleTouch implements OnTouchListener  {
 		
 		public boolean isStillTouch (int millisecond ) {
 				int start ;
-				
+				if (event!=null) {
 				int duration = millisecond * 1000000;
 				start = (int) System.nanoTime();
 				
@@ -79,5 +79,7 @@ public class  SingleTouch implements OnTouchListener  {
 					 if (event.getAction()== MotionEvent.ACTION_UP) {return false; } 
 					 }
 				return true;
+				}
+				else return false;
 		}
 }
