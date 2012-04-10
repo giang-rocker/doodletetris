@@ -7,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
 
 import myGame.doodleTetris.framework.Game;
 import android.content.Context;

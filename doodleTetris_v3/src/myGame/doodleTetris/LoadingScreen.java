@@ -61,6 +61,7 @@ public class LoadingScreen extends Screen {
 		Asset.UI_Pause = new ImgButton(g.newBitmap("StateUI/pauseUI.png"),48,120	);
 		Asset.UI_GameOver = new ImgButton(g.newBitmap("StateUI/gameOverUI.png"),24,72	);
 		Asset.UI_StageClear = new ImgButton(g.newBitmap("StateUI/stateClearUI.png"),24,72	);
+		Asset.UI_Exit = new ImgButton(g.newBitmap("StateUI/exitUI.png"),0,0	);
 		
 		// button game button arrow
 		Asset.btn_left = new ImgButton (g.newBitmap("Button/btn_left.png"),0,0);
@@ -72,6 +73,11 @@ public class LoadingScreen extends Screen {
 		// button game menu Button
 		Asset.btn_mainMenu = new ImgButton (g.newBitmap("Button/btn_mainMenu.png"),0,0);
 		Asset.btn_newGame = new ImgButton (g.newBitmap("Button/btn_newGame.png"),0,0);
+		Asset.btn_nextStage = new ImgButton (g.newBitmap("Button/btn_nextStage.png"),0,0);
+		Asset.btn_menuStage = new ImgButton (g.newBitmap("Button/btn_menuStage.png"),0,0);
+		Asset.btn_playAgain = new ImgButton (g.newBitmap("Button/btn_playAgain.png"),0,0);
+		Asset.btn_yes = new ImgButton (g.newBitmap("Button/btn_yes.png"),0,0);
+		Asset.btn_no = new ImgButton (g.newBitmap("Button/btn_no.png"),0,0);
 		
 		// block
 		Asset.block_blue = new Image (g.newBitmap("Block/block_blue.png"),0,0);
@@ -126,7 +132,8 @@ public class LoadingScreen extends Screen {
 		Asset.sound_cleanRow = new Sound ((Context)game, R.raw.cleanrow);
 		Asset.sound_gameOver = new Sound ((Context)game, R.raw.game_over);
 		Asset.sound_nextLevel = new Sound ((Context)game, R.raw.next_level);
-		
+		Asset.sound_star = new Sound ((Context)game, R.raw.sound_star);
+		Asset.sound_stageClean = new Sound ((Context)game, R.raw.stage_clean);
 		// load track
 		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
 		StatusMap statusMap= new StatusMap(game);

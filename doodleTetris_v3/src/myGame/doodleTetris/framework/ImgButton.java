@@ -40,7 +40,7 @@ public class ImgButton {
 	    	if (event!=null){
 	        	float ex = event.getX();
 	    		float ey =  event.getY();
-	        	if (ex>=x && ex<=x+bitmap.getWidth()&& ey>=y  && ey<=y+bitmap.getHeight() && event.isTouch())
+	    		if (ex>=x && ex<=x+bitmap.getWidth()&& ey>=y  && ey<=y+bitmap.getHeight() && event.isTouch())
 	        	return true;
 	        	else 
 	        	return false;
