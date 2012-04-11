@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.os.PowerManager.WakeLock;
@@ -54,6 +55,8 @@ public abstract class AndroidGame extends Activity implements Game {
         
         touchEvent = new SingleTouch(renderView,scaleX, scaleY);
         keyPressEvent = new KeyPress(renderView);
+        
+        this.setVolumeControlStream(AudioManager.STREAM_MUSIC); 
         
         screen = getStartScreen();
         setContentView(renderView); 

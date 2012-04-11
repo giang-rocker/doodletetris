@@ -112,7 +112,9 @@ public class ClassicGameScreen extends Screen {
 		drawBonus(board.getBonus());
 	}
 	drawBoard(board);
-	
+	// ve current Block
+	drawBlock (board.currentBlock);
+	drawBlock (board.nextBlock);
 	
 	if (gameState == GameState.Paused )
 		{drawPauseUI(); }
@@ -155,16 +157,21 @@ public class ClassicGameScreen extends Screen {
 				}// for j
 			}//for i
 		
-		// ve block
-		for (int i=0;i<Block.BLOCK_HEIGHT;i++){
-			for (int j=0;j<Block.BLOCK_HEIGHT;j++) {
-				if (board.currentBlock.status[i][j])
-				drawCell(board.currentBlock.type,(board.currentBlock.x+i+1)*unit_cell,(board.currentBlock.y+j-4)*unit_cell);
-				}// for j
-			}//for i
 		
 	}
-	// ve block
+	
+	// ve Block ()
+	void drawBlock (Block block) {
+		int unit_cell = Block.UNIT_CELL;
+		for (int i=0;i<Block.BLOCK_HEIGHT;i++){
+			for (int j=0;j<Block.BLOCK_HEIGHT;j++) {
+				if (block.status[i][j])
+				drawCell(block.type,(block.x+i+1)*unit_cell,(block.y+j-4)*unit_cell);
+				}// for j
+			}//for i
+	}
+	
+	// ve cell
 	public void drawCell(BlockType blocktype, int x, int y){
 		AndroidGraphics g = game.getGraphics();
 			
@@ -203,7 +210,7 @@ public class ClassicGameScreen extends Screen {
 		}// switch case
 	}
 	
-	// ve diem
+
 	
 	
 	//ve level
@@ -232,21 +239,21 @@ public class ClassicGameScreen extends Screen {
 		
 		
 		int duration = 80000000;
-		if (timeExpired(start,duration))	{
+		if (timeExpired(start,duration) )	{
 			start = (int)System.nanoTime();
 			
-			if ( Asset.btn_rotate.isTouch(TouchEvent)   )
+			if ( Asset.btn_rotate.isTouchDown(TouchEvent)  )
 				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); }
 				
 			
-			if ( Asset.btn_left.isTouch(TouchEvent)   )
+			if ( Asset.btn_left.isTouchDown(TouchEvent)   )
 			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play(); }
 			
-			if ( Asset.btn_right.isTouch(TouchEvent)   )
+			if ( Asset.btn_right.isTouchDown(TouchEvent)   )
 				{board.currentBlock.goRight(board); 	 Asset.sound_move.play(); }
 			}
 	
-		if ( Asset.btn_down.isTouch(TouchEvent)   )
+		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
 			board.currentBlock.goDown(board);
 		
 		AndroidGraphics g = game.getGraphics();
@@ -262,6 +269,7 @@ public class ClassicGameScreen extends Screen {
 		
 		if ( Asset.icon_music.isTouch(TouchEvent)   )
 		{
+			
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
 		//		Music.pauseMusic();
@@ -320,12 +328,10 @@ public class ClassicGameScreen extends Screen {
 	//			Music.startMusic();
 		}
 		// kiem tra xac nhan bam
-		if (TouchEvent.isStillTouch(150)){
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
 			game.setScreen(new ClassicGameScreen(game));
-		}
 	}
 
 	// kiem tra trang thai on game over
@@ -375,7 +381,7 @@ public class ClassicGameScreen extends Screen {
 		AndroidGraphics g = game.getGraphics();
 		g.drawImage(Asset.UI_GameOver);
 		g.drawImage(Asset.btn_mainMenu);
-		g.drawImage(Asset.btn_newGame);
+		g.drawImage(Asset.btn_playAgain);
 		drawStringNumber (""+currentScore, 84,192);
 		drawTime (time, 192, 192);
 		
