@@ -34,7 +34,7 @@ public class SelectLevelScreen extends Screen {
 		//Duong cap nhat set select level
 		assetManager = game.getContext().getAssets();
 		
-		statusMap.setFirstStatus( );
+		/*statusMap.setFirstStatus( );
 	
 		try {
 			list= assetManager.list("Map");
@@ -47,14 +47,24 @@ public class SelectLevelScreen extends Screen {
 		listLevel = new LevelInfo[list.length];
 		
 		statusMap.saveStatus(list[0], new LevelInfo(0, 10f, 10, 3, true) );
-		
+		*/
 		
 		//Random r = new Random();
-		String[] data;
+		String[] data = null;
 		boolean unlock=true;
-		for (int i=0;i<listLevel.length;i++) 
+		
+			for (int i=0;i<listLevel.length;i++) 
 			{
+				try {
 				data = statusMap.getData(list[i]);
+				} catch (Exception e) {
+					// TODO: handle exception
+					statusMap.data[0]=i+"";//id
+					statusMap.data[1]="0";//time
+					statusMap.data[2]="0";//score
+					statusMap.data[3]="0";//rate
+					statusMap.data[4]="1";//unlock
+				}
 				if(data[4].equals("0")){
 					unlock=false;
 				}
@@ -62,8 +72,8 @@ public class SelectLevelScreen extends Screen {
 					unlock= true;
 				}
 				listLevel[i] = new LevelInfo(Integer.parseInt(data[0].trim()),Float.parseFloat(data[1].trim()),Integer.parseInt(data[2].trim()),Integer.parseInt(data[3].trim()),unlock);
-
 			}
+
 		startY = 96;
 	}
 
