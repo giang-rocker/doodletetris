@@ -131,7 +131,7 @@ public class StatusMap {
 	
 	
 	// Giang - try to write text file on external Memory
-	
+	/*
 	public void isMapInfoExist (){
 		File root = Environment.getExternalStorageDirectory();
 		String path = root+"/DoodleTetris/";
@@ -185,7 +185,7 @@ public class StatusMap {
 		}
 	}
 	
-	
+	*/
 	
 	//test luu the nho
 	public void saveMapInfo (int id, int score, int time, int rate, boolean isUnlock){

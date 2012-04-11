@@ -28,6 +28,7 @@ public class Sound {
 }
 */
 public class Sound  {
+	public static float appVolume = 1;
 	public int soundID;
 	public SoundPool sound;
 	public int resSoundID;
@@ -36,7 +37,7 @@ public class Sound  {
 
 	
 	public void play(){
-		sound.play(soundID, 1, 1, 0, 0, 1);
+		sound.play(soundID,appVolume,appVolume,0,0,1);
 	}
 	public void play(float volume){
 		sound.play(soundID,volume,volume,0,0,1);
@@ -46,6 +47,7 @@ public class Sound  {
 	public Sound (Context context, int resSoundID) {
 		this.context = context;
 		this.sound = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+		
 		this.soundID = sound.load(context,resSoundID,1 );
 	}
 	

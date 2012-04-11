@@ -49,6 +49,7 @@ public class Block {
 		x= (Board.BOARD_WIDTH /2); 
 		y = 0;
 	}
+
 	int blockStyle1[] = {15,15,30,60,51,57,58};
 	int blockStyle[] = {15,15,184,408,240,312,120};
 	
@@ -161,6 +162,11 @@ public class Block {
 	}// switch case
 	}
 	
+	public void setPosition (int x, int y) {
+		this.x = x;
+		this.y = y;
+		
+	}
 	public boolean[] intToBinary (int id) {
 		
 		boolean result [] = new boolean [9];
@@ -278,13 +284,21 @@ public class Block {
 	 public static Block Next_Block() {
 		Random r = new Random();
 		int ra = r.nextInt(7);
-		if (item!=-1) ra  = item; item=-1;
+		if (item!=-1) ra  = item;
+		item=-1;
 		Block nextBlock = new Block(ra);
-		 StringBuilder b = new StringBuilder();
-		 b.append(ra); String text = b.toString();
-		 Log.d("type", text);
 		return nextBlock;
 		 
 		 
 	 }
+	 
+	 public static int Next_Block_id() {
+		Random r = new Random();
+		int ra = r.nextInt(7);
+		if (item!=-1) ra  = item;
+		item=-1;
+
+		return ra;
+	 }
+	 
 }

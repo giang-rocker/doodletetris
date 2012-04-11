@@ -40,6 +40,19 @@ public class ImgButton {
 	    	if (event!=null){
 	        	float ex = event.getX();
 	    		float ey =  event.getY();
+	    		if (ex>=x && ex<=x+bitmap.getWidth()&& ey>=y  && ey<=y+bitmap.getHeight() && !event.isTouch())
+	        	return true;
+	        	else 
+	        	return false;
+	        	}
+	        	else return false;
+	    	
+		}
+	    
+	    public boolean isTouchDown (SingleTouch event) {
+	    	if (event!=null){
+	        	float ex = event.getX();
+	    		float ey =  event.getY();
 	    		if (ex>=x && ex<=x+bitmap.getWidth()&& ey>=y  && ey<=y+bitmap.getHeight() && event.isTouch())
 	        	return true;
 	        	else 
@@ -48,5 +61,4 @@ public class ImgButton {
 	        	else return false;
 	    	
 		}
-
 }

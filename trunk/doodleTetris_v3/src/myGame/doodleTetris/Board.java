@@ -9,18 +9,22 @@ public class Board {
 	
 	public static float TICK_INTIAL = 0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
 	public static float TICK_DECREMENT = 0.05f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
-	public static int SCORE_LV_STEP = 1000; 
+	public static int SCORE_LV_STEP = 999; 
 	
 	// diem 1 row
-	public static int SCORE_INCREMENT = 500;
+	public static int SCORE_INCREMENT = 99;
 	
 	float tickTime = 0f;//Thá»�i gian Ä‘Ã£ qua cá»§a 1 phiÃªn lÃ m viá»‡c
 	float tick = TICK_INTIAL;//Thá»�i gian hiá»‡n táº¡i cá»§a 1 phiÃªn lÃ m viá»‡c
 	
 	public Block.BlockType map [][] = new Block.BlockType[BOARD_WIDTH][BOARD_HEIGHT];
-	public Block currentBlock;
 	
-	public int level = 1;
+	public Block currentBlock;
+	public Block nextBlock;
+	
+	public int nextBlockID;	
+	
+	public int level = 1;	
 	public int score =0;
 	public boolean gameOver = false;
 	
@@ -34,7 +38,14 @@ public class Board {
 				map[i][j]= BlockType.NULL;
 			
 		}
+
 		currentBlock = Block.Next_Block();
+		nextBlockID = Block.Next_Block_id();
+		nextBlock = new Block (nextBlockID);
+		nextBlock.setPosition(15, 9);
+		
+		//nextBlock = Block.Next_Block();
+		
 	}
 
 	public void clearRow (int row) {
@@ -73,14 +84,16 @@ public class Board {
 				//(row is bonus)
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
 				// tăng level
-				if (score>level *SCORE_LV_STEP && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
+				if (score>(((level-1) *(SCORE_LV_STEP+1))+SCORE_LV_STEP) && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
 				
 				// check over
 				if (checkOver (row)) gameOver = true;
 				// next block
-				currentBlock = Block.Next_Block();
+				currentBlock = new Block(nextBlockID);
+				nextBlockID = Block.Next_Block_id();
+				nextBlock = new Block (nextBlockID);
+				nextBlock.setPosition(15, 9);
 			}
-			
 		}
 	}
 	
@@ -101,11 +114,12 @@ public class Board {
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
 				// kiem tra over ( - so dong an )
 				if (checkOver (row)) gameOver = true;
-				currentBlock = Block.Next_Block();
-				//Duong check finish map
-				if(LoadMap.rowNum==0){
-					nextMap = true;	
-				}
+				
+				currentBlock = new Block(nextBlockID);
+				nextBlockID = Block.Next_Block_id();
+				nextBlock = new Block (nextBlockID);
+				nextBlock.setPosition(15, 9);
+		
 			}
 			if (score>level *SCORE_LV_STEP && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
 		}

@@ -62,18 +62,18 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		if (timeExpired(start,duration))	{
 			start = (int)System.nanoTime();
 			
-			if ( Asset.btn_rotate.isTouch(TouchEvent)   )
+			if ( Asset.btn_rotate.isTouchDown(TouchEvent)   )
 				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); }
 				
 			
-			if ( Asset.btn_left.isTouch(TouchEvent)   )
+			if ( Asset.btn_left.isTouchDown(TouchEvent)   )
 			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play(); }
 			
-			if ( Asset.btn_right.isTouch(TouchEvent)   )
+			if ( Asset.btn_right.isTouchDown(TouchEvent)   )
 				{board.currentBlock.goRight(board); 	 Asset.sound_move.play(); }
 			}
 	
-		if ( Asset.btn_down.isTouch(TouchEvent)   )
+		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
 			board.currentBlock.goDown(board);
 		
 		AndroidGraphics g = game.getGraphics();
@@ -193,7 +193,6 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	public void updatePause () {
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
-		if (TouchEvent.isStillTouch(150)) {
 		if ( Asset.UI_Pause.isTouch(TouchEvent)   )
 			{gameState = GameState.Running;}
 		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
@@ -201,7 +200,6 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		if ( Asset.btn_menuStage.isTouch(TouchEvent)   )
 			game.setScreen(new SelectLevelScreen(game));
 		}
-	}
 	
 	boolean checkStageClean () {
 		for (int i=0;i<Board.BOARD_WIDTH;i++) {
