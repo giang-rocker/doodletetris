@@ -34,7 +34,7 @@ public class SelectLevelScreen extends Screen {
 		//Duong cap nhat set select level
 		assetManager = game.getContext().getAssets();
 		
-		/*statusMap.setFirstStatus( );
+		statusMap.setFirstStatus( );
 	
 		try {
 			list= assetManager.list("Map");
@@ -47,7 +47,7 @@ public class SelectLevelScreen extends Screen {
 		listLevel = new LevelInfo[list.length];
 		
 		statusMap.saveStatus(list[0], new LevelInfo(0, 10f, 10, 3, true) );
-		*/
+		
 		
 		//Random r = new Random();
 		String[] data = null;
