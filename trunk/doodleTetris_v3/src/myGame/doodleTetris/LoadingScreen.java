@@ -112,8 +112,8 @@ public class LoadingScreen extends Screen {
 	
 		
 		// number level
-		Asset.numberLevel = new  Image[14];
-		for (int i =1;i<=13;i++){
+		Asset.numberLevel = new  Image[10];
+		for (int i =1;i<=9;i++){
 			//System.out.println("Number/lv_"+ Integer.toString(i)+".png");
 			Asset.numberLevel[i] = new Image (g.newBitmap("Number/lv_"+ Integer.toString(i)+".png"),0,0);
 		}
@@ -136,8 +136,7 @@ public class LoadingScreen extends Screen {
 		Asset.sound_stageClean = new Sound ((Context)game, R.raw.stage_clean);
 		// load track
 		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
-		//StatusMap statusMap= new StatusMap(game);
-		//statusMap.isMapInfoExist();
+
 		
 		game.setScreen(new MainMenu(game));
 	}
