@@ -17,7 +17,6 @@ public class Music {
 	}
 	public  void stop(){
 		mediaPlay.stop();
-		mediaPlay.release();
 	}
 	public  void pause(){
 		mediaPlay.pause();

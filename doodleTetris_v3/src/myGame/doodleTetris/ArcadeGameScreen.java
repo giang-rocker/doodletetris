@@ -14,8 +14,8 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	int id_stage;
 	LoadMap loadMap;
 	Music music;
-	String nameMusic[]={"bg_track","bg_track","bg_track"};
 	int rate;
+	String nameMusic[]={"bg_track","bg_track","bg_track"};
 	@Override
 	public void setup() {
 		super.setup();
