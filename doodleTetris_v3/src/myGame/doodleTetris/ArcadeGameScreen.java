@@ -15,6 +15,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	LoadMap loadMap;
 	Music music;
 	String nameMusic[]={"bg_track","bg_track","bg_track"};
+	int rate;
 	@Override
 	public void setup() {
 		super.setup();
@@ -137,7 +138,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			StatusMap statusMap = new StatusMap(game);
 			String filename = id_stage+"";
 			//get rate
-			int rate=1;
+			rate=1;
 			int timeForRow= (180*40)*((id_stage+1)*10/100);
 			
 			for(int i=1;i<=2;i++){
@@ -193,7 +194,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		g.drawImage(Asset.btn_menuStage);
 		drawScore(""+currentScore, 84,180);
 		drawTime (time, 192, 180);
-		drawStar (2, 138 ,192+36);
+		drawStar (rate, 138 ,192+36);
 		
 	}
 	@Override
