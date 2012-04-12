@@ -15,7 +15,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	LoadMap loadMap;
 	Music music;
 	int rate;
-	String nameMusic[]={"bg_track","bg_track","bg_track"};
+	
 	@Override
 	public void setup() {
 		super.setup();
@@ -34,10 +34,10 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		setBoardMap(id);
 		setup();
 		//Duong update music 12/4/2012
-				Random r = new Random();
-				int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
-				music = new Music(game.getContext(), resid);
-				music.play();
+//				Random r = new Random();
+		//		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
+		//		music = new Music(game.getContext(), resid);
+		//		music.play();
 		
 	}
 	//Duong set map
