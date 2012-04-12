@@ -16,7 +16,7 @@ public class ClassicGameScreen extends Screen {
 
 	boolean isMusic = true;
 	boolean isSound = true;
-	String nameMusic[]={"bg_track","bg_track","bg_track"};
+	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi1"};
 	Music music;
 	public void setup () {
 		// bg
