@@ -93,7 +93,6 @@ public class ClassicGameScreen extends Screen {
 			updateStageClean();
 		if (gameState == GameState.Exit)
 			updateExit();
-		
 	}
 	
 	// int bonus image duration present
@@ -152,17 +151,17 @@ public class ClassicGameScreen extends Screen {
 		{drawExitUI();}
 	
 	}
-
+	
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
 		if (gameState == GameState.Running)
 			gameState = GameState.Exit;
+		    music.stop();
 	}
 
 	@Override
-	public void resume() {
-		
+	public void resume(){
 	}
 
 	@Override
