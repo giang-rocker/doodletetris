@@ -1,6 +1,8 @@
 package myGame.doodleTetris;
 
+import android.test.IsolatedContext;
 import myGame.doodleTetris.Block.BlockType;
+import myGame.doodleTetris.Block.blockName;
 
 
 public class Board {
@@ -17,7 +19,7 @@ public class Board {
 	float tickTime = 0f;//Thá»�i gian Ä‘Ã£ qua cá»§a 1 phiÃªn lÃ m viá»‡c
 	float tick = TICK_INTIAL;//Thá»�i gian hiá»‡n táº¡i cá»§a 1 phiÃªn lÃ m viá»‡c
 	
-	public Block.BlockType map [][] = new Block.BlockType[BOARD_WIDTH][BOARD_HEIGHT];
+	public Block.BlockType statusBoard [][] = new Block.BlockType[BOARD_WIDTH][BOARD_HEIGHT];
 	
 	public Block currentBlock;
 	public Block nextBlock;
@@ -35,26 +37,25 @@ public class Board {
 	public Board(){
 		for (int i=0;i<BOARD_WIDTH;i++){
 			for (int j=0;j<BOARD_HEIGHT ;j++) 
-				map[i][j]= BlockType.NULL;
+				statusBoard[i][j]= BlockType.NULL;
 			
 		}
 
 		currentBlock = Block.Next_Block();
 		nextBlockID = Block.Next_Block_id();
 		nextBlock = new Block (nextBlockID);
-		nextBlock.setPosition(15, 9);
-		
-		//nextBlock = Block.Next_Block();
+		nextBlock.setPosition(0,0);
 		
 	}
 
 	public void clearRow (int row) {
+		
 		for (int i=0;i<Board.BOARD_WIDTH;i++)
 			for (int j=row;j>0;j--)
-				   map[i][j] = map[i][j-1];
+				statusBoard[i][j] = statusBoard[i][j-1];
 	
 		for (int j=0;j<Board.BOARD_WIDTH;j++)//KhÃ´ng cáº§n cÃ¡i nÃ y
-			map[j][0] = BlockType.NULL;
+			statusBoard[j][0] = BlockType.NULL;
 	
 	}
 	
@@ -64,7 +65,7 @@ public class Board {
 		for (int j=0;j<Block.BLOCK_HEIGHT;j++)
 			if(currentBlock.status[i][j]==true)
             {
-               map[i+currentBlock.x][j+currentBlock.y] = currentBlock.type;
+				statusBoard[i+currentBlock.x][j+currentBlock.y] = currentBlock.type;
             }
 		
 	}
@@ -79,6 +80,9 @@ public class Board {
 			if (!currentBlock.goDown(this)){
 			
 				this.addBlock(currentBlock); // add block to board
+				
+				if (currentBlock.isItem()) { processItem (); Asset.sound_cleanRow.play(); }
+				else {
 				int row = checkFullRow();
 				if (row==0) Asset.sound_endFall.play();
 				//(row is bonus)
@@ -88,11 +92,13 @@ public class Board {
 				
 				// check over
 				if (checkOver (row)) gameOver = true;
+				}
+				
 				// next block
 				currentBlock = new Block(nextBlockID);
 				nextBlockID = Block.Next_Block_id();
 				nextBlock = new Block (nextBlockID);
-				nextBlock.setPosition(15, 9);
+				nextBlock.setPosition(0, 0);
 			}
 		}
 	}
@@ -106,6 +112,8 @@ public class Board {
 			if (!currentBlock.goDown(this)){
 			
 				this.addBlock(currentBlock);
+				if (currentBlock.isItem()) { processItem (); Asset.sound_cleanRow.play(); }
+				else {
 				int row = checkFullRow();
 				
 				if (row==0) Asset.sound_endFall.play(); // khong an diem
@@ -114,11 +122,11 @@ public class Board {
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
 				// kiem tra over ( - so dong an )
 				if (checkOver (row)) gameOver = true;
-				
+				}
 				currentBlock = new Block(nextBlockID);
 				nextBlockID = Block.Next_Block_id();
 				nextBlock = new Block (nextBlockID);
-				nextBlock.setPosition(15, 9);
+				nextBlock.setPosition(0, 0);
 		
 			}
 			if (score>level *SCORE_LV_STEP && tick- TICK_DECREMENT > 0){ level ++ ;tick -= TICK_DECREMENT; }
@@ -135,6 +143,29 @@ public class Board {
 		return false;
 	}
 	
+	/* Item position 1-1
+	 ****
+	 *#**
+	 ****
+	 ****
+	 */
+	public void processItem () {
+		if (currentBlock.name == blockName.Boomb)
+			for (int i=0;i< Block.BLOCK_HEIGHT-1;i++)
+				for (int j=0;j< Block.BLOCK_HEIGHT-1;j++)
+					if (currentBlock.x>=0 && currentBlock.x+i<=Board.BOARD_WIDTH-1  )
+						if (currentBlock.y>=0 && currentBlock.y+j<=Board.BOARD_HEIGHT-1  )
+							statusBoard[currentBlock.x+i][currentBlock.y+j] = BlockType.NULL;
+		
+		if (currentBlock.name == blockName.Rocket)
+			for (int i=currentBlock.y;i< Board.BOARD_HEIGHT;i++)
+					statusBoard[currentBlock.x+1][i] = BlockType.NULL;
+		
+		if (currentBlock.name == blockName.Dynamite)
+			clearRow(currentBlock.y+1);
+		
+	}
+	
 	public int checkFullRow () {
 		int i,j;
 		int n =0;
@@ -145,20 +176,20 @@ public class Board {
 			if ( currentBlock.type !=  BlockType.BOOMB || currentBlock.status[1][i] !=true) {
 			for (j=0;j<Board.BOARD_WIDTH ;j++){
 				if (i+currentBlock.y<BOARD_HEIGHT){
-					if(map[j][i+currentBlock.y] ==BlockType.NULL )
+					if(statusBoard[j][i+currentBlock.y] ==BlockType.NULL )
 					{   
 						f=false; break;
 					}
 					//Duong test BlockType.Map
-					else if(map[j][i+currentBlock.y]==BlockType.MAP){
+					else if(statusBoard[j][i+currentBlock.y]==BlockType.MAP){
 						existMap=true;
 					}
 					//
-				}
-				else 
-				{f=false;  break;}
+					}
+					else 
+					{f=false;  break;}
 			}// for j
-		}
+		} // vong if
 		if (f && (i+currentBlock.y<BOARD_HEIGHT))	{
 			n++; clearRow (i+currentBlock.y); 
 			//Duong test exist block of map

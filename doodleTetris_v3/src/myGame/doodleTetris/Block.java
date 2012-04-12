@@ -20,6 +20,8 @@ public class Block {
 		NULL,
 		// items
 		BOOMB,
+		ROCKET,
+		DYNAMITE,
 		MAP
 		
 	} 
@@ -32,7 +34,9 @@ public class Block {
 			I,
 			T,
 			Sq,
-			Boomb
+			Boomb,
+			Rocket,
+			Dynamite
 		} 
 	 
 	 static enum blockDirection {
@@ -52,6 +56,12 @@ public class Block {
 
 	int blockStyle1[] = {15,15,30,60,51,57,58};
 	int blockStyle[] = {15,15,184,408,240,312,120};
+	
+	public boolean isItem () {
+		if (name == blockName.Boomb || name == blockName.Dynamite ||name == blockName.Rocket)
+		return true;
+		return false;
+	}
 	
 	public Block(int id  ){
 		
@@ -89,37 +99,22 @@ public class Block {
 		case 7:{
 			type = BlockType.BOOMB;
 			name = blockName.Boomb;
-			direction = blockDirection.LEFT;
-			for (int i=1;i<2;i++)
-				for (int j=0;j<2;j++)
-				{
-					status[i][j] = true;
-					
-				}
-			break;
-		}
-		case 8:{
-			type = BlockType.BOOMB;
-			name = blockName.Boomb;
-			direction = blockDirection.LEFT;
-			for (int i=1;i<2;i++)
-				for (int j=0;j<3;j++)
-				{
-					status[i][j] = true;
-					
-				}
+			// vi tri
+			status[1][1] = true;
 			break;
 		}
 		case 9:{
-			type = BlockType.BOOMB;
-			name = blockName.Boomb;
-			direction = blockDirection.LEFT;
-			for (int i=1;i<2;i++)
-				for (int j=0;j<4;j++)
-				{
-					status[i][j] = true;
-					
-				}
+			type = BlockType.ROCKET;
+			name = blockName.Rocket;
+			// vi tri
+			status[1][1] = true;
+			break;
+		}
+		case 8:{
+			type = BlockType.DYNAMITE;
+			name = blockName.Dynamite;
+			// vi tri
+			status[1][1] = true;
 			break;
 		}
 		default:{
@@ -187,7 +182,7 @@ public class Block {
 		for (int i=0;i<BLOCK_WIDTH;i++){
 			for (int j=0;j<BLOCK_HEIGHT;j++) {
 				if ( status[i][j]==true )
-				if ((x+i) == Board.BOARD_WIDTH-1 || currentBoardStatus.map[x+i+1][y+j]!=BlockType.NULL  )
+				if ((x+i) == Board.BOARD_WIDTH-1 || currentBoardStatus.statusBoard[x+i+1][y+j]!=BlockType.NULL  )
 					return false;
 				
 				
@@ -201,7 +196,7 @@ public class Block {
 		for (int i=0;i<BLOCK_WIDTH;i++){
 			for (int j=0;j<BLOCK_HEIGHT;j++) {
 				if ( status[i][j]==true  )
-				if ( (x+i) == 0 || currentBoardStatus.map[x+i-1][y+j]!=BlockType.NULL )
+				if ( (x+i) == 0 || currentBoardStatus.statusBoard[x+i-1][y+j]!=BlockType.NULL )
 				return false;
 				
 			}// for j
@@ -214,7 +209,7 @@ public class Block {
 		for (int i=0;i<BLOCK_WIDTH;i++){
 			for (int j=0;j<BLOCK_HEIGHT;j++) {
 				if (status[i][j]==true )
-				if ( (y+j) == Board.BOARD_HEIGHT-1 || currentBoardStatus.map[x+i][y+1+j]!=BlockType.NULL)
+				if ( (y+j) == Board.BOARD_HEIGHT-1 || currentBoardStatus.statusBoard[x+i][y+1+j]!=BlockType.NULL)
 				return false;
 				
 			}// for j
@@ -226,7 +221,7 @@ public class Block {
 		int delta =0;
 		
 		// square,
-		if (name == blockName.Sq || name == blockName.Boomb) {
+		if (name == blockName.Sq || isItem() ) {
 			return true;
 		}
 		// rule
@@ -283,9 +278,11 @@ public class Block {
 	public static int item = -1;
 	 public static Block Next_Block() {
 		Random r = new Random();
-		int ra = r.nextInt(7);
+		int ra = r.nextInt(20);
 		if (item!=-1) ra  = item;
 		item=-1;
+		if (ra<17) ra = ra%7;
+		else ra = ra %10;
 		Block nextBlock = new Block(ra);
 		return nextBlock;
 		 
@@ -294,10 +291,13 @@ public class Block {
 	 
 	 public static int Next_Block_id() {
 		Random r = new Random();
-		int ra = r.nextInt(7);
+		int ra = r.nextInt(20);
 		if (item!=-1) ra  = item;
 		item=-1;
-
+		Log.d ("Block id",Integer.toString(ra));
+		
+		if (ra<17) ra = ra%7;
+		else ra = ra %10;
 		return ra;
 	 }
 	 

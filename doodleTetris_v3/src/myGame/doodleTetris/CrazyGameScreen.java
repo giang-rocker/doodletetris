@@ -17,7 +17,7 @@ public class CrazyGameScreen extends ClassicGameScreen {
 		// ve board
 	for (int j=4;j<Board.BOARD_HEIGHT;j++){
 		for (int i=0;i<Board.BOARD_WIDTH;i++)	 {
-				drawCell(board.map[i][j],(Board.BOARD_WIDTH-i)*unit_cell,(Board.BOARD_HEIGHT-1-j)*unit_cell);
+				drawCell(board.statusBoard[i][j],(Board.BOARD_WIDTH-i)*unit_cell,(Board.BOARD_HEIGHT-1-j)*unit_cell);
 				}// for j
 			}//for i
 		

@@ -1,6 +1,7 @@
 package myGame.doodleTetris.framework;
 
 
+import myGame.doodleTetris.Asset;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -75,4 +76,18 @@ public class AndroidFastRenderView extends SurfaceView implements Runnable{
 			
 		}
 		
+	public void draw (Bitmap t_framebuffer){
+		Rect rect= new Rect();
+		
+			if (!holder.getSurface().isValid())
+			return;
+			Matrix m = new Matrix();
+			m.setScale(game.scaleX, game.scaleY);
+			Canvas canvas = holder.lockCanvas();
+			canvas.getClipBounds(rect);
+			canvas.drawBitmap(t_framebuffer, m,null);
+			holder.unlockCanvasAndPost(canvas);
+			
+			
+	}
 }

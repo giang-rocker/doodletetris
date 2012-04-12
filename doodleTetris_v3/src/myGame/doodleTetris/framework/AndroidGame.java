@@ -1,11 +1,13 @@
 package myGame.doodleTetris.framework;
 
 
+import myGame.doodleTetris.Asset;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
+import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -35,7 +37,7 @@ public abstract class AndroidGame extends Activity implements Game {
     public void onCreate(Bundle savedInstanceState) { 
 		Log.d("myTag", "start");
         super.onCreate(savedInstanceState); 
- 
+   
         requestWindowFeature(Window.FEATURE_NO_TITLE); 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN); 
@@ -55,10 +57,11 @@ public abstract class AndroidGame extends Activity implements Game {
         
         touchEvent = new SingleTouch(renderView,scaleX, scaleY);
         keyPressEvent = new KeyPress(renderView);
-        
+       
         this.setVolumeControlStream(AudioManager.STREAM_MUSIC); 
         
         screen = getStartScreen();
+     
         setContentView(renderView); 
         PowerManager powerManager = (PowerManager) 
         getSystemService(Context.POWER_SERVICE); 
@@ -104,7 +107,6 @@ public abstract class AndroidGame extends Activity implements Game {
 	public void setScreen(Screen screen) {
 		if (screen ==null)
 			throw new IllegalAccessError("Screen must be not null");
-		
 		this.screen.pause();
 		this.screen.dispose();
 		screen.resume();
