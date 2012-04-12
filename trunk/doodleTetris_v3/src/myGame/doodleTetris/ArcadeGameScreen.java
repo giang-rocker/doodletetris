@@ -1,17 +1,20 @@
 package myGame.doodleTetris;
 
 import java.io.IOException;
+import java.util.Random;
 
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
+import myGame.doodleTetris.framework.Music;
 import myGame.doodleTetris.framework.SingleTouch;
 
 public class ArcadeGameScreen extends ClassicGameScreen {
 	// create doi tuiong load map
 	int id_stage;
 	LoadMap loadMap;
-
+	Music music;
+	String nameMusic[]={"bg_track","bg_track","bg_track"};
 	@Override
 	public void setupButton() {
 		super.setupButton();
@@ -29,6 +32,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		loadMap = new LoadMap(game);
 		setBoardMap(id);
 		setupButton();
+		//Duong update music 12/4/2012
+				Random r = new Random();
+				int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
+				music = new Music(game.getContext(), resid);
+				music.play();
 		
 	}
 	//Duong set map
@@ -87,21 +95,21 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			{Block.item = 9;Asset.icon_rocket.setPosition(-5000, -5000);}
 		}
 		
-		if ( Asset.icon_music.isTouch(TouchEvent)   )
+		if ( Asset.icon_music.isTouchDown(TouchEvent)   )
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-		//		Music.pauseMusic();
+				music.offVolume();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-		//		Music.startMusic();
+	            music.onVolume();
 			}
 			
 			isMusic = !isMusic;
 		}
 	
-		if ( Asset.icon_sound.isTouch(TouchEvent)   ){
+		if ( Asset.icon_sound.isTouchDown(TouchEvent)   ){
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
@@ -123,9 +131,31 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		// check stageClean state
 		if (checkStageClean ())  {
 			// stageCelan 
-			 strScore = ""+currentScore;  
+			strScore = ""+currentScore;  
 			gameState = GameState.StageClean; 
 			Asset.sound_stageClean.play();
+			StatusMap statusMap = new StatusMap(game);
+			String filename = id_stage+"";
+			//get rate
+			int rate=1;
+			int timeForRow= (180*40)*((id_stage+1)*10/100);
+			
+			for(int i=1;i<=2;i++){
+				if(time>=LoadMap.rowNum*timeForRow*(i-1) && time <LoadMap.rowNum*timeForRow*(i)){
+					rate = 3-i;
+				}
+			}
+			//
+			//Kiểm tra time nào nhỏ hơn
+			if(statusMap.openStatus(filename)){				
+				if(Float.parseFloat(statusMap.data[1])>Float.parseFloat(time+"")){
+					statusMap.saveStatus(filename, new LevelInfo (id_stage,time,currentScore,rate,true));
+				}
+			}
+			else{
+				statusMap.saveStatus(filename, new LevelInfo (id_stage,time,currentScore,rate,true));
+			}
+			//
 			return;
 			
 		}

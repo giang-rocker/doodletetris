@@ -38,7 +38,7 @@ public class LoadingScreen extends Screen {
 		
 		
 		// set bg main;
-		Asset.list_bg = new Image[6];
+		Asset.list_bg = new Image[1];
 		for (int i =0; i< Asset.list_bg.length;i++)
 		Asset.list_bg[i] = new Image (g.newBitmap("Background/bg_"+ Integer.toString(i)  +".jpg"),0,0);
 		
@@ -112,8 +112,10 @@ public class LoadingScreen extends Screen {
 	
 		
 		// number level
+
 		Asset.numberLevel = new  Image[10];
 		for (int i =1;i<=9;i++){
+
 			//System.out.println("Number/lv_"+ Integer.toString(i)+".png");
 			Asset.numberLevel[i] = new Image (g.newBitmap("Number/lv_"+ Integer.toString(i)+".png"),0,0);
 		}

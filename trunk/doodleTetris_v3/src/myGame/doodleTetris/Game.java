@@ -40,8 +40,7 @@ public class Game  extends AndroidGame{
 			      
 			       if ( Sound.appVolume>1)  Sound.appVolume=1;
 			       if ( Sound.appVolume<0)  Sound.appVolume=0;
-					Log.d("volume ",Float.toString(Sound.appVolume));
-				    
+					Log.d("volume ",Float.toString(Sound.appVolume));		    
 			       
 	return true;
 	}

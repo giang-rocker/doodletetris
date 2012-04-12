@@ -5,6 +5,7 @@ import java.util.Random;
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
+import myGame.doodleTetris.framework.Music;
 import myGame.doodleTetris.framework.Screen;
 import myGame.doodleTetris.framework.SingleTouch;
 
@@ -12,7 +13,8 @@ public class ClassicGameScreen extends Screen {
 
 	boolean isMusic = true;
 	boolean isSound = true;
-	
+	String nameMusic[]={"bg_track","bg_track","bg_track"};
+	Music music;
 	public void setupButton () {
 		// set game button arrow
 		Asset.btn_left.setPosition(48, 696);
@@ -34,7 +36,7 @@ public class ClassicGameScreen extends Screen {
 		Asset.icon_sound.setPosition(360+48,24);
 		
 		Random r = new Random ();
-		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(5)];
+		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
 		
 		
 	}
@@ -63,6 +65,11 @@ public class ClassicGameScreen extends Screen {
 		// TODO Auto-generated constructor stub
 	//	play track
 //		Asset.bg_track.play ();
+		//Duong update music 12/4/2012
+		Random r = new Random();
+		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
+		music = new Music(game.getContext(), resid);
+		music.play();
 	}
 	
 	@Override
@@ -267,16 +274,15 @@ public class ClassicGameScreen extends Screen {
 			{Block.item = 9;Asset.icon_rocket.setPosition(-5000, -5000);}
 		}
 		
-		if ( Asset.icon_music.isTouch(TouchEvent)   )
+		if ( Asset.icon_music.isTouchDown(TouchEvent)   )
 		{
-			
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-		//		Music.pauseMusic();
+				music.offVolume();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-		//		Music.startMusic();
+				music.onVolume();
 			}
 			
 			isMusic = !isMusic;
