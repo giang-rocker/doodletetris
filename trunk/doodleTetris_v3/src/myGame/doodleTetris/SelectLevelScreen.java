@@ -49,7 +49,7 @@ public class SelectLevelScreen extends Screen {
 		String[] data=new String[5];
 		Boolean isFirstLock = true;
 		boolean unlock=true;
-			for (int i=0;i<listLevel.length;i++) 
+			for (int i=0;i<list.length;i++) 
 			{
 				if(statusMap.openStatus(i+"")){
 				data = statusMap.getData();
@@ -140,7 +140,7 @@ public class SelectLevelScreen extends Screen {
 
 	public void drawSlide (){
 	
-		startY = startY + moveY*30;
+		startY = startY + moveY*10;
 		AndroidGraphics g = game.getGraphics();
 		
 		int height_unit=72;
@@ -151,20 +151,23 @@ public class SelectLevelScreen extends Screen {
 			float X = startX;
 			float Y = startY + (height_unit+space_line)*i +moveY;
 			listLevel[i].setPosition((int)X,(int)Y)	;
-		if (listLevel[i].isUnlock)	
-			Asset.slide_level.setBitmap(g.newBitmap("Button/btn_level_info.png"));
-		else	
-			Asset.slide_level.setBitmap(g.newBitmap("Button/btn_level_info_lock.png"));
 		
-		g.drawImage(Asset.slide_level.getBitmap(),(int)X,(int)Y)	;
+		if (listLevel[i].isUnlock)	
+			g.drawImage(Asset.slide_level.getBitmap(),(int)X,(int)Y)	;
+		
+		else	
+			g.drawImage(Asset.slide_level_lock.getBitmap(),(int)X,(int)Y)	;
+		
 		// draw ID
-		drawStringNumber(Integer.toString(listLevel[i].id), (int)X+24+12, (int)Y+64);
+		drawStringNumber(Integer.toString(listLevel[i].id+1), (int)X+24+12, (int)Y+64);
 		// draw scoreRecord
+		
 		drawStringNumber(Integer.toString(listLevel[i].scoreRecord), (int)X+120,(int) Y+72);
 		// draw timeRecord
 		drawTime(((int)listLevel[i].timeRecord),(int) X+240, (int)Y+72);
 		//draw start. chua xulu
 		drawStar( listLevel[i].rate ,(int)X+342,(int)Y+60+12);
+		
 		}
 		
 	
