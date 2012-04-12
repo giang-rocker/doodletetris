@@ -18,7 +18,7 @@ public class SelectLevelScreen extends Screen {
 	int startX = 0;
 	
 	int moveY =0;
-	
+	String minus,second;
 	String list[]= new String[1];
 	// them doi tuong assetmanager
 	AssetManager assetManager ;
@@ -140,7 +140,7 @@ public class SelectLevelScreen extends Screen {
 
 	public void drawSlide (){
 	
-		startY = startY + moveY*10;
+		startY = startY + moveY*30;
 		AndroidGraphics g = game.getGraphics();
 		
 		int height_unit=72;
@@ -162,7 +162,7 @@ public class SelectLevelScreen extends Screen {
 		// draw scoreRecord
 		drawStringNumber(Integer.toString(listLevel[i].scoreRecord), (int)X+120,(int) Y+72);
 		// draw timeRecord
-		drawStringNumber(Integer.toString((int)listLevel[i].timeRecord),(int) X+240, (int)Y+72);
+		drawTime(((int)listLevel[i].timeRecord),(int) X+240, (int)Y+72);
 		//draw start. chua xulu
 		drawStar( listLevel[i].rate ,(int)X+342,(int)Y+60+12);
 		}
@@ -211,5 +211,18 @@ public class SelectLevelScreen extends Screen {
 				g.drawImage( Asset.number[(int)c-48].bitmap,x,y);
 			}
 	
-		
+		void drawTime (int time, int StartX, int StartY) {
+			int realTime = time/40;
+			String o = "0";
+			
+			if (realTime/60>9) o = ""; else o = "0";
+			minus  = o +  realTime/60;
+			
+			if (realTime%60>9) o = ""; else o = "0";
+			second = o + realTime%60;
+			
+			drawStringNumber (minus,StartX,StartY);
+			drawStringNumber (":",StartX+48,StartY);
+			drawStringNumber (second,StartX+44+12,StartY);
+		}
 }

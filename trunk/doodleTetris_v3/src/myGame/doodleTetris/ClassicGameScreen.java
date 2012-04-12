@@ -24,8 +24,8 @@ public class ClassicGameScreen extends Screen {
 		Asset.bg_nextBlock.setPosition(15*24, 5*24);
 		
 		// set game button arrow
-		Asset.btn_left.setPosition(48, 696);
 		Asset.btn_right.setPosition(216, 696);
+		Asset.btn_left.setPosition(48, 696);
 		Asset.btn_rotate.setPosition(360, 696);
 		Asset.btn_down.setPosition(360, 600);
 		Asset.btn_pause.setPosition(384, 60);
