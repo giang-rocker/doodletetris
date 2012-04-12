@@ -34,7 +34,6 @@ public class SelectLevelScreen extends Screen {
 		//Duong cap nhat set select level
 		assetManager = game.getContext().getAssets();
 		
-		statusMap.setFirstStatus( );
 	
 		try {
 			list= assetManager.list("Map");
@@ -46,34 +45,38 @@ public class SelectLevelScreen extends Screen {
 		
 		listLevel = new LevelInfo[list.length];
 		
-		statusMap.saveStatus(list[0], new LevelInfo(0, 10f, 10, 3, true) );
-		
-		
 		//Random r = new Random();
-		String[] data = null;
+		String[] data=new String[5];
+		Boolean isFirstLock = true;
 		boolean unlock=true;
-		
 			for (int i=0;i<listLevel.length;i++) 
 			{
-				try {
-				data = statusMap.getData(list[i]);
-				} catch (Exception e) {
-					// TODO: handle exception
-					statusMap.data[0]=i+"";//id
-					statusMap.data[1]="0";//time
-					statusMap.data[2]="0";//score
-					statusMap.data[3]="0";//rate
-					statusMap.data[4]="1";//unlock
+				if(statusMap.openStatus(i+"")){
+				data = statusMap.getData();
 				}
-				if(data[4].equals("0")){
+				else{
+					// TODO: handle exception
+					data[0]=i+"";//id
+					data[1]="0";//time
+					data[2]="0";//score
+					data[3]="0";//rate
+					data[4]="1";//unlock
+				}
+				if(data[4].equals("1")){
 					unlock=false;
 				}
 				else{
 					unlock= true;
 				}
-				listLevel[i] = new LevelInfo(Integer.parseInt(data[0].trim()),Float.parseFloat(data[1].trim()),Integer.parseInt(data[2].trim()),Integer.parseInt(data[3].trim()),unlock);
+				if(!unlock && isFirstLock){//item bi khóa và phải là item đầu tiên bị khóa
+					isFirstLock = false;
+					listLevel[i] = new LevelInfo(Integer.parseInt(data[0].trim()),Float.parseFloat(data[1].trim()),Integer.parseInt(data[2].trim()),Integer.parseInt(data[3].trim()),true);
+				}
+				else{
+					listLevel[i] = new LevelInfo(Integer.parseInt(data[0].trim()),Float.parseFloat(data[1].trim()),Integer.parseInt(data[2].trim()),Integer.parseInt(data[3].trim()),unlock);
+				}
+				
 			}
-
 		startY = 96;
 	}
 
@@ -148,6 +151,11 @@ public class SelectLevelScreen extends Screen {
 			float X = startX;
 			float Y = startY + (height_unit+space_line)*i +moveY;
 			listLevel[i].setPosition((int)X,(int)Y)	;
+		if (listLevel[i].isUnlock)	
+			Asset.slide_level.setBitmap(g.newBitmap("Button/btn_level_info.png"));
+		else	
+			Asset.slide_level.setBitmap(g.newBitmap("Button/btn_level_info_lock.png"));
+		
 		g.drawImage(Asset.slide_level.getBitmap(),(int)X,(int)Y)	;
 		// draw ID
 		drawStringNumber(Integer.toString(listLevel[i].id), (int)X+24+12, (int)Y+64);
@@ -167,6 +175,7 @@ public class SelectLevelScreen extends Screen {
 		if (moveY==0){
 		for (int i=0;i<n;i++) {
 			if (listLevel[i].isTouch(touchEvent)){
+				if (listLevel[i].isUnlock)
 				if (touchEvent.isStillTouch(150))
 					if (listLevel[i].isTouch(touchEvent)) return i;
 		}

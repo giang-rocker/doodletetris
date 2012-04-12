@@ -75,7 +75,7 @@ public class StatusMap {
 			e.printStackTrace();
 		}
 	}
-	public  void openStatus(String filename){
+	public Boolean openStatus(String filename){
 		try {
 			FileInputStream fis =game.getContext().openFileInput(filename);
 			String str="";
@@ -90,11 +90,16 @@ public class StatusMap {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("File is not found");
-			
+			return false;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return false;
 		}
+		catch(Exception e){
+			return false;
+		}
+		return true;
 	}
 	public  void setFirstStatus(){
 		System.out.println("Call function setFirstStatus");
@@ -103,7 +108,6 @@ public class StatusMap {
 			String pathDir="Map";
 			try {
 				String list[]= game.getAsset().list(pathDir);
-			
 				if(list!=null){
 					for(int i=0;i<list.length;i++){
 						setVariable(i, 1, 1, 1, 1);
@@ -123,10 +127,8 @@ public class StatusMap {
 		}
 	}
 	
-	public String[] getData (String Path) {
-		openStatus(Path);
+	public String[] getData () {
 		return data;
-		
 	}
 	
 	
