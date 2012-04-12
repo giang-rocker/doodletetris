@@ -312,7 +312,7 @@ public class ClassicGameScreen extends Screen {
 			isMusic = !isMusic;
 		}
 	
-		if ( Asset.icon_sound.isTouch(TouchEvent)   ){
+		if ( Asset.icon_sound.isTouchDown(TouchEvent)   ){
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
