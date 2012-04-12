@@ -153,8 +153,8 @@ public class Board {
 		if (currentBlock.name == blockName.Boomb)
 			for (int i=0;i< Block.BLOCK_HEIGHT-1;i++)
 				for (int j=0;j< Block.BLOCK_HEIGHT-1;j++)
-					if (currentBlock.x>=0 && currentBlock.x+i<=Board.BOARD_WIDTH-1  )
-						if (currentBlock.y>=0 && currentBlock.y+j<=Board.BOARD_HEIGHT-1  )
+					if (currentBlock.x+i>=0 && currentBlock.x+i<=Board.BOARD_WIDTH-1  )
+						if (currentBlock.y+j>=0 && currentBlock.y+j<=Board.BOARD_HEIGHT-1  )
 							statusBoard[currentBlock.x+i][currentBlock.y+j] = BlockType.NULL;
 		
 		if (currentBlock.name == blockName.Rocket)
