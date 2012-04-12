@@ -11,9 +11,11 @@ public class Music {
 		mediaPlay = MediaPlayer.create(context, resid);
 		mediaPlay.setVolume(1, 1);
 	}
+	public void setLooping(){
+		mediaPlay.setLooping(true);
+	}
 	public void play(){
 		mediaPlay.start();
-		mediaPlay.setLooping(true);
 	}
 	public  void stop(){
 		mediaPlay.stop();

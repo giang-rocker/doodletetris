@@ -219,23 +219,26 @@ public class Block {
 	}
 	public  boolean rotation(Board currentBoardStatus){
 		int delta =0;
+		boolean f = true;
 		
 		// square,
-		if (name == blockName.Sq || isItem() ) {
-			return true;
-		}
+			if (name == blockName.Sq || isItem() ) {
+				return f;
+			}
 		// rule
 		if (direction == blockDirection.LEFT ||  direction == blockDirection.RIGHT)
 		if (name == blockName.S || name == blockName.Z || name == blockName.I ) delta = 1;
 		
-		// doi huong
-		direction = nextDirection();
 		// copy
+		boolean temp_rotation[][] =  new boolean [BLOCK_WIDTH][BLOCK_WIDTH];
 		boolean temp[][] =  new boolean [BLOCK_WIDTH][BLOCK_WIDTH];
+		
 		for (int i=0;i<4;i++)
-			for (int j =0;j<4;j++){
+			for (int j =0;j<4;j++) {
+				temp[i][j]=false;
+				temp_rotation[i][j]=false;
 				temp[i][j] = status[i][j];
-				 status[i][j]=false;
+				
 			}
 	
 		// L
@@ -243,17 +246,36 @@ public class Block {
 			for (int i=0;i<4;i++)
 				for (int j =0;j<4;j++)
 					if (i-delta>=0)
-					status[i-delta][j] = temp[j][3-i];
+						temp_rotation[i-delta][j] = temp[j][3-i];
 			
-			return true;
+			
 		}
 		
 		// orther case
 		for (int i=0;i<3;i++)
 			for (int j =0;j<3;j++)
-				status[i][j+delta] = temp[j][2-i];
+				temp_rotation[i][j+delta] = temp[j][2-i];
 	
-		return true;
+		
+		// kiem tra
+					for (int i=0;i<4;i++)
+						for (int j =0;j<4;j++)
+							if (temp_rotation[i][j] == true)
+								if (x + i < 0 || y + j < 0 || x+i >=Board.BOARD_WIDTH || y+j >= Board.BOARD_HEIGHT)
+								f =false;
+								else if ( currentBoardStatus.statusBoard[x+i][y+j] != BlockType.NULL)
+								f =false;
+		
+			if (f) 
+			{
+				for (int i=0;i<4;i++)
+					for (int j =0;j<4;j++)
+						status[i][j] = temp_rotation[i][j];
+			
+				// doi huong
+				direction = nextDirection();
+			}
+	return f;
 	}
 	
 	//

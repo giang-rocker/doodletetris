@@ -13,7 +13,6 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	// create doi tuiong load map
 	int id_stage;
 	LoadMap loadMap;
-	Music music;
 	int rate;
 	
 	@Override
@@ -33,11 +32,6 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		loadMap = new LoadMap(game);
 		setBoardMap(id);
 		setup();
-		//Duong update music 12/4/2012
-//				Random r = new Random();
-		//		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
-		//		music = new Music(game.getContext(), resid);
-		//		music.play();
 		
 	}
 	//Duong set map
@@ -66,8 +60,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	void updateRunning (float deltaTime){
 	SingleTouch TouchEvent = game.getTouchEvent();
 		
-		
-		int duration = 80000000;
+		int duration = 100000000;
 		if (timeExpired(start,duration))	{
 			start = (int)System.nanoTime();
 			
@@ -100,11 +93,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-				music.offVolume();
+				music.pause();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-	            music.onVolume();
+	            music.play();
 			}
 			
 			isMusic = !isMusic;
@@ -139,7 +132,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			String filename = id_stage+"";
 			//get rate
 			rate=1;
-			int timeForRow= (180*40)*((id_stage+1)*10/100);
+			int timeForRow= (600*40)*((id_stage+1)*10/100);
 			
 			for(int i=1;i<=2;i++){
 				if(time>=LoadMap.rowNum*timeForRow*(i-1) && time <LoadMap.rowNum*timeForRow*(i)){
@@ -199,6 +192,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	}
 	@Override
 	public void updateStageClean () {
+		music.pause();
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
 		if ( Asset.UI_GameOver.isTouch(TouchEvent)   )
@@ -246,6 +240,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	@Override
 	
 	void updateGameOver (){
+		music.stop();
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
 			if ( Asset.btn_playAgain.isTouch(TouchEvent)   )

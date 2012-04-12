@@ -98,7 +98,7 @@ public class SelectLevelScreen extends Screen {
 		
 		if (Math.abs(moveY) > 20){
 				startScrollY = (int) touchEvent.getY();
-		}
+		}	
 		if (moveY>0) moveY = 1; else if (moveY<0) moveY = -1;
 		
 		}
@@ -123,7 +123,6 @@ public class SelectLevelScreen extends Screen {
 	@Override
 	public void pause() {
 		// TODO Auto-generated method stub
-	//	game.setScreen(new MainMenu(game));
 	}
 
 	@Override

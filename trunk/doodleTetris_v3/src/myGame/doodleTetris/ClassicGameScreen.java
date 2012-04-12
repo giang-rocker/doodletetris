@@ -268,7 +268,7 @@ public class ClassicGameScreen extends Screen {
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
 		
-		int duration = 80000000;
+		int duration = 100000000;
 		if (timeExpired(start,duration) )	{
 			start = (int)System.nanoTime();
 			
@@ -301,11 +301,11 @@ public class ClassicGameScreen extends Screen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-				music.offVolume();
+				music.pause();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-				music.onVolume();
+				music.play();
 			}
 			
 			isMusic = !isMusic;
