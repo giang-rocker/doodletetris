@@ -5,7 +5,10 @@ import java.util.Random;
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
+
+
 import myGame.doodleTetris.framework.Music;
+
 import myGame.doodleTetris.framework.Screen;
 import myGame.doodleTetris.framework.SingleTouch;
 
@@ -15,13 +18,17 @@ public class ClassicGameScreen extends Screen {
 	boolean isSound = true;
 	String nameMusic[]={"bg_track","bg_track","bg_track"};
 	Music music;
-	public void setupButton () {
+	public void setup () {
+		// bg
+		Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
+		Asset.bg_nextBlock.setPosition(15*24, 5*24);
+		
 		// set game button arrow
 		Asset.btn_left.setPosition(48, 696);
 		Asset.btn_right.setPosition(216, 696);
 		Asset.btn_rotate.setPosition(360, 696);
 		Asset.btn_down.setPosition(360, 600);
-		Asset.btn_pause.setPosition(384, 72);
+		Asset.btn_pause.setPosition(384, 60);
 		
 		// set menu button
 		Asset.btn_mainMenu.setPosition(48, 312);
@@ -32,9 +39,10 @@ public class ClassicGameScreen extends Screen {
 		Asset.icon_dynamite.setPosition(384,360+72);
 		Asset.icon_rocket.setPosition(384,360+72+72);
 		
-		Asset.icon_music.setPosition(360,24);
-		Asset.icon_sound.setPosition(360+48,24);
+		Asset.icon_music.setPosition(360,12);
+		Asset.icon_sound.setPosition(360+48,12);
 		
+		// random bg
 		Random r = new Random ();
 		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
 		
@@ -61,7 +69,7 @@ public class ClassicGameScreen extends Screen {
 	public ClassicGameScreen(Game game) {
 		super(game);
 		board = new Board();
-		setupButton ();
+		setup ();
 		// TODO Auto-generated constructor stub
 	//	play track
 //		Asset.bg_track.play ();
@@ -107,21 +115,30 @@ public class ClassicGameScreen extends Screen {
 	g.drawImage(Asset.icon_dynamite);
 	g.drawImage(Asset.icon_rocket);
 	
-	//
+	// draw NextBlock bg
+	g.drawImage(Asset.bg_nextBlock);
+	// draw boar statistic
+	g.drawImage(Asset.bg_scoreBoard);
+	
+	// i con muslc
 	g.drawImage(Asset.icon_music);
 	g.drawImage(Asset.icon_sound);
-
-	drawScore(strScore,360,240);
+	// draw Score
+	drawScore(strScore,360,240+5);
+	//draw Level
 	drawLevel( level);
-	drawTime (time,360,312);
+	// draw Time
+	drawTime (time,360,307);
 
 	if (!timeExpired(startDrawBonus, bonusDuration)){
 		drawBonus(board.getBonus());
 	}
+	
 	drawBoard(board);
 	// ve current Block
-	drawBlock (board.currentBlock);
-	drawBlock (board.nextBlock);
+	drawBlock (board.currentBlock, 24, -4*24);
+	// ve next Block
+	drawBlock (board.nextBlock, 15*24, 5*24);
 	
 	if (gameState == GameState.Paused )
 		{drawPauseUI(); }
@@ -160,7 +177,7 @@ public class ClassicGameScreen extends Screen {
 		// ve board
 		for (int i=0;i<Board.BOARD_WIDTH;i++){
 			for (int j=4;j<Board.BOARD_HEIGHT;j++) {
-				drawCell(board.map[i][j],(i+1)*unit_cell,(j-4)*unit_cell);
+				drawCell(board.statusBoard[i][j],(i+1)*unit_cell,(j-4)*unit_cell);
 				}// for j
 			}//for i
 		
@@ -168,12 +185,12 @@ public class ClassicGameScreen extends Screen {
 	}
 	
 	// ve Block ()
-	void drawBlock (Block block) {
+	void drawBlock (Block block, int startX, int startY) {
 		int unit_cell = Block.UNIT_CELL;
 		for (int i=0;i<Block.BLOCK_HEIGHT;i++){
 			for (int j=0;j<Block.BLOCK_HEIGHT;j++) {
 				if (block.status[i][j])
-				drawCell(block.type,(block.x+i+1)*unit_cell,(block.y+j-4)*unit_cell);
+				drawCell(block.type,(block.x+i)*unit_cell +startX ,(block.y+j)*unit_cell +startY);
 				}// for j
 			}//for i
 	}
@@ -204,9 +221,6 @@ public class ClassicGameScreen extends Screen {
 		case PURPLE:
 			g.drawImage(Asset.block_purple.bitmap,x,y);
 			break;
-		case BOOMB:
-			g.drawImage(Asset.item_boomb.bitmap,x,y);
-			break;
 		case NULL:
 			g.drawImage(Asset.block_null.bitmap,x,y);
 			break;
@@ -214,7 +228,17 @@ public class ClassicGameScreen extends Screen {
 		case MAP:
 			g.drawImage(Asset.block_map.bitmap,x,y);
 			break;
-		}// switch case
+		// item
+		case BOOMB:
+			g.drawImage(Asset.item_boomb.bitmap,x,y);
+			break;
+		case ROCKET:
+			g.drawImage(Asset.item_rocket.bitmap,x,y);
+			break;
+		case DYNAMITE:
+			g.drawImage(Asset.item_dynamite.bitmap,x,y);
+			break;
+			}// switch case
 	}
 	
 
@@ -267,11 +291,11 @@ public class ClassicGameScreen extends Screen {
 		// check touch item
 		if ( Block.item ==-1){
 		if ( Asset.icon_boomb.isTouch(TouchEvent) )
-			{Block.item = 7;Asset.icon_boomb.setPosition(-5000, -5000);}
+			{Block.item = 17;Asset.icon_boomb.setPosition(-5000, -5000);}
 		if ( Asset.icon_dynamite.isTouch(TouchEvent)   )
-			{Block.item = 8;Asset.icon_dynamite.setPosition(-5000, -5000);}
+			{Block.item = 18;Asset.icon_dynamite.setPosition(-5000, -5000);}
 		if ( Asset.icon_rocket.isTouch(TouchEvent)   )
-			{Block.item = 9;Asset.icon_rocket.setPosition(-5000, -5000);}
+			{Block.item = 19;Asset.icon_rocket.setPosition(-5000, -5000);}
 		}
 		
 		if ( Asset.icon_music.isTouchDown(TouchEvent)   )
@@ -364,8 +388,7 @@ public class ClassicGameScreen extends Screen {
 			
 			System.gc();
 			// try to kill this process
-			android.os.Process.killProcess(game.getTaskId());
-			System.exit(0);
+			game.setScreen(new MainMenu(game));
 			}
 			else if (Asset.btn_no.isTouch(TouchEvent))  {
 				gameState  = GameState.Paused;

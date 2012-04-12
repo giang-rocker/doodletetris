@@ -83,7 +83,7 @@ public class LoadMap {
 			for(int row=0;row<rowNum;row++){
 				//System.out.println("col="+col+" row="+row);
 				if(map[col][row])
-				board.map[(Board.BOARD_WIDTH-colNum)/2+col][Board.BOARD_HEIGHT-rowNum+row]=Block.BlockType.MAP;
+				board.statusBoard[(Board.BOARD_WIDTH-colNum)/2+col][Board.BOARD_HEIGHT-rowNum+row]=Block.BlockType.MAP;
 			}
 		}
 	}

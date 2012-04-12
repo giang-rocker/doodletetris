@@ -16,8 +16,8 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	Music music;
 	String nameMusic[]={"bg_track","bg_track","bg_track"};
 	@Override
-	public void setupButton() {
-		super.setupButton();
+	public void setup() {
+		super.setup();
 		// set lai menu button
 		Asset.btn_nextStage.setPosition(48, 312);
 		Asset.btn_playAgain.setPosition(48, 552);
@@ -31,7 +31,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		id_stage = id;
 		loadMap = new LoadMap(game);
 		setBoardMap(id);
-		setupButton();
+		setup();
 		//Duong update music 12/4/2012
 				Random r = new Random();
 				int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
@@ -88,11 +88,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		// check touch item
 		if ( Block.item ==-1){
 		if ( Asset.icon_boomb.isTouch(TouchEvent) )
-			{Block.item = 7;Asset.icon_boomb.setPosition(-5000, -5000);}
+			{Block.item = 17;Asset.icon_boomb.setPosition(-5000, -5000);}
 		if ( Asset.icon_dynamite.isTouch(TouchEvent)   )
-			{Block.item = 8;Asset.icon_dynamite.setPosition(-5000, -5000);}
+			{Block.item = 18;Asset.icon_dynamite.setPosition(-5000, -5000);}
 		if ( Asset.icon_rocket.isTouch(TouchEvent)   )
-			{Block.item = 9;Asset.icon_rocket.setPosition(-5000, -5000);}
+			{Block.item = 19;Asset.icon_rocket.setPosition(-5000, -5000);}
 		}
 		
 		if ( Asset.icon_music.isTouchDown(TouchEvent)   )
@@ -230,11 +230,33 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		if ( Asset.btn_menuStage.isTouch(TouchEvent)   )
 			game.setScreen(new SelectLevelScreen(game));
 		}
+	@Override
+	void drawGameOverUI (){
+		AndroidGraphics g = game.getGraphics();
+		g.drawImage(Asset.UI_GameOver);
+		Asset.btn_playAgain.setPosition(48, 312);
+		g.drawImage(Asset.btn_playAgain);
+		g.drawImage(Asset.btn_menuStage);
+		
+		drawStringNumber (""+currentScore, 84,192);
+		drawTime (time, 192, 192);
+		
+	}
+	@Override
+	
+	void updateGameOver (){
+		SingleTouch TouchEvent = game.getTouchEvent();
+		
+			if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
+			game.setScreen(new ArcadeGameScreen(game,id_stage));
+		if ( Asset.btn_menuStage.isTouch(TouchEvent)   )
+			game.setScreen(new SelectLevelScreen(game));
+	}
 	
 	boolean checkStageClean () {
 		for (int i=0;i<Board.BOARD_WIDTH;i++) {
 			
-			if (board.map[i][Board.BOARD_HEIGHT-1] == BlockType.MAP) return false;
+			if (board.statusBoard[i][Board.BOARD_HEIGHT-1] == BlockType.MAP) return false;
 		}
 		
 		return true;

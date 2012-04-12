@@ -7,6 +7,7 @@ import myGame.doodleTetris.framework.ImgButton;
 import myGame.doodleTetris.framework.Music;
 import myGame.doodleTetris.framework.Screen;
 import myGame.doodleTetris.framework.Sound;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.util.Log;
 
@@ -17,15 +18,14 @@ public class LoadingScreen extends Screen {
 		// TODO Auto-generated constructor stub
 		Log.d("myTag","loading screen");
 	}
-
+	
 	@Override
 	public void update(float deltaTime) {
 		AndroidGraphics g = game.getGraphics();
-
+		
+		
 		//loading
 		Asset.bg_loading = new Image (g.newBitmap("Background/bg_loading.jpg"),0,0);
-		g.drawImage(Asset.bg_loading.bitmap, (int )Asset.bg_loading.x,(int ) Asset.bg_loading.y);
-		
 		// set image source
 		Asset.btn_setting = new ImgButton (g.newBitmap("Button/btn_setting.png"),0,0);
 		Asset.btn_record = new ImgButton (g.newBitmap("Button/btn_record.png"),0,0);
@@ -45,7 +45,8 @@ public class LoadingScreen extends Screen {
 		// bg_board
 		Asset.bg_board = new Image (g.newBitmap("Background/bg_board.png"),0,0);
 		Asset.bg_main = new Image (g.newBitmap("Background/bg_main.png"),0,0);
-		
+		Asset.bg_scoreBoard = new Image (g.newBitmap("Button/board.png"),0,0);
+		Asset.bg_nextBlock = new Image (g.newBitmap("Button/bg_nextBlock.png"),0,0);
 		
 		// select level
 		Asset.bg_selectLevel_main = new Image (g.newBitmap("Background/bg_select_lv_main.jpg"),0,0);
@@ -89,13 +90,16 @@ public class LoadingScreen extends Screen {
 		Asset.block_orange = new Image (g.newBitmap("Block/block_orange.png"),0,0);
 		Asset.block_null = new Image (g.newBitmap("Block/block_null.png"),0,0);
 		Asset.block_map = new Image(g.newBitmap("Block/block_map.png"), 0, 0);
+		
 		//items
 		Asset.item_boomb = new Image (g.newBitmap("Items/item_boomb.png"),0,0);
+		Asset.item_rocket = new Image (g.newBitmap("Items/item_rocket.png"),0,0);
+		Asset.item_dynamite = new Image (g.newBitmap("Items/item_dynamite.png"),0,0);
 		
 		// icon
 		Asset.icon_boomb = new ImgButton (g.newBitmap("Items/icon_boomb.png"),0,0);
-		Asset.icon_dynamite = new ImgButton (g.newBitmap("Items/item_dynamite.png"),0,0);
-		Asset.icon_rocket = new ImgButton (g.newBitmap("Items/item_rocket.png"),0,0);
+		Asset.icon_dynamite = new ImgButton (g.newBitmap("Items/icon_dynamite.png"),0,0);
+		Asset.icon_rocket = new ImgButton (g.newBitmap("Items/icon_rocket.png"),0,0);
 		
 		//
 		Asset.icon_music = new ImgButton (g.newBitmap("Button/icon_music.png"),0,0);
@@ -125,6 +129,8 @@ public class LoadingScreen extends Screen {
 		Asset.bonusImg[i] = new Image (g.newBitmap("Button/bonusX"+ Integer.toString(i)+".png"),0,0);
 		}
 		
+		
+		
 		// load sound
 		Asset.sound_endFall = new Sound ((Context) game, R.raw.endfall);
 //		/Asset.sound_ready = new Sound ((Context) game, R.raw.ready);
@@ -138,8 +144,8 @@ public class LoadingScreen extends Screen {
 		Asset.sound_stageClean = new Sound ((Context)game, R.raw.stage_clean);
 		// load track
 		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
-
 		
+		// set main menuScreem
 		game.setScreen(new MainMenu(game));
 	}
 
