@@ -10,7 +10,7 @@ import android.content.res.AssetManager;
 
 
 public class SelectLevelScreen extends Screen {
-
+	
 	LevelInfo[] listLevel;
 
 	// star of list at beginning
@@ -33,7 +33,7 @@ public class SelectLevelScreen extends Screen {
 		statusMap = new StatusMap(game);
 		//Duong cap nhat set select level
 		assetManager = game.getContext().getAssets();
-		
+		screenName ="selectLevel";
 	
 		try {
 			list= assetManager.list("Map");

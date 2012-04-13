@@ -1,6 +1,9 @@
 package myGame.doodleTetris;
 
+import java.util.Random;
+
 import android.test.IsolatedContext;
+import android.util.Log;
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.Block.blockName;
 
@@ -48,6 +51,24 @@ public class Board {
 		
 	}
 
+	void addNewLine () {
+		
+		for (int i=0;i<Board.BOARD_WIDTH;i++)
+			for (int j=0;j<=Board.BOARD_HEIGHT-2;j++)
+				statusBoard[i][j] = statusBoard[i][j+1];
+	
+		Random r = new Random ();
+		int ra = r.nextInt(13);
+		if (ra < 3 ) ra = 3;
+		for (int j=0;j<Board.BOARD_WIDTH;j++)//KhÃ´ng cáº§n cÃ¡i nÃ y
+			if (j%ra ==0 && j !=0)
+			 statusBoard[j][BOARD_HEIGHT-1] = BlockType.NULL;
+			else 
+			 statusBoard[j][BOARD_HEIGHT-1] = BlockType.ORANGE;
+	
+		Log.d("add new","add new");
+	}
+	
 	public void clearRow (int row) {
 		
 		for (int i=0;i<Board.BOARD_WIDTH;i++)
