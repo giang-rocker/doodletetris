@@ -34,6 +34,7 @@ public class LoadingScreen extends Screen {
 		Asset.btn_sound = new ImgButton (g.newBitmap("Button/btn_sound.png"),0,0);
 		// set mode image
 		Asset.btn_modeAdv = new ImgButton (g.newBitmap("Button/btn_modeAdv.png"),0,0);
+		Asset.btn_modeArc = new ImgButton (g.newBitmap("Button/btn_modeArc.png"),0,0);
 		Asset.btn_modeClassic = new ImgButton (g.newBitmap("Button/btn_modeClassic.png"),0,0);
 		
 		

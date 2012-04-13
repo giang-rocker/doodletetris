@@ -40,6 +40,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton btn_about;
 	
 	public static ImgButton btn_modeAdv;
+	public static ImgButton btn_modeArc;
 	public static ImgButton btn_modeClassic;
 	public static ImgButton btn_sound;
 	

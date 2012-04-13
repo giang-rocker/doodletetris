@@ -23,7 +23,13 @@ public class Game  extends AndroidGame{
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
-		if (keyCode == KeyEvent.KEYCODE_BACK)
+		if (keyCode == KeyEvent.KEYCODE_BACK )
+			if (getCurrentScreen().screenName == "selectLevel"){
+				this.setScreen( new MainMenu(this));
+				return true;
+			}
+		
+		if (keyCode == KeyEvent.KEYCODE_BACK )
 			if (getCurrentScreen().screenName != "MainMenu")
 				getCurrentScreen().pause ();
 			else {
@@ -31,6 +37,8 @@ public class Game  extends AndroidGame{
 				System.exit(0);
 		
 			}
+		
+		
 				 if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
 					 	Sound.appVolume-=0.2;
 			           }
