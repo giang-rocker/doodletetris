@@ -12,6 +12,8 @@ public class Board {
 	public static int BOARD_WIDTH = 13;
 	public static int BOARD_HEIGHT =32;
 	
+	//public static float TICK_INTIAL = 0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
+	// test
 	public static float TICK_INTIAL = 0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
 	public static float TICK_DECREMENT = 0.05f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
 	public static int SCORE_LV_STEP = 999; 
@@ -26,9 +28,9 @@ public class Board {
 	
 	public Block currentBlock;
 	public Block nextBlock;
-	
+	public Block shadowBlock; // shadow of current Block;
 	public int nextBlockID;	
-	
+	public int lines=0;
 	public int level = 1;	
 	public int score =0;
 	public boolean gameOver = false;
@@ -91,9 +93,18 @@ public class Board {
 		
 	}
 	
+	public void removeBlock (Block currentBlock) {
+		
+		for (int i=0;i<Block.BLOCK_WIDTH;i++)
+		for (int j=0;j<Block.BLOCK_HEIGHT;j++)
+			if(currentBlock.status[i][j]==true)
+            {
+				statusBoard[i+currentBlock.x][j+currentBlock.y] = BlockType.NULL;
+            }
+		
+	}
 	
 	public void update(float deltaTime) {
-		
 		tickTime+= deltaTime;
 		
 		while (tickTime>tick){
@@ -106,6 +117,7 @@ public class Board {
 				else {
 				int row = checkFullRow();
 				if (row==0) Asset.sound_endFall.play();
+				lines += row;
 				//(row is bonus)
 				score += SCORE_INCREMENT*row *(1+(float)row/10);
 				// tăng level
@@ -124,6 +136,8 @@ public class Board {
 		}
 	}
 	
+	
+
 	//Duong insert method updateForArcadeGameScreen()
 	public void updateForArcadeGameScreen(float deltaTime){
 		tickTime+= deltaTime;
@@ -226,6 +240,83 @@ public class Board {
 	public int getBonus () {
 		if (bonus>=3) return bonus;
 		else return -1;
+		
+	}
+	
+	/*
+	 -0.03 for the height multiplier
+	-7.5 per hole
+	-3.5 per blockade
+	+8.0 per clear 
+	 */
+
+	public float rankBoard( Block b ) {
+		Block shadow = b.setShadow(this);
+		float result=0.f;
+		
+		  int height = 0;
+		   int holes=0;
+		   int clearRow=0;
+		
+		
+		float scr_height=-5f;
+		float scr_hole = -2.31f;
+	//	float scr_clear = 1.6f;
+		
+	//	   float scr_height= -0.03f;
+		//	float scr_hole = -7.5f;
+			float scr_clear = 8.0f;
+		
+		this.addBlock(shadow);
+		int maxY = -1;
+		
+		for (int i=0; i< Board.BOARD_WIDTH;i++){
+			maxY = -1;
+			for (int j=0; j< Board.BOARD_HEIGHT;j++) {
+				// tim thay phan tu cao nhat
+				if (statusBoard[i][j]!= BlockType.NULL) {maxY = j; break;}
+				} //for j
+			
+			// ton tai it nhat 1 block
+			if (maxY!=-1){
+			// tong chieu cao
+			height+= (Board.BOARD_HEIGHT- maxY ) ;
+			
+			// ket hop tim holes
+			for (int k=maxY; k< Board.BOARD_HEIGHT ;k++) {
+				if (statusBoard[i][k]== BlockType.NULL){
+			//		Log.d("Board Statistic", "Hole : " +Integer.toString(holes) +":" +Integer.toString(i) +","+  Integer.toString(k) );
+					holes ++;
+					
+				}
+				} // for maxY to BoardHeught
+			
+			}	// if (maxY!=-1)
+		}//for i
+		boolean f = true;
+		// tim clear row
+	//	int limitY = Board.BOARD_HEIGHT- maxHeight;
+		
+		// check clearow
+		for (int i=0; i< Board.BOARD_HEIGHT;i++) {
+				f = true;
+			for (int j=0; j< Board.BOARD_WIDTH;j++) {
+				if (statusBoard[j][i]== BlockType.NULL)
+					{f = false; break;}
+			}
+			if (f) clearRow++;
+		}
+		
+		result = holes*scr_hole + height*scr_height + clearRow*scr_clear;
+		
+		Log.d("Board Statistic"," Total  = " + Float.toString(result) 
+				+" sumHeight = " + Integer.toString(height) 
+				+"," +" holes = " +Integer.toString(holes)
+				+"," +" clearow = " +Integer.toString(clearRow) );
+	
+		
+		removeBlock(shadow);
+		return result;
 		
 	}
 }

@@ -2,6 +2,8 @@ package myGame.doodleTetris;
 
 import java.util.Random;
 
+import android.util.Log;
+
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
@@ -146,6 +148,7 @@ public class ClassicGameScreen extends Screen {
 	drawBlock (board.currentBlock, 24, -4*24);
 	// ve next Block
 	drawBlock (board.nextBlock, 15*24, 5*24);
+	//
 	
 	if (gameState == GameState.Paused )
 		{drawPauseUI(); }
@@ -272,6 +275,8 @@ public class ClassicGameScreen extends Screen {
 	}
 	
 	int start = (int) System.nanoTime();
+	float blockRank =0;
+	float boardRank =0;
 	void updateRunning (float deltaTime){
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
@@ -293,6 +298,7 @@ public class ClassicGameScreen extends Screen {
 	
 		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
 			board.currentBlock.goDown(board);
+		
 		
 		AndroidGraphics g = game.getGraphics();
 		// check touch item
@@ -496,6 +502,5 @@ public class ClassicGameScreen extends Screen {
 	}
 
 
-	
 	
 }

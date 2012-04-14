@@ -40,10 +40,10 @@ public class Game  extends AndroidGame{
 		
 		
 				 if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-					 	Sound.appVolume-=0.2;
+					 	Sound.appVolume-=0.1;
 			           }
 			       if (keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-			    	   Sound.appVolume+=0.2;
+			    	   Sound.appVolume+=0.1;
 			       }
 			      
 			       if ( Sound.appVolume>1)  Sound.appVolume=1;
