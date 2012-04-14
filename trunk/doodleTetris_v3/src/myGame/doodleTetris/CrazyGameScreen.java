@@ -274,7 +274,7 @@ public class CrazyGameScreen extends Screen {
 	void updateRunning (float deltaTime){
 		// tinh toan bestMove
 		if (board.currentBlock.isBestPosition == false){
-			bestMove();
+		//	bestMove();
 			// auto di chuyen
 		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 		while (board.currentBlock.direction != bestDirection){
@@ -454,39 +454,7 @@ public class CrazyGameScreen extends Screen {
 	int bestX = -3;
 	Block.blockDirection bestDirection =null;
 	float maxRank = -1000000;
-	void bestMove (){
-		 Block blockTemp = new Block(board.currentBlock);
-		 maxRank = -1000000;
-		 float tempRank =0;
-		
 	
-		// xoay 4 vi tri
-		for (int i =0; i <=4; i++) {
-			
-			// di chuyen qua trai het muc
-			while (blockTemp.goLeft(board));
-			
-			// di chuyen qua phai va tinh toan
-			do {
-				tempRank = board.rankBoard(blockTemp) + blockTemp.rankBlock(board);
-				if (tempRank > maxRank){
-					maxRank = tempRank;
-					bestX = blockTemp.x;
-					bestDirection = blockTemp.direction;
-				}
-			}
-			while (blockTemp.goRight(board));
-			blockTemp.rotation(board);
-			blockTemp.setPosition( Board.BOARD_WIDTH/2-2,0);
-		
-		}///end for rotation 4 direction
-		
-		Log.d ("BEST ", "Score : " + Float.toString(maxRank) +" = Best X : "+  Integer.toString(bestX) + " BEST DIrection :  " + getDirection(bestDirection)) ;
-		
-		board.currentBlock.isBestPosition = true;
-	}// end function
-		
-		
 	String getDirection (blockDirection d) {
 		String k = "";
 		switch (d) {
