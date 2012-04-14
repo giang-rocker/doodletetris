@@ -5,6 +5,7 @@ import java.util.Random;
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
+import myGame.doodleTetris.framework.Sound;
 
 
 import myGame.doodleTetris.framework.Music;
@@ -14,8 +15,8 @@ import myGame.doodleTetris.framework.SingleTouch;
 
 public class ClassicGameScreen extends Screen {
 
-	boolean isMusic = true;
-	boolean isSound = true;
+	static boolean isMusic = true;
+	static boolean isSound = true;
 	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi2","bg_track_midi3"};
 	Music music;
 	public void setup () {
@@ -73,6 +74,13 @@ public class ClassicGameScreen extends Screen {
 		// TODO Auto-generated constructor stub
 	//	play track
 //		Asset.bg_track.play ();
+		if(ClassicGameScreen.isMusic){
+			setMusic();
+		}
+		
+	}
+	
+	public void setMusic(){
 		//Duong update music 12/4/2012
 		Random r = new Random();
 		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
@@ -301,11 +309,11 @@ public class ClassicGameScreen extends Screen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-				music.pause();
+				music.stop();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-				music.play();
+				setMusic();
 			}
 			
 			isMusic = !isMusic;
@@ -315,11 +323,13 @@ public class ClassicGameScreen extends Screen {
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
+				Sound.appVolume =0;
 		//		Sound.unloadSound();
 			}
 			else 
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
+				Sound.appVolume =1;
 		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
 		//		Sound.loadSound(AndroidGame.getContext());
 			}

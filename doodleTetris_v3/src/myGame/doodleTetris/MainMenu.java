@@ -5,6 +5,7 @@ import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Screen;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.SingleTouch;
+import android.content.Intent;
 import android.util.Log;
 
 
@@ -49,10 +50,15 @@ public class MainMenu extends Screen  {
 		if ( Asset.btn_modeAdv.isTouch(TouchEvent)   )
 			game.setScreen(new AdvanceGameScreen(game));
 		
-		if ( Asset.btn_about.isTouch(TouchEvent)   )
+		if ( Asset.btn_about.isTouch(TouchEvent))
 			game.setScreen(new CrazyGameScreen(game));
 			//game.setScreen(new ArcadeGameScreen(game, 1));
+		if(Asset.btn_setting.isTouch(TouchEvent)){
+			Intent setting = new Intent("android.intent.action.SETTINGACTIVITY");
+			game.getContext().startActivity(setting);
 		}
+		}
+			
 	}
 
 	@Override

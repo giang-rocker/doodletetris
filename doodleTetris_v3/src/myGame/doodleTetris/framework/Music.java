@@ -16,6 +16,7 @@ public class Music {
 	}
 	public void play(){
 		mediaPlay.start();
+		mediaPlay.setLooping(true);
 	}
 	public  void stop(){
 		mediaPlay.stop();

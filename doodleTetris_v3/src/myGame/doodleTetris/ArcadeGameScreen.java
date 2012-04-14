@@ -8,6 +8,7 @@ import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.Music;
 import myGame.doodleTetris.framework.SingleTouch;
+import myGame.doodleTetris.framework.Sound;
 
 public class ArcadeGameScreen extends ClassicGameScreen {
 	// create doi tuiong load map
@@ -93,11 +94,11 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
-				music.pause();
+				music.stop();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-	            music.play();
+	            setMusic();
 			}
 			
 			isMusic = !isMusic;
@@ -107,11 +108,14 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			if (isSound)
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
+				Sound.appVolume = 0;
 		//		Sound.unloadSound();
 			}
 			else 
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
+				Sound.appVolume = 1;
+				
 		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
 		//		Sound.loadSound(AndroidGame.getContext());
 			}
@@ -132,7 +136,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			String filename = id_stage+"";
 			//get rate
 			rate=1;
-			int timeForRow= (600*40)*((id_stage+1)*10/100);
+			int timeForRow= (300*40)*((id_stage+1)*10/100);
 			
 			for(int i=1;i<=2;i++){
 				if(time>=LoadMap.rowNum*timeForRow*(i-1) && time <LoadMap.rowNum*timeForRow*(i)){
@@ -251,8 +255,9 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	
 	boolean checkStageClean () {
 		for (int i=0;i<Board.BOARD_WIDTH;i++) {
-			
-			if (board.statusBoard[i][Board.BOARD_HEIGHT-1] == BlockType.MAP) return false;
+			for(int j=Board.BOARD_HEIGHT;j>(Board.BOARD_HEIGHT-LoadMap.rowNum);j--){
+				if (board.statusBoard[i][j-1] == BlockType.MAP) return false;
+			}
 		}
 		
 		return true;
