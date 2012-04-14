@@ -42,18 +42,34 @@ public class Block {
 	 static enum blockDirection {
 			UP,DOWN,RIGHT,LEFT
 		} 
-	int x,y;//Lưu top và left của mảng
+	int x,y;//LÆ°u top vÃ  left cá»§a máº£ng
 	BlockType type;
 	blockName name;
 	blockDirection direction;
+	// bien tam kiem tra
+	public boolean isBestPosition ;
 	boolean status[][] = new boolean [BLOCK_WIDTH][BLOCK_WIDTH];
 	
 	public Block(  ){
+		isBestPosition = false;
 		for (int i=0;i<BLOCK_WIDTH;i++) status[i][i] =false;
 		x= (Board.BOARD_WIDTH /2); 
 		y = 0;
 	}
 
+	public Block( Block b ){
+		isBestPosition = false;
+		for (int i=0;i<BLOCK_WIDTH;i++) 
+			for (int j=0;j<BLOCK_HEIGHT;j++) status[i][j] =b.status[i][j];
+		
+		x= b.x;
+		y = b.y;
+		name = b.name;
+		direction = b.direction;
+		type = b.type;
+		
+	}
+	
 	int blockStyle1[] = {15,15,30,60,51,57,58};
 	int blockStyle[] = {15,15,184,408,240,312,120};
 	
@@ -64,7 +80,7 @@ public class Block {
 	}
 	
 	public Block(int id  ){
-		
+		isBestPosition = false;
 		for (int i=0;i<BLOCK_WIDTH;i++)for (int j=0;j<BLOCK_HEIGHT;j++) status[i][j] =false;
 		
 		x= ((Board.BOARD_WIDTH)/2);
@@ -223,6 +239,7 @@ public class Block {
 		
 		// square,
 			if (name == blockName.Sq || isItem() ) {
+				direction = nextDirection();
 				return f;
 			}
 		// rule
@@ -278,7 +295,45 @@ public class Block {
 	return f;
 	}
 	
-	//
+	// direction ko quan tam board
+	public  void rotation(){
+		int delta =0;
+		// doi huong
+		direction = nextDirection();
+		// square,
+			if (name == blockName.Sq || isItem() ) {
+				return;
+			}
+		// rule
+		if (direction == blockDirection.LEFT ||  direction == blockDirection.RIGHT)
+		if (name == blockName.S || name == blockName.Z || name == blockName.I ) delta = 1;
+		
+		// copy
+		boolean temp[][] =  new boolean [BLOCK_WIDTH][BLOCK_WIDTH];
+		
+		for (int i=0;i<4;i++)
+			for (int j =0;j<4;j++) {
+				temp[i][j]=false;
+				temp[i][j] = status[i][j];
+				
+			}
+	
+		// L
+		if (name == blockName.I ) {
+			for (int i=0;i<4;i++)
+				for (int j =0;j<4;j++)
+					if (i-delta>=0)
+						status[i][j] = temp[j][3-i];
+			
+			
+		}
+		
+		// orther case
+		for (int i=0;i<3;i++)
+			for (int j =0;j<3;j++)
+				status[i][j] = temp[j][2-i];
+		}
+	
 	
 	
 	blockDirection nextDirection  () {
@@ -313,14 +368,96 @@ public class Block {
 	 
 	 public static int Next_Block_id() {
 		Random r = new Random();
-		int ra = r.nextInt(20);
+		int ra = r.nextInt(100);
 		if (item!=-1) ra  = item;
 		item=-1;
 		Log.d ("Block id",Integer.toString(ra));
-		
-		if (ra<17) ra = ra%7;
-		else ra = ra %10;
+		ra = ra%7;
+		// bo item
+	//	if (ra<17) ra = ra%7;
+	//	else ra = ra %10;
 		return ra;
 	 }
 	 
+	
+	 
+		public Block setShadow (Board currentBoardStatus){
+			Block shadow = new Block (this);
+			boolean f = true;
+			while (f){
+			for (int i=0;i<BLOCK_WIDTH;i++){
+				for (int j=0;j<BLOCK_HEIGHT;j++) {
+					if (shadow.status[i][j]==true )
+					if ( (shadow.y+j) == Board.BOARD_HEIGHT-1 || currentBoardStatus.statusBoard[shadow.x+i][shadow.y+1+j]!=BlockType.NULL)
+					f= false;
+					
+				}// for j
+			}//for i
+			shadow.y++;
+			} // for while
+			shadow.y-=1;
+			return shadow;
+		}
+		
+		/*
+		 +3.0 for each edge touching another block
+		+2.5 for each edge touching the wall
+		+5.0 for each edge touching the floor/
+		 */
+		 public float rankBlock ( Board currentBoardStatus){
+			 float result=0;
+			 
+			 float scr_touchBlock = 3.97f;
+			 float scr_touchWall = 2f;
+			 float scr_touchFloor =2f;
+			
+			// float scr_touchBlock = 3.0f;
+			// float scr_touchWall = 2f;
+		//	 float scr_touchFloor = 5.0f;
+			   
+			 
+			 
+			 int touchBlock = 0;
+			 int touchWall = 0;
+			 int touchFloor = 0;
+			 
+			
+				Block shadow = this.setShadow(currentBoardStatus);
+				
+				for (int i=0;i<BLOCK_WIDTH;i++){
+					for (int j=0;j<BLOCK_HEIGHT;j++) {
+						if (shadow.status[i][j]==true ) { // có gạch
+							 // kiem tra cham tuong
+							if (shadow.x+i == Board.BOARD_WIDTH-1 || shadow.x+i == 0)	touchWall ++;
+							 // kiem tra cham san
+							if (shadow.y+j == Board.BOARD_HEIGHT-1) touchFloor++;
+							
+								// kiem tra 3 vi tri
+							if ( (shadow.x+i+1) < Board.BOARD_WIDTH )
+								if (currentBoardStatus.statusBoard[shadow.x+i+1][shadow.y+j] != BlockType.NULL)
+									touchBlock++;
+							if ( ( shadow.x+i-1 )>=0)
+								if (currentBoardStatus.statusBoard[shadow.x+i-1][shadow.y+j] != BlockType.NULL)
+									touchBlock++;
+							
+							if ( (shadow.y+j+1) < Board.BOARD_HEIGHT)
+								if (currentBoardStatus.statusBoard[shadow.x+i][shadow.y+j+1] != BlockType.NULL)
+									touchBlock++;
+							
+						}
+						
+					}
+				}
+				
+				result = touchWall*scr_touchWall + touchFloor*scr_touchFloor +touchBlock*scr_touchBlock;
+			
+				Log.d("Block Statistic"," Total  = " + Float.toString(result) 
+						+" touchWall = " + Integer.toString(touchWall) 
+						+"," +" touchFloor = " +Integer.toString(touchFloor)
+						+"," +" touchBlock = " +Integer.toString(touchBlock) );
+			
+				
+				
+				return result;
+			}
 }
