@@ -105,6 +105,9 @@ public class LoadingScreen extends Screen {
 		//
 		Asset.icon_music = new ImgButton (g.newBitmap("Button/icon_music.png"),0,0);
 		Asset.icon_sound = new ImgButton (g.newBitmap("Button/icon_sound.png"),0,0);
+		Asset.icon_music_dis = new ImgButton (g.newBitmap("Button/icon_music_dis.png"),0,0);
+		Asset.icon_sound_dis = new ImgButton (g.newBitmap("Button/icon_sound_dis.png"),0,0);
+		
 		
 		// number
 		Asset.number= new  Image[11];
@@ -118,12 +121,12 @@ public class LoadingScreen extends Screen {
 		
 		// number level
 
-		Asset.numberLevel = new  Image[21];
+		Asset.numberLevel = new  Image[101];
 		for (int i =1;i<=13;i++){
 	//System.out.println("Number/lv_"+ Integer.toString(i)+".png");
 			Asset.numberLevel[i] = new Image (g.newBitmap("Number/lv_"+ Integer.toString(i)+".png"),0,0);
 		}
-		for (int i =14;i<=20;i++){
+		for (int i =14;i<=100;i++){
 			//System.out.println("Number/lv_"+ Integer.toString(i)+".png");
 					Asset.numberLevel[i] = new Image (g.newBitmap("Number/lv_"+ Integer.toString(1)+".png"),0,0);
 				}

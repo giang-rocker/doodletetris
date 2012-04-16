@@ -12,6 +12,7 @@ import android.view.View.OnTouchListener;
 
 
 public class Game  extends AndroidGame{
+	 
 	public static OnTouchListener renderTouch ;
 	@Override
 	public Screen getStartScreen () {
@@ -62,6 +63,4 @@ public class Game  extends AndroidGame{
 	  public int getTaskID (){
 		  return this.getTaskId();
 	  }
-
-	  
 }

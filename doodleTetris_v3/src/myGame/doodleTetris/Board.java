@@ -14,8 +14,9 @@ public class Board {
 	
 	//public static float TICK_INTIAL = 0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
 	// test
-	public static float TICK_INTIAL = 0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
-	public static float TICK_DECREMENT = 0.05f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
+	public static float TICK_INTIAL =0.5f; //Thá»�i gian quy Ä‘á»‹nh ban Ä‘áº§u cho phiÃªn lÃ m viá»‡c
+	//public static float TICK_DECREMENT = 0.05f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
+	public static float TICK_DECREMENT = 0.0f;//Ä�á»™ giáº£m thá»�i gian lÃ m viá»‡c
 	public static int SCORE_LV_STEP = 999; 
 	
 	// diem 1 row
@@ -243,5 +244,115 @@ public class Board {
 		
 	}
 	
+	/*
+	"1/ The Height of the TALLEST column // chieu cao cao nhat"
+	"2/ Hole Count // so lo"
+	"3/ Lines cleared  // so dong duoc xoa\n" +
+	"4/ max different height // chenh lech cot cao nhat va thap nhat "
+	"5/ Deepest hole // do sau cua lo thap nhat "
+	"6/ total dept of holes // tong chieu sau cua cac lo  "
+	"7/ Horizontal Roughness // do nham be mat ngang "
+	"8/ sum of height // tong chieu cao "
+	*/
+	public int rankBoard( Block b, Chromosome currentChromosome ) {
+		Block shadow = b.setShadow(this);
+		int result= 0;
 	
+		int heightest =0;
+		int shortest = 300;
+		int holes=0;
+		int clearLine=0;
+		int maxDiffHeight=0;
+		int deepestOfHole=0;
+		int totalDeptOfhHole=0;
+		int HorizontalRoughness =0 ; // do nham be mat
+		int sumHeight =0;
+		
+		this.addBlock(shadow);
+		int maxY = -1;
+		
+		int preHeight=-1;
+		int curHeight=-1;
+		
+		for (int i=0; i< Board.BOARD_WIDTH;i++){
+			maxY = -1;
+			for (int j=0; j< Board.BOARD_HEIGHT;j++) {
+				// tim thay phan tu cao nhat
+				if (statusBoard[i][j]!= BlockType.NULL) {maxY = j; break;}
+				} //for j
+			
+			if (maxY ==-1) curHeight = 0;
+			else
+			curHeight = (Board.BOARD_HEIGHT- maxY ) ;
+			
+			if (curHeight > heightest) heightest =curHeight; // chieu cao cao nhat
+			if (curHeight < shortest) shortest =curHeight; // chieu cao thap
+			
+			if (preHeight!=-1){
+				
+			if (curHeight>preHeight)
+				HorizontalRoughness = HorizontalRoughness+ (curHeight - preHeight);
+			else 
+				HorizontalRoughness = HorizontalRoughness+ (preHeight - curHeight);
+			
+			}
+			
+			preHeight = curHeight;
+			
+			// ton tai it nhat 1 block
+			if (maxY!=-1){
+			// tong chieu cao
+			sumHeight+= (Board.BOARD_HEIGHT- maxY ) ;
+			
+			// ket hop tim holes
+			for (int k=maxY; k< Board.BOARD_HEIGHT ;k++) {
+					if (statusBoard[i][k]== BlockType.NULL){
+					if ( (k- maxY ) > deepestOfHole) deepestOfHole = (k- maxY ); // lo sau nhat
+					totalDeptOfhHole += (k- maxY ); // tong chieu sau
+					holes ++;
+				}
+				} // for maxY to BoardHeught
+			
+			}	// if (maxY!=-1)
+		}//for i
+		
+		
+		boolean f = true;
+		// tim clear row
+		
+		// check clearow
+		for (int i=0; i< Board.BOARD_HEIGHT;i++) {
+				f = true;
+			for (int j=0; j< Board.BOARD_WIDTH;j++) {
+				if (statusBoard[j][i]== BlockType.NULL)
+					{f = false; break;}
+			}
+			if (f) clearLine++;
+		}
+		
+		
+		maxDiffHeight = heightest- shortest;
+		
+		// log stat
+		Log.d ("current stat", "heightest:"+heightest+"-holes:"+holes+"-clearLine:"+clearLine+"-maxDiffHeight:"
+					+maxDiffHeight+"-deepestOfHole:"+deepestOfHole+"-totalDeptOfhHole:"
+					+totalDeptOfhHole+"-HorizontalRoughness:"+HorizontalRoughness+"-sumHeight:"
+					+sumHeight);
+		
+		int i =0;
+		result = 
+		 heightest *currentChromosome.gen[i++]+
+		 holes*currentChromosome.gen[i++]+
+		 clearLine*currentChromosome.gen[i++]+
+		 maxDiffHeight*currentChromosome.gen[i++]+
+		 deepestOfHole*currentChromosome.gen[i++]+
+		 totalDeptOfhHole*currentChromosome.gen[i++]+
+		 HorizontalRoughness*currentChromosome.gen[i++]+
+		 (sumHeight -clearLine*Board.BOARD_WIDTH ) *currentChromosome.gen[i++];
+		
+		
+		removeBlock(shadow);
+		return result;
+		
+	}
 }

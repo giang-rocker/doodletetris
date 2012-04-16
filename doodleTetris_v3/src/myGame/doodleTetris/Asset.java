@@ -84,6 +84,8 @@ import myGame.doodleTetris.framework.Sound;
 	// music
 	public static ImgButton icon_sound;
 	public static ImgButton icon_music;
+	public static ImgButton icon_sound_dis;
+	public static ImgButton icon_music_dis;
 	
 	
 	// number - 10 is ":" hai cham
