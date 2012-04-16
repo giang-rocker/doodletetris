@@ -51,14 +51,22 @@ public class MainMenu extends Screen  {
 			game.setScreen(new AdvanceGameScreen(game));
 		
 		if ( Asset.btn_about.isTouch(TouchEvent))
-			game.setScreen(new CrazyGameScreen(game));
+			game.setScreen(new EvolutionScreen(game));
 			//game.setScreen(new ArcadeGameScreen(game, 1));
 		if(Asset.btn_setting.isTouch(TouchEvent)){
 			Intent setting = new Intent("android.intent.action.SETTINGACTIVITY");
 			game.getContext().startActivity(setting);
 		}
+
+		
+		if ( Asset.btn_help.isTouch(TouchEvent)   )
+			game.setScreen(new TestAutoPlay(game));
+			
+		
+
 		}
 			
+
 	}
 
 	@Override

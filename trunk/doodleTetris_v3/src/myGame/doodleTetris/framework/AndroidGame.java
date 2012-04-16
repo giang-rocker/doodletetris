@@ -17,7 +17,12 @@ import android.view.Window;
 import android.view.WindowManager;
 
 public abstract class AndroidGame extends Activity implements Game {
-
+	public static int count =1;
+	public static int map =1;
+	public static int currentSumLines = 0;
+	public static int preSumLines = 0;
+	
+	
 	float scaleX, scaleY;
 	
 	AndroidFastRenderView renderView;
