@@ -6,10 +6,10 @@ import android.media.MediaPlayer;
 
 public class Music {
 	MediaPlayer mediaPlay;
-	
+	public static float appVolume;
 	public Music (Context context, int resid){
 		mediaPlay = MediaPlayer.create(context, resid);
-		mediaPlay.setVolume(1, 1);
+		mediaPlay.setVolume(appVolume, appVolume);
 	}
 	public void setLooping(){
 		mediaPlay.setLooping(true);

@@ -7,6 +7,7 @@ import android.util.Log;
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
+import myGame.doodleTetris.framework.Sound;
 
 
 import myGame.doodleTetris.framework.Music;
@@ -18,8 +19,10 @@ public class ClassicGameScreen extends Screen {
 
 	boolean isMusic = true;
 	boolean isSound = true;
+	Setting setting;
 	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi2","bg_track_midi3"};
 	Music music;
+	String [] dataSetting=new String[5];
 	public void setup () {
 		// bg
 		Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
@@ -75,7 +78,57 @@ public class ClassicGameScreen extends Screen {
 		// TODO Auto-generated constructor stub
 	//	play track
 //		Asset.bg_track.play ();
+		openSetting();
+		
+		if(dataSetting[0].equals("true")){
+			isMusic=true;
+		}
+		else{
+			isMusic=false;
+		}
+		AndroidGraphics g = game.getGraphics();
+		if (isMusic){
+			Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
+			setMusic();
+		}
+		else{
+			Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
+		}
+		
+		//set sound
+		if(dataSetting[2].equals("true")){
+			isSound=true;
+		}
+		else{
+			isSound=false;
+		}
+		if (isSound){
+			Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
+		}
+		else{
+			Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
+		}
+		Sound.appVolume=Float.parseFloat(dataSetting[3].trim())/100.0f;
+		System.out.println("appMusic: "+Music.appVolume+" appSound: "+Sound.appVolume);
+	}
+	
+	public void openSetting(){
+		Setting setting = new Setting(game.getContext());
+		if(setting.loadSetting()){
+			dataSetting = setting.getData();
+		}
+		else{
+			dataSetting[0]="true";
+			dataSetting[1]="100";
+			dataSetting[2]="true";
+			dataSetting[3]="100";
+			dataSetting[4]="true";
+		}
+	}
+	
+	public void setMusic(){
 		//Duong update music 12/4/2012
+		Music.appVolume =Float.parseFloat(dataSetting[1].trim())/100.0f;
 		Random r = new Random();
 		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
 		music = new Music(game.getContext(), resid);
@@ -326,6 +379,8 @@ public class ClassicGameScreen extends Screen {
 			else 
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
+				Sound.appVolume=Float.parseFloat(dataSetting[3].trim())/100.0f;
+
 		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
 		//		Sound.loadSound(AndroidGame.getContext());
 			}
