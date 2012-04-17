@@ -121,15 +121,11 @@ public class LoadingScreen extends Screen {
 		
 		// number level
 
-		Asset.numberLevel = new  Image[101];
-		for (int i =1;i<=13;i++){
+		Asset.numberLevel = new  Image[10];
+		for (int i =0;i<=9;i++){
 	//System.out.println("Number/lv_"+ Integer.toString(i)+".png");
 			Asset.numberLevel[i] = new Image (g.newBitmap("Number/lv_"+ Integer.toString(i)+".png"),0,0);
 		}
-		for (int i =14;i<=100;i++){
-			//System.out.println("Number/lv_"+ Integer.toString(i)+".png");
-					Asset.numberLevel[i] = new Image (g.newBitmap("Number/lv_"+ Integer.toString(1)+".png"),0,0);
-				}
 		
 		// bonus
 		Asset.bonusImg = new  Image[5];

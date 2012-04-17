@@ -11,14 +11,14 @@ import android.content.Context;
 
 public class Setting {
 	String data[];
-	public Game game;
-	public Setting(Game game)
+	public Context context;
+	public Setting(Context context)
 	{
-		this.game = game;
+		this.context = context;
 	}
-	public void saveSetting(boolean music, float volMusic, boolean sound, float volSound,boolean engLanguage){
+	public void saveSetting(boolean music, int volMusic, boolean sound, int volSound,boolean engLanguage){
 		try {
-			FileOutputStream fos = game.getContext().openFileOutput("setting",Context.MODE_WORLD_READABLE);
+			FileOutputStream fos = context.openFileOutput("setting",Context.MODE_WORLD_READABLE);
 			fos.write((music+" ").getBytes());
 			fos.write((volMusic+" ").getBytes());
 			fos.write((sound+" ").getBytes());
@@ -36,7 +36,7 @@ public class Setting {
 	}
 	public boolean loadSetting(){
 		try {
-			FileInputStream fis =game.getContext().openFileInput("setting");
+			FileInputStream fis =context.openFileInput("setting");
 			String str="";
 			byte[] buffer = new byte[fis.available()];
 			while(fis.read(buffer)!=-1){

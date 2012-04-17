@@ -47,7 +47,6 @@ public class Sound  {
 	public Sound (Context context, int resSoundID) {
 		this.context = context;
 		this.sound = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-		
 		this.soundID = sound.load(context,resSoundID,1 );
 	}
 	

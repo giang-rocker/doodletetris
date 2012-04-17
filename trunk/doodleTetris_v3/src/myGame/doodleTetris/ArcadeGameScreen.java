@@ -114,7 +114,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 			else 
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
-				Sound.appVolume = 1;
+				Sound.appVolume=Float.parseFloat(dataSetting[3].trim())/100.0f;
 				
 		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
 		//		Sound.loadSound(AndroidGame.getContext());

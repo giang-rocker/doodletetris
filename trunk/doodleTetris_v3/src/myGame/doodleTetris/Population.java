@@ -114,10 +114,7 @@ public class Population {
 		// thay the
 		for (int i =0;i<numOfChromosome;i++)
 			this.chromosomes[i].copy(p_temp.chromosomes[i]);
-		
-
-		
-		
+				
 	}
 	
 	// toan tu ghep Crossover // ti le 100% 
