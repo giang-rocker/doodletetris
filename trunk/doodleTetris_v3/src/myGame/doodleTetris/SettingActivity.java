@@ -1,6 +1,7 @@
 package myGame.doodleTetris;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -44,6 +45,7 @@ public class SettingActivity extends Activity {
 		Button btnSave = (Button) findViewById(R.id.btnSave);
 		Button btnReset = (Button) findViewById(R.id.btnReset);
 		Button btnMenuGame = (Button) findViewById(R.id.btnMenuGame);
+		
 		
 		setting = new Setting(SettingActivity.this);
 		if(setting.loadSetting()){
@@ -151,7 +153,7 @@ public class SettingActivity extends Activity {
 				//try {
 					setting = new Setting(SettingActivity.this);
 					setting.saveSetting(music,seekbarMusic.getProgress(), sound,seekbarSound.getProgress(), engLanguage);
-					Toast.makeText(getBaseContext(), "Đã lưu thành công", 1000).show();
+					Toast.makeText(getBaseContext(), "Ä�Ã£ lÆ°u thÃ nh cÃ´ng", 1000).show();
 					//if(setting.loadSetting()){
 					//	data = setting.getData();
 					//}

@@ -23,6 +23,8 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		Asset.btn_nextStage.setPosition(48, 312);
 		Asset.btn_playAgain.setPosition(48, 552);
 		Asset.btn_menuStage.setPosition(48, 432);
+		Board.BOARD_HEIGHT = 32;
+		Board.BOARD_WIDTH=13;
 				
 	};
 	
@@ -59,6 +61,21 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	
 	@Override
 	void updateRunning (float deltaTime){
+		
+		
+		if (isAutoPlay) {
+			// tinh toan bestMove
+			if (board.currentBlock.isBestPosition == false){
+				bestMove();
+				// auto di chuyen
+			while (board.currentBlock.direction != bestDirection) {board.currentBlock.rotation(board);}
+			while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); }
+			while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
+			//tu dong di xuong
+			while (board.currentBlock.goDown(board)) ;
+			}
+		}
+		
 	SingleTouch TouchEvent = game.getTouchEvent();
 		
 		int duration = 100000000;
@@ -122,7 +139,8 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		
 			isSound= !isSound;
 		}
-		
+		if ( Asset.btn_autoPlay.isTouchDown(TouchEvent)   )
+		{isAutoPlay = !isAutoPlay; }
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
 		if (board.gameOver) { Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 		
@@ -173,6 +191,7 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		else { tempScore=currentScore; }
 		
 		strScore = "" + tempScore;
+		
 		
 		// time running
 		time++;

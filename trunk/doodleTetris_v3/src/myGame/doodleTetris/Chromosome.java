@@ -4,14 +4,15 @@ import java.util.Random;
 
 import android.util.Log;
 
-public class Chromosome {
-	public static int numOfGen = 9;
+public class Chromosome extends ChromosomeInfo {
+	public static int numOfGen = 10;
 	public static int RangeofGenValue = 1000;// gia tri tong khoang [-5,5];
 	int gen[]; // gia tri trong khoang [-RangeofGenValue,RangeofGenValue];
 	int fitnessValue;
 	int pecentFit ; // * % ngan
 	// gen
 	int genIndex;
+	int typeChromosome;
 	public Chromosome (){
 		gen = new int[numOfGen];
 		for (int i =0; i<numOfGen;i++) gen [i]=0;

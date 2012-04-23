@@ -13,6 +13,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static Image bg_main;
 	public static Image bg_loading;
 	public static Image bg_gameScreen;
+	public static Image bg_autoPlay;
 	public static Image bg_board;
 	public static Image bg_scoreBoard;
 	public static Image bg_nextBlock;
@@ -38,6 +39,13 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton btn_help;
 	public static ImgButton btn_record;
 	public static ImgButton btn_about;
+	public static ImgButton btn_autoPlay_B;
+	public static ImgButton btn_genetic;
+	public static ImgButton btn_hillClimbing;
+	public static ImgButton btn_chromosomeSlide;
+	//string
+	public static Image str_genetic;
+	public static Image str_hillClimbing;
 	
 	public static ImgButton btn_modeAdv;
 	public static ImgButton btn_modeArc;

@@ -8,6 +8,7 @@ import myGame.doodleTetris.framework.SingleTouch;
 public class AdvanceGameScreen extends ClassicGameScreen {
 
 	public AdvanceGameScreen(Game game) {
+	
 		super(game);
 		// TODO Auto-generated constructor stub
 	}

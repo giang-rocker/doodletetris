@@ -168,7 +168,7 @@ public class HillClimbingScreen extends Screen {
 	// ve current Block
 	//drawBlock (board.currentBlock, 24, -4*24);
 	// ve next Block
-	//drawBlock (board.nextBlock, 15*24, 5*24);
+	drawBlock (board.nextBlock, 15*24, 5*24);
 	
 	//drawBlock (board.shadowBlock, 24, -4*24);
 	

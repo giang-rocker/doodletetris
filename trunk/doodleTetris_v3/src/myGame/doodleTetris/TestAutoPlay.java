@@ -16,7 +16,7 @@ import myGame.doodleTetris.framework.Screen;
 import myGame.doodleTetris.framework.SingleTouch;
 
 public class TestAutoPlay extends Screen {
-
+	int id;
 	boolean isMusic = true;
 	boolean isSound = true;
 	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi2","bg_track_midi3"};
@@ -58,16 +58,15 @@ public class TestAutoPlay extends Screen {
 	//	bestChromosome.gen = new int[] {-698 , -995 , 463 , 745 , 916 , -350 , -579 , 497 , 834 , -456 , 380 , -196 , -279 , -444 };
 		//bestChromosome.gen = new int[] {950 , -835 , 498 , 708 , 0 , 0 , -1 , -712, -86 , 575 , -33 , -451 ,-932 , -572 };
 	//	bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
-		bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -825 ,-634};
-		bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
+	//	bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -825 ,-634};
+	//	bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
 		
 		Chromosome.numOfGen = bestChromosome.gen.length;
-			isAutoPlay= false;
+		isAutoPlay= true;
 		Block.generateBlock();
 		Board.TICK_DECREMENT=0.0f;
-		
-	//	board.addNewLine();board.addNewLine();board.addNewLine();board.addNewLine();board.addNewLine();
-	//	board.addNewLine();board.addNewLine();
+		Board.BOARD_HEIGHT = 32;
+		Board.BOARD_WIDTH = 13;
 	}
 	
 	enum GameState {
@@ -89,9 +88,9 @@ public class TestAutoPlay extends Screen {
 	String minus,second;
 	public TestAutoPlay (Game game) {
 		super(game);
-		board = new Board();
 		setup ();
-		// TODO Auto-generated constructor stub
+		board = new Board();
+			// TODO Auto-generated constructor stub
 	//	play track
 //		Asset.bg_track.play ();
 		//Duong update music 12/4/2012
@@ -99,6 +98,23 @@ public class TestAutoPlay extends Screen {
 		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
 		music = new Music(game.getContext(), resid);
 		music.play();
+	}
+	
+	public TestAutoPlay (Game game, ChromosomeInfo chromosome) {
+		super(game);
+		setup ();
+		board = new Board();
+			// TODO Auto-generated constructor stub
+	//	play track
+//		Asset.bg_track.play ();
+		//Duong update music 12/4/2012
+		Random r = new Random();
+		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
+		music = new Music(game.getContext(), resid);
+		music.play();
+		// chep gen
+		for (int i=0;i<Chromosome.numOfGen;i++)
+				bestChromosome.gen[i] = chromosome.gen[i];
 	}
 	
 	@Override
@@ -135,7 +151,7 @@ public class TestAutoPlay extends Screen {
 	g.drawImage(Asset.icon_dynamite);
 //	g.drawImage(Asset.icon_rocket);
 	
-	g.drawImage(Asset.btn_autoPlay);
+//	g.drawImage(Asset.btn_autoPlay);
 	
 	// draw NextBlock bg
 	g.drawImage(Asset.bg_nextBlock);
@@ -419,7 +435,7 @@ public class TestAutoPlay extends Screen {
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
-			game.setScreen(new ClassicGameScreen(game));
+			game.setScreen(new TestAutoPlay(game, (ChromosomeInfo) bestChromosome));
 	}
 
 	// kiem tra trang thai on game over
@@ -431,7 +447,7 @@ public class TestAutoPlay extends Screen {
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
-			game.setScreen(new ClassicGameScreen(game));
+			game.setScreen(new TestAutoPlay(game, (ChromosomeInfo) bestChromosome));
 	}
 	
 	// stage Clean mode
