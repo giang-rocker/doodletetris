@@ -370,17 +370,36 @@ public class Block {
 			int ra = r.nextInt(20);
 			ra =0;
 			Block nextBlock = new Block(ra);
+			++next;
 			return nextBlock;
 			 
 			 
 		 }
+	 
+	 public static int blockArray [] = new int[10000];
+	 
+	 public static void generateBlock () {
+		 next=0;
+		 Random r = new Random();
+			int ra ;
+		 for (int i =0;i<10000;i++) {
+			 ra = r.nextInt(10000);
+			 ra = ra%7;
+			 blockArray[i] = ra;
+			 
+		 }
+		 
+	 }
 	 public static int next=1;
 	 public static int Next_Block_id() {
 		Random r = new Random();
 		int ra = r.nextInt(100);
 		ra = ra%7;
-		ra = (next++)%7;
-		return ra;
+		//ra = (next++)%7;
+		
+		//return ra;
+		return  Math.abs( blockArray[(++next)%10000]);
+	//	return  (++next)%7;
 	 }
 	 
 	
@@ -402,33 +421,15 @@ public class Block {
 			shadow.y-=1;
 			return shadow;
 		}
-		
-		 public static float scr_touchBlock = 0.5f;
-		 public static float scr_touchWall =  0f;
-		 public static float scr_touchFloor = 1f;
-		 
-		 public static float sum_touchBlock = 0;
-		 public static float sum_touchWall = 0;
-		 public static float sum_touchFloor = 0;
-		 
 
-		 
-		 public float rankBlock ( Board currentBoardStatus){
-			 float result=0;
-			/* 
-			 float scr_touchBlock = 4f;
-			 float scr_touchWall =  3.5f;
-			 float scr_touchFloor = 3.68f;
-			*/
-			// float scr_touchBlock = 3.0f;
-			// float scr_touchWall = 2f;
-		//	 float scr_touchFloor = 5.0f;
-			   
-			 
-			 
+		/*
+		 public int rankBlock ( Board currentBoardStatus, Chromosome currentChromosome){
+			 int result=0;
+		
 			 int touchBlock = 0;
-			 int touchWall = 0;
-			 int touchFloor = 0;
+			 
+			 //int touchWall = 0;
+			// int touchFloor = 0;
 			 
 			
 				Block shadow = this.setShadow(currentBoardStatus);
@@ -436,7 +437,8 @@ public class Block {
 				for (int i=0;i<BLOCK_WIDTH;i++){
 					for (int j=0;j<BLOCK_HEIGHT;j++) {
 						if (shadow.status[i][j]==true ) { // có gạch
-							 // kiem tra cham tuong
+							
+							// kiem tra cham tuong
 							if (shadow.x+i == Board.BOARD_WIDTH-1 || shadow.x+i == 0)	touchWall ++;
 							 // kiem tra cham san
 							if (shadow.y+j == Board.BOARD_HEIGHT-1) touchFloor++;
@@ -458,19 +460,10 @@ public class Block {
 					}
 				}
 				
-				sum_touchBlock+= touchBlock*scr_touchBlock;
-				 sum_touchWall += touchWall*scr_touchWall;
-				 sum_touchFloor += touchFloor*scr_touchFloor;
-				
-				result = touchWall*scr_touchWall + touchFloor*scr_touchFloor +touchBlock*scr_touchBlock;
-				/*
-				Log.d("Block Statistic"," Total  = " + Float.toString(result) 
-						+" touchWall = " + Integer.toString(touchWall) 
-						+"," +" touchFloor = " +Integer.toString(touchFloor)
-						+"," +" touchBlock = " +Integer.toString(touchBlock) );
-				*/
-				
-				
-				return result;
+				result = touchBlock*currentChromosome.gen[8];
+						return result;
 			}
-}
+		
+		*/
+		
+		}
