@@ -151,6 +151,16 @@ public class LoadingScreen extends Screen {
 		// load track
 		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
 		
+		
+		// load auto play
+		Asset.bg_autoPlay = new Image(g.newBitmap("Background/bg_autoPlay.png"),0,0);
+		Asset.btn_autoPlay_B = new ImgButton (g.newBitmap("Button/btn_autoplay_B.png"),0,0);
+		Asset.btn_genetic = new ImgButton (g.newBitmap("Button/btn_genetic.png"),0,0);
+		Asset.btn_hillClimbing = new ImgButton (g.newBitmap("Button/btn_hillClimbing.png"),0,0);
+		Asset.str_genetic = new Image (g.newBitmap("Button/str_genetic.png"),0,0);
+		Asset.str_hillClimbing = new Image (g.newBitmap("Button/str_hillClimbing.png"),0,0);
+		Asset.btn_chromosomeSlide = new ImgButton(g.newBitmap("Button/btn_chromosomeSlide.png"),0,0);
+		
 		// set main menuScreem
 		game.setScreen(new MainMenu(game));
 	}

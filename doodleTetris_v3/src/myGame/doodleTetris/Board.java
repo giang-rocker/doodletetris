@@ -497,7 +497,7 @@ public class Board {
 			result = 
 					   heightest *currentChromosome.gen[i++]+
 						 holes*currentChromosome.gen[i++]+
-					//	 clearLine*currentChromosome.gen[i++]+
+						 clearLine*currentChromosome.gen[i++]+
 						 maxDiffHeight*currentChromosome.gen[i++]+
 						// deepestOfHole*currentChromosome.gen[i++]+
 						 //totalDeptOfhHole*currentChromosome.gen[i++]+

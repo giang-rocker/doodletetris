@@ -22,6 +22,7 @@ public class MainMenu extends Screen  {
 	Asset.btn_help.setPosition(320, 710);
 	Asset.btn_about.setPosition(400, 710);
 	Asset.btn_sound.setPosition(20, 730);
+	Asset.btn_autoPlay_B.setPosition(144, 530) ; 
 	
   	}
 	
@@ -50,21 +51,15 @@ public class MainMenu extends Screen  {
 		if ( Asset.btn_modeAdv.isTouch(TouchEvent)   )
 			game.setScreen(new AdvanceGameScreen(game));
 		
-		if ( Asset.btn_about.isTouch(TouchEvent))
-			game.setScreen(new EvolutionScreen(game));
-			//game.setScreen(new ArcadeGameScreen(game, 1));
+			
 		if(Asset.btn_setting.isTouch(TouchEvent)){
 			Intent setting = new Intent("android.intent.action.SETTINGACTIVITY");
 			game.getContext().startActivity(setting);
 		}
 
-		// test autoplay
-		if ( Asset.btn_help.isTouch(TouchEvent)   )
-			game.setScreen(new TestAutoPlay(game));
-			
-		// cliimbing
-		if ( Asset.btn_record.isTouch(TouchEvent)   )
-			game.setScreen(new HillClimbingScreen(game));
+		
+		if ( Asset.btn_autoPlay_B.isTouch(TouchEvent)   )
+			game.setScreen(new AutoPlayScreen(game));
 		
 	
 
@@ -86,6 +81,7 @@ public class MainMenu extends Screen  {
 		g.drawImage(Asset.btn_help);
 		g.drawImage(Asset.btn_record);
 		g.drawImage(Asset.btn_about);
+		g.drawImage(Asset.btn_autoPlay_B);
 		
 	}
 

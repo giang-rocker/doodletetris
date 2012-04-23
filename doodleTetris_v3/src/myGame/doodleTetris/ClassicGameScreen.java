@@ -63,9 +63,9 @@ public class ClassicGameScreen extends Screen {
 	//	bestChromosome.gen = new int[] {-62709, -30271, -48621, +35395,0,0,0,0,0,-12,-43810,-44262,-5832,-4041};
 	//	bestChromosome.gen = new int[] {-698 , -995 , 463 , 745 , 916 , -350 , -579 , 497 , 834 , -456 , 380 , -196 , -279 , -444 };
 		//bestChromosome.gen = new int[] {950 , -835 , 498 , 708 , 0 , 0 , -1 , -712, -86 , 575 , -33 , -451 ,-932 , -572 };
-	//	bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
+		bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
 	//	bestChromosome.gen = new int[] {-9 , -9 , 5 , -5 , -9 , -6 , -1 , -4 , -6 , -3 };
-		bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
+	//	bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
 			
 		Chromosome.numOfGen = bestChromosome.gen.length;
 			isAutoPlay= false;
@@ -96,8 +96,9 @@ public class ClassicGameScreen extends Screen {
 	String minus,second;
 	public ClassicGameScreen(Game game) {
 		super(game);
-		board = new Board();
 		setup ();
+		
+		board = new Board();
 		// TODO Auto-generated constructor stub
 	//	play track
 //		Asset.bg_track.play ();

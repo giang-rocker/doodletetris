@@ -292,7 +292,8 @@ public class Block {
 				// doi huong
 				direction = nextDirection();
 			}
-	return f;
+	
+		return f;
 	}
 	
 	// direction ko quan tam board
