@@ -19,8 +19,11 @@ public class EvolutionScreen extends Screen {
 	boolean isSound = true;
 	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi2","bg_track_midi3"};
 	Music music;
-	Population polulation;
+	Population population;
 	int currentChromosome;
+	// truyen giong
+	
+	
 		public void setup () {
 		// bg
 		Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
@@ -49,14 +52,15 @@ public class EvolutionScreen extends Screen {
 		// random bg
 		Random r = new Random ();
 		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
-		
 		// quan the
-		polulation = new Population();
+		population = new Population();
 		// tao quan the ngau nhien
-		polulation.generatePopulation();
+		population.generatePopulation();
 		currentChromosome = 0;
-		
-	}
+		Board.TICK_DECREMENT=0.0f;
+		Board.BOARD_HEIGHT = 24;
+		Board.BOARD_WIDTH=10;
+		}
 	
 	enum GameState {
 		Ready,
@@ -89,6 +93,7 @@ public class EvolutionScreen extends Screen {
 		music = new Music(game.getContext(), resid);
 		//music.play();
 		Sound.appVolume = 0f;
+		Block.generateBlock ();
 	}
 	
 	@Override
@@ -144,18 +149,20 @@ public class EvolutionScreen extends Screen {
 	//draw Level
 	drawLevel( level);
 	// draw Time
-	drawStringNumber(""+polulation.generation,360,307);
+	drawStringNumber(""+population.generation,360,307);
 	drawStringNumber(""+currentChromosome,360+24+24,307);
-
+	drawStringNumber(""+numAlive,360,307+200);
+	
+	
 	if (!timeExpired(startDrawBonus, bonusDuration)){
 		drawBonus(board.getBonus());
 	}
 	
 	drawBoard(board);
 	// ve current Block
-	drawBlock (board.currentBlock, 24, -4*24);
+	//drawBlock (board.currentBlock, 24, -4*24);
 	// ve next Block
-	drawBlock (board.nextBlock, 15*24, 5*24);
+	//drawBlock (board.nextBlock, 15*24, 5*24);
 	
 	//drawBlock (board.shadowBlock, 24, -4*24);
 	
@@ -262,9 +269,15 @@ public class EvolutionScreen extends Screen {
 		
 	//ve level
 	public void drawLevel(int level){
+		String lv = ""+level;
 		AndroidGraphics g = game.getGraphics();
-		g.drawImage(Asset.numberLevel[level].bitmap,24,168);
-	}
+		int startX= 24; int startY = 168;
+		int len  = lv.length();
+		int UNIT_CHAR = 187;
+		for (int i=0;i<len;i++){
+			g.drawImage(Asset.numberLevel[(int)lv.charAt(i)-48].bitmap,startX+UNIT_CHAR*i,startY);
+		}	
+		}
 	
 	// ve so
 	public void drawNumber(Character c, int x, int y){
@@ -281,58 +294,70 @@ public class EvolutionScreen extends Screen {
 	}
 	
 	int start = (int) System.nanoTime();
-	
+	int numAlive = 0;
 	void updateRunning (float deltaTime){
 		
-		if (board.gameOver ) {
-			if (polulation.maxFitnessValue<=5000){
-			strScore = ""+currentScore; Asset.sound_gameOver.play(); 
-		
-		// gan gia tri thich nghi
-		polulation.chromosomes[currentChromosome].fitnessValue = board.lines;
-		currentChromosome++;
-		
-		board = new Board();
-		
-		// hoan tat kiem tra tat ca cac ca the
-		if (currentChromosome ==Population.numOfChromosome) {
-			// tinh tong gia tri thich nghi
-			polulation.getSumOfFitnessValue();
-			// tinh toan phan tram
-			polulation.setPecentFit();
-			// tim ca the tot nhat
-			polulation.findBestFitness();
-			// tien hoa
-			polulation.Evolution();
-			//ca the dau tien cua the he tiep theo
-			currentChromosome =0;
-			
-			}
-			}
-			else {gameState=GameState.GameOver;}
-		return;
+		if (board.gameOver  ) {
+	//		if ( population.generation!=0 || board.lines >=30)
+			{
+					if (population.maxFitnessValue<=100000 ){
+					strScore = ""+currentScore; //Asset.sound_gameOver.play(); 
+				
+				// gan gia tri thich nghi
+				population.chromosomes[currentChromosome].fitnessValue = board.lines;
+				if (board.lines >0) numAlive++;
+				currentChromosome++;
+				Block.next =0;
+				board = new Board();
+				
+				// hoan tat kiem tra tat ca cac ca the
+				if (currentChromosome ==Population.numOfChromosome) {
+					// tinh tong gia tri thich nghi
+					population.getSumOfFitnessValue();
+					// tinh toan phan tram
+					population.setPecentFit();
+					// tim ca the tot nhat
+					population.findBestFitness();
+					// tien hoa
+					population.Evolution();
+					//ca the dau tien cua the he tiep theo
+					currentChromosome =0;
+					// resetnextBlock
+					Block.generateBlock () ;
+					numAlive =0;
+					}
+					}
+					else {gameState=GameState.GameOver;}
+					return;
+					}
+//			 loai bo ca the 0%
+		//	else if ( board.lines <30){
+		//		population.chromosomes[currentChromosome] = Chromosome.generateChromosome();
+		//		Block.next =0;
+		//		board = new Board();
+		//	}
 		}
 		
 		// tinh toan bestMove
 		if (board.currentBlock.isBestPosition == false){
 			bestMove();
-		
+	//	int tempRank = board.rankBoard(board.currentBlock, population.chromosomes[currentChromosome]) ;
+			
+			//Log.d ("CURRENT ", "Score : " + Float.toString(tempRank) +" = current X : "+  Integer.toString( board.currentBlock.x) + " CURRENT DIrection :  " + getDirection( board.currentBlock.direction)) ;
+	
 			// auto di chuyen
 		while (board.currentBlock.direction != bestDirection){
-			Log.d("Rotating to the best directon","Current : " + getDirection(board.currentBlock.direction) + "to best " + getDirection(bestDirection) );
+		//	//Log.d("Rotating to the best directon","Current : " + getDirection(board.currentBlock.direction) + "to best " + getDirection(bestDirection) );
 				board.currentBlock.rotation(board);
 			
 		}
 		
-		while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); Log.d("move to best", "move to best right"); }
-		while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); Log.d("move to best", "move to best left"); }
+		while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); }
+		while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
 		
 		while (board.currentBlock.goDown(board)) ;
 		}
 			
-		//	float tempRank = board.rankBoard(board.currentBlock) + board.currentBlock.rankBlock(board);
-			
-		//	Log.d ("CURRENT ", "Score : " + Float.toString(tempRank) +" = current X : "+  Integer.toString( board.currentBlock.x) + " CURRENT DIrection :  " + getDirection( board.currentBlock.direction)) ;
 		
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
@@ -343,24 +368,29 @@ public class EvolutionScreen extends Screen {
 			
 			if ( Asset.btn_rotate.isTouchDown(TouchEvent)  )
 				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); 
-				board.rankBoard( board.currentBlock, polulation.chromosomes[ currentChromosome] );}
+		
+				}
 				
 			
 			if ( Asset.btn_left.isTouchDown(TouchEvent)   )
 			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play();
-			board.rankBoard( board.currentBlock, polulation.chromosomes[ currentChromosome] );}
+		
+			}
 			
 			if ( Asset.btn_right.isTouchDown(TouchEvent)   )
 				{board.currentBlock.goRight(board); 	 Asset.sound_move.play();
-				board.rankBoard( board.currentBlock, polulation.chromosomes[ currentChromosome] );}
-			}
+			
+				}
+			
+		
+		}
 	
 		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
 			board.currentBlock.goDown(board);
 		
 		board.shadowBlock = board.currentBlock.setShadow(board);	
 	
-		board.update( Board.TICK_INTIAL );
+		board.update(Board.TICK_INTIAL );
 		
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
 		
@@ -390,7 +420,7 @@ public class EvolutionScreen extends Screen {
 		}
 		// kiem tra xac nhan bam
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
-			game.setScreen(new MainMenu(game));
+		//	game.setScreen(new MainMenu(game));
 		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
 			{ board = new Board(); gameState = GameState.Running; }
 	}
@@ -521,12 +551,12 @@ public class EvolutionScreen extends Screen {
 	
 	int bestX = -3;
 	Block.blockDirection bestDirection =null;
-	float maxRank = -1000000;
+	long maxRank=0 ;
 	
 	void bestMove (){
 		 Block blockTemp = new Block(board.currentBlock);
-		 maxRank = -1000000;
-		 int tempRank =0;
+		 maxRank = -9000000000000000000L ;
+		 long tempRank =0;
 	
 		// xoay 4 vi tri
 		for (int i =0; i <=4; i++) {
@@ -537,7 +567,7 @@ public class EvolutionScreen extends Screen {
 			// di chuyen qua phai va tinh toan
 			do {
 				
-				tempRank = board.rankBoard(blockTemp, polulation.chromosomes[currentChromosome]) ;
+				tempRank = board.rankBoard(blockTemp, population.chromosomes[currentChromosome])  ;
 				if (tempRank  > maxRank){
 					maxRank = tempRank ;
 					bestX = blockTemp.x;
@@ -545,10 +575,13 @@ public class EvolutionScreen extends Screen {
 				}
 			}
 			while (blockTemp.goRight(board));
-			blockTemp.rotation(board);
 			blockTemp.setPosition( Board.BOARD_WIDTH/2-2,0);
+			blockTemp.rotation(board);
 		
 		}///end for rotation 4 direction
+		
+		//Log.d ("BEST ", "maxRank : " + Float.toString(maxRank) +" = best X : "+  Integer.toString( bestX) + " BEST DIrection :  " + getDirection(bestDirection)) ;
+
 		
 		board.currentBlock.isBestPosition = true;
 	}// end function

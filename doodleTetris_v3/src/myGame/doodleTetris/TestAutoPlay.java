@@ -1,22 +1,13 @@
 package myGame.doodleTetris;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Random;
 
-import android.R.integer;
-import android.os.Environment;
 import android.util.Log;
-
 
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.Block.blockDirection;
-import myGame.doodleTetris.framework.AndroidGame;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
-import myGame.doodleTetris.framework.Sound;
 
 
 import myGame.doodleTetris.framework.Music;
@@ -30,6 +21,8 @@ public class TestAutoPlay extends Screen {
 	boolean isSound = true;
 	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi2","bg_track_midi3"};
 	Music music;
+	Chromosome bestChromosome;
+	boolean isAutoPlay;
 	public void setup () {
 		// bg
 		Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
@@ -47,19 +40,34 @@ public class TestAutoPlay extends Screen {
 		Asset.btn_playAgain.setPosition(48, 432);
 		
 		// set icon
-		Asset.icon_music.setPosition(360,360);
-		Asset.icon_sound.setPosition(360,360+48);
-		Asset.icon_star.setPosition(360,360+48+48);
+		Asset.icon_boomb.setPosition(384,360);
+		Asset.icon_dynamite.setPosition(384,360+72);
+		Asset.icon_rocket.setPosition(384,360+72+72);
+		Asset.btn_autoPlay.setPosition(384,360+72+72+24);
 		
-		Asset.icon_music_dis.setPosition(360 + 48 ,360);
-		Asset.icon_sound_dis.setPosition(360 + 48 ,360+48);
-		Asset.icon_star_dis.setPosition(360 + 48 ,360+48+48);
+		Asset.icon_music.setPosition(360,12);
+		Asset.icon_sound.setPosition(360+48,12);
 		
 		// random bg
 		Random r = new Random ();
 		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
+		 
+		bestChromosome = new Chromosome();
+	//	bestChromosome.gen = new int[] {-1 , -2 , 1 , 0 , 0 , 0 , -1 , -5 ,0,0,0,0,0,0 };
+	//	bestChromosome.gen = new int[] {-62709, -30271, -48621, +35395,0,0,0,0,0,-12,-43810,-44262,-5832,-4041};
+	//	bestChromosome.gen = new int[] {-698 , -995 , 463 , 745 , 916 , -350 , -579 , 497 , 834 , -456 , 380 , -196 , -279 , -444 };
+		//bestChromosome.gen = new int[] {950 , -835 , 498 , 708 , 0 , 0 , -1 , -712, -86 , 575 , -33 , -451 ,-932 , -572 };
+	//	bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
+		bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -825 ,-634};
+		bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
 		
+		Chromosome.numOfGen = bestChromosome.gen.length;
+			isAutoPlay= false;
+		Block.generateBlock();
+		Board.TICK_DECREMENT=0.0f;
 		
+	//	board.addNewLine();board.addNewLine();board.addNewLine();board.addNewLine();board.addNewLine();
+	//	board.addNewLine();board.addNewLine();
 	}
 	
 	enum GameState {
@@ -79,8 +87,7 @@ public class TestAutoPlay extends Screen {
 	int level=1;
 	int time=0;
 	String minus,second;
-	
-	public TestAutoPlay(Game game) {
+	public TestAutoPlay (Game game) {
 		super(game);
 		board = new Board();
 		setup ();
@@ -91,8 +98,7 @@ public class TestAutoPlay extends Screen {
 		Random r = new Random();
 		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
 		music = new Music(game.getContext(), resid);
-		//music.play();
-		Sound.appVolume = 0.1f;
+		music.play();
 	}
 	
 	@Override
@@ -125,44 +131,28 @@ public class TestAutoPlay extends Screen {
 	g.drawImage(Asset.btn_down);
 	g.drawImage(Asset.btn_pause);
 	// icon
+	g.drawImage(Asset.icon_boomb);
+	g.drawImage(Asset.icon_dynamite);
+//	g.drawImage(Asset.icon_rocket);
 	
-	
+	g.drawImage(Asset.btn_autoPlay);
 	
 	// draw NextBlock bg
 	g.drawImage(Asset.bg_nextBlock);
 	// draw boar statistic
 	g.drawImage(Asset.bg_scoreBoard);
 	
-
+	// i con muslc
 	g.drawImage(Asset.icon_music);
 	g.drawImage(Asset.icon_sound);
-	g.drawImage(Asset.icon_star);
-	
-	g.drawImage(Asset.icon_music_dis);
-	g.drawImage(Asset.icon_sound_dis);
-	g.drawImage(Asset.icon_star_dis);
-	
 	// draw Score
-	// drawLines
+	//drawScore(strScore,360,240+5);
 	drawStringNumber(""+board.lines,360,240+5);
 	//draw Level
 	drawLevel( level);
 	// draw Time
-	drawStringNumber(""+AndroidGame.map,360,307);
-	drawStringNumber(""+AndroidGame.count,360+24+24,307);
+	drawTime (time,360,307);
 
-	/*
-	int a,b,c;
-	a = (int)(Board.scr_height*100)*-1;
-	b = (int)(Board.scr_sumHeight*100)*-1;
-	c = (int)(Board.scr_hole*100)*-1;
-	
-	
-	drawStringNumber( Integer.toString(a),30,30);
-	drawStringNumber( Integer.toString(b),30,130);
-	drawStringNumber( Integer.toString(c),30,230);
-*/
-	
 	if (!timeExpired(startDrawBonus, bonusDuration)){
 		drawBonus(board.getBonus());
 	}
@@ -172,8 +162,7 @@ public class TestAutoPlay extends Screen {
 	drawBlock (board.currentBlock, 24, -4*24);
 	// ve next Block
 	drawBlock (board.nextBlock, 15*24, 5*24);
-	
-	drawBlock (board.shadowBlock, 24, -4*24);
+	//
 	
 	if (gameState == GameState.Paused )
 		{drawPauseUI(); }
@@ -275,13 +264,21 @@ public class TestAutoPlay extends Screen {
 			break;
 			}// switch case
 	}
-		
+	
+
+	
+	
 	//ve level
 	public void drawLevel(int level){
+		String lv = ""+level;
 		AndroidGraphics g = game.getGraphics();
-		g.drawImage(Asset.numberLevel[level].bitmap,24,168);
-	}
-	
+		int startX= 24; int startY = 168;
+		int len  = lv.length();
+		int UNIT_CHAR = 187;
+		for (int i=0;i<len;i++){
+			g.drawImage(Asset.numberLevel[(int)lv.charAt(i)-48].bitmap,startX+UNIT_CHAR*i,startY);
+		}	
+		}
 	// ve so
 	public void drawNumber(Character c, int x, int y){
 		
@@ -297,54 +294,103 @@ public class TestAutoPlay extends Screen {
 	}
 	
 	int start = (int) System.nanoTime();
-	
+	float blockRank =0;
+	float boardRank =0;
 	void updateRunning (float deltaTime){
 		
-		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 		
-		// tinh toan bestMove
-		if (board.currentBlock.isBestPosition == false){
-		//	bestMove();
-			// auto di chuyen
-		while (board.currentBlock.direction != bestDirection){
-			Log.d("Rotating to the best directon","Current : " + getDirection(board.currentBlock.direction) + "to best " + getDirection(bestDirection) );
-				board.currentBlock.rotation(board);
-			
+		if (isAutoPlay) {
+			// tinh toan bestMove
+			if (board.currentBlock.isBestPosition == false){
+				bestMove();
+				// auto di chuyen
+			while (board.currentBlock.direction != bestDirection) {board.currentBlock.rotation(board);}
+			while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); }
+			while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
+			//tu dong di xuong
+			while (board.currentBlock.goDown(board)) ;
+			}
 		}
-		
-		while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); Log.d("move to best", "move to best right"); }
-		while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); Log.d("move to best", "move to best left"); }
-		
-		while (board.currentBlock.goDown(board)) ;
-		}
-			
-		//	float tempRank = board.rankBoard(board.currentBlock) + board.currentBlock.rankBlock(board);
-			
-		//	Log.d ("CURRENT ", "Score : " + Float.toString(tempRank) +" = current X : "+  Integer.toString( board.currentBlock.x) + " CURRENT DIrection :  " + getDirection( board.currentBlock.direction)) ;
-	
-		board.shadowBlock = board.currentBlock.setShadow(board);	
-	
-		board.update(0.1f);
 		
 		SingleTouch TouchEvent = game.getTouchEvent();
-		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
-		
-		if (TouchEvent.isTouch()){
-		/*
-		if (Asset.icon_sound.isTouchDown(TouchEvent)) {Board.scr_height+=0.2f;}
-		if (Asset.icon_sound_dis.isTouchDown(TouchEvent)) {Board.scr_height-=0.2f;}
-		
-		if (Asset.icon_music.isTouchDown(TouchEvent)) {Board.scr_sumHeight+=0.2f;}
-		if (Asset.icon_music_dis.isTouchDown(TouchEvent)) {Board.scr_sumHeight-=0.2f;}
-		
-		if (Asset.icon_music.isTouchDown(TouchEvent)) {Board.scr_sumHeight+=0.2f;}
-		if (Asset.icon_music_dis.isTouchDown(TouchEvent)) {Board.scr_sumHeight-=0.2f;}
-		
-		if (Asset.icon_star.isTouch(TouchEvent)) {Board.scr_hole +=0.2f;}
-		if (Asset.icon_star_dis.isTouch(TouchEvent)) {Board.scr_hole-=0.2f;}
-		*/
-		
+		int duration = 100000000;
+		if (timeExpired(start,duration) )	{
+			start = (int)System.nanoTime();
+			
+			if ( Asset.btn_rotate.isTouchDown(TouchEvent)  )
+				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); Log.d("CURRENT DIRECTION", getDirection(board.currentBlock.direction)); Log.d("SCORE CURRENT", ""+board.rankBoard(board.currentBlock, bestChromosome));}
+				
+			
+			if ( Asset.btn_left.isTouchDown(TouchEvent)   )
+			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play();Log.d("SCORE CURRENT", ""+board.rankBoard(board.currentBlock, bestChromosome));}
+			
+			if ( Asset.btn_right.isTouchDown(TouchEvent)   )
+				{board.currentBlock.goRight(board); 	 Asset.sound_move.play();Log.d("SCORE CURRENT", ""+board.rankBoard(board.currentBlock, bestChromosome));}
+			
+			if ( Asset.btn_autoPlay.isTouchDown(TouchEvent)   )
+			{isAutoPlay = !isAutoPlay; 
+			
+			if (!isAutoPlay)
+			{Asset.btn_autoPlay.setBitmap( game.getGraphics().newBitmap("Button/btn_autoplay_dis.png"));}
+			else  {Asset.btn_autoPlay.setBitmap( game.getGraphics().newBitmap("Button/btn_autoplay.png"));
+			}
+			
+			}
+			
 		}
+	
+		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
+			board.currentBlock.goDown(board);
+		
+		
+		AndroidGraphics g = game.getGraphics();
+		// check touch item
+		if ( Block.item ==-1){
+		if ( Asset.icon_boomb.isTouch(TouchEvent) )
+			{Block.item = 17;Asset.icon_boomb.setPosition(-5000, -5000);}
+		if ( Asset.icon_dynamite.isTouch(TouchEvent)   )
+			{Block.item = 18;Asset.icon_dynamite.setPosition(-5000, -5000);}
+		if ( Asset.icon_rocket.isTouch(TouchEvent)   )
+			{Block.item = 19;Asset.icon_rocket.setPosition(-5000, -5000);}
+		}
+		
+		
+		
+		if ( Asset.icon_music.isTouchDown(TouchEvent)   )
+		{
+			if (isMusic){
+				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
+				music.pause();
+			}
+			else{
+				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
+				music.play();
+			}
+			
+			isMusic = !isMusic;
+		}
+	
+		if ( Asset.icon_sound.isTouchDown(TouchEvent)   ){
+			if (isSound)
+			{
+				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
+		//		Sound.unloadSound();
+			}
+			else 
+			{
+				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound.png"));
+		//		Sound.setResSoundID(myGame.doodleTetris.R.raw.endfall);
+		//		Sound.loadSound(AndroidGame.getContext());
+			}
+		
+			isSound= !isSound;
+		}
+		
+		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
+		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
+
+		board.update(Board.TICK_INTIAL);
+		
 		
 		if (currentScore != board.score){
 			// kiem tra level
@@ -353,7 +399,7 @@ public class TestAutoPlay extends Screen {
 			currentScore = board.score;
 		}
 		
-		if (tempScore<currentScore-5) { tempScore+=5; strScore = "" + tempScore;}
+		if (tempScore<currentScore-10) { tempScore+=10; strScore = "" + tempScore;}
 		else { tempScore=currentScore; strScore = "" + tempScore;}
 		
 		
@@ -364,6 +410,7 @@ public class TestAutoPlay extends Screen {
 	// kiem tra trang thai on pause
 	void updatePause (){
 		SingleTouch TouchEvent = game.getTouchEvent();
+		Asset.bg_track.pause();
 		if ( Asset.UI_Pause.isTouch(TouchEvent)   ){
 			gameState = GameState.Running;
 	//			Music.startMusic();
@@ -377,16 +424,15 @@ public class TestAutoPlay extends Screen {
 
 	// kiem tra trang thai on game over
 	void updateGameOver (){
-		
-			SingleTouch TouchEvent = game.getTouchEvent();
+		SingleTouch TouchEvent = game.getTouchEvent();
 		
 		if ( Asset.UI_GameOver.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
-		if ( Asset.btn_playAgain.isTouchDown(TouchEvent)   )
-			game.setScreen(new TestAutoPlay(game));
-		}
+		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
+			game.setScreen(new ClassicGameScreen(game));
+	}
 	
 	// stage Clean mode
 	public void updateStageClean () {
@@ -423,13 +469,14 @@ public class TestAutoPlay extends Screen {
 		g.drawImage(Asset.UI_GameOver);
 		g.drawImage(Asset.btn_mainMenu);
 		g.drawImage(Asset.btn_playAgain);
-		drawStringNumber (""+board.lines, 84,192);
+		drawStringNumber (""+currentScore, 84,192);
 		drawTime (time, 192, 192);
 		
 	}
 	//StaeClean mode;
 	
 	void drawStageCleanUI (){
+	
 	}
 	void drawExitUI (){
 		Asset.btn_yes.setPosition(144, 288);
@@ -441,6 +488,7 @@ public class TestAutoPlay extends Screen {
 	}
 	// ve chuoi so s tai vi tri bat dau X, Y
 	void drawStringNumber (String s, int startX, int startY) {
+		
 		int len  = s.length();
 		int UNIT_CHAR = 24;
 		for (int i=0;i<len;i++){
@@ -477,13 +525,11 @@ public class TestAutoPlay extends Screen {
 	}
 	// ve diem tai vi tri X,Y;
 	public void drawScore(String score, int startX, int startY){
-		String o ="0000";
+	//	String o ="0000";
 		int len  = score.length();
-		score = o.substring(len) + score;
-		
 		int UNIT_CHAR = 24;
 		
-		for (int i=0;i<4;i++){
+		for (int i=0;i<len;i++){
 			drawNumber(score.charAt(i),startX+i*UNIT_CHAR,startY);
 		
 		}
@@ -496,11 +542,45 @@ public class TestAutoPlay extends Screen {
 		return false;
 	}
 
-	
+
 	int bestX = -3;
 	Block.blockDirection bestDirection =null;
-	float maxRank = -1000000;
+	long maxRank = 0;
 	
+	void bestMove (){
+		 Block blockTemp = new Block(board.currentBlock);
+		 maxRank = -9000000000000000000L ;
+		 long tempRank =0;
+	
+	
+		// xoay 4 vi tri
+		for (int i =0; i <5; i++) {
+			
+			// di chuyen qua trai het muc
+			while (blockTemp.goLeft(board));
+			
+			// di chuyen qua phai va tinh toan
+			do {
+				
+				tempRank = board.rankBoard(blockTemp, bestChromosome)  ;
+				if (tempRank  > maxRank){
+					maxRank = tempRank ;
+					bestX = blockTemp.x;
+					bestDirection = blockTemp.direction;
+				}
+			}
+			while (blockTemp.goRight(board));
+			blockTemp.setPosition( Board.BOARD_WIDTH/2-2,0);
+			blockTemp.rotation(board);
+			
+		
+		}///end for rotation 4 direction
+		
+		Log.d ("BEST ", "maxRank : " + Float.toString(maxRank) +" = best X : "+  Integer.toString( bestX) + " BEST DIrection :  " + getDirection(bestDirection)) ;
+
+		
+		board.currentBlock.isBestPosition = true;
+	}// end function
 	String getDirection (blockDirection d) {
 		String k = "";
 		switch (d) {
@@ -517,5 +597,4 @@ public class TestAutoPlay extends Screen {
 		return k;
 		
 	}
-	
 }

@@ -71,6 +71,7 @@ public class LoadingScreen extends Screen {
 		Asset.btn_rotate = new ImgButton (g.newBitmap("Button/btn_rotate.png"),0,0);
 		Asset.btn_down = new ImgButton (g.newBitmap("Button/btn_down.png"),0,0);
 		Asset.btn_pause = new ImgButton (g.newBitmap("Button/btn_pause.png"),0,0);
+		Asset.btn_autoPlay = new ImgButton (g.newBitmap("Button/btn_autoplay_dis.png"),0,0);
 		
 		// button game menu Button
 		Asset.btn_mainMenu = new ImgButton (g.newBitmap("Button/btn_mainMenu.png"),0,0);
@@ -117,6 +118,7 @@ public class LoadingScreen extends Screen {
 		
 		// load hai cham
 		Asset.number[10] = new Image (g.newBitmap("Number/db_dot.png"),0,0);
+		Asset.minues = new Image (g.newBitmap("Number/minus.png"),0,0);
 	
 		
 		// number level

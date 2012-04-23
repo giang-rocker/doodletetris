@@ -58,11 +58,15 @@ public class MainMenu extends Screen  {
 			game.getContext().startActivity(setting);
 		}
 
-		
+		// test autoplay
 		if ( Asset.btn_help.isTouch(TouchEvent)   )
 			game.setScreen(new TestAutoPlay(game));
 			
+		// cliimbing
+		if ( Asset.btn_record.isTouch(TouchEvent)   )
+			game.setScreen(new HillClimbingScreen(game));
 		
+	
 
 		}
 			

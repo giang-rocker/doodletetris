@@ -59,7 +59,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton btn_menuStage;
 	public static ImgButton btn_yes;
 	public static ImgButton btn_no;
-	
+	public static ImgButton btn_autoPlay;
 	//block
 	public static Image block_red;
 	public static Image block_green;
@@ -90,6 +90,7 @@ import myGame.doodleTetris.framework.Sound;
 	
 	// number - 10 is ":" hai cham
 	public static Image[] number;
+	public static Image minues;
 	
 	// number level
 	public static Image[] numberLevel;

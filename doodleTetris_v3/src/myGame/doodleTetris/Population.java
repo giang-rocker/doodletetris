@@ -11,15 +11,20 @@ import android.os.Environment;
 import android.util.Log;
 
 public class Population {
-	public static int numOfChromosome = 40;
-	public static int numOfGeneration = 10;
+	public static int numOfChromosome = 50; // lage is good
+	public static int numOfGeneration = 100;
 	public static float ProbCross  = 1.0f;
 	public static float ProbMutation  = 0.01f;
+	
 	
 	int generation =0 ;// the he quan the
 	int maxFitnessValue; // fitnessValue of bestChromosome
 	int bestChromosome; // id
 	int sumOfFitnessValue; // tong gia tri thich nghi
+	int numOfDiffChromosome =0;
+	int numOfMutationChromosome;
+	int[] mutationChromosome;
+	
 	
 	// population
 	Chromosome chromosomes[] ;
@@ -30,6 +35,7 @@ public class Population {
 		bestChromosome=-1;
 		sumOfFitnessValue = 0;
 		generation =0 ;
+		mutationChromosome = new int [100];
 	}
 	/*
 	// sao chep quan the
@@ -62,6 +68,25 @@ public class Population {
 		}
 	}
 	
+	// generate full weight
+		public void generatePopulation_FULLSPEC () {
+			int w = -Chromosome.RangeofGenValue;
+			
+			for (int i =0;i<numOfChromosome;i++){
+				chromosomes[i] = new Chromosome();
+				for (int k =0; k <Chromosome.numOfGen;k++){
+					if (w == Chromosome.RangeofGenValue+1) w = -Chromosome.RangeofGenValue;
+				chromosomes[i].gen[k] = w++;
+				}
+				
+			
+			}
+			maxFitnessValue =-1;
+			bestChromosome =-1;
+			sumOfFitnessValue = -1;
+			generation =0 ;
+		}
+	
 	public int getSumOfFitnessValue () {
 		maxFitnessValue =-1;
 		bestChromosome =-1;
@@ -73,9 +98,17 @@ public class Population {
 	}
 	
 	public void setPecentFit () {
-		if (sumOfFitnessValue==0) sumOfFitnessValue = 1;
+		if (sumOfFitnessValue==0){
+			for (int i =0;i<numOfChromosome;i++){
+				chromosomes[i]= Chromosome.generateChromosome();
+				chromosomes[i].pecentFit=250;
+				}
+		return;
+		}
+		
+		
 		for (int i =0;i<numOfChromosome;i++)
-			chromosomes[i].pecentFit = ((chromosomes[i].fitnessValue * 100)/sumOfFitnessValue);
+			chromosomes[i].pecentFit = ((chromosomes[i].fitnessValue * 1000)/sumOfFitnessValue);
 	}
 	
 	// tai tao, chon loc
@@ -84,8 +117,11 @@ public class Population {
 		int position, ballPosition;
 		
 		Population p_temp = new Population();
+		boolean[] isChose = new boolean[numOfChromosome];
 		
-		int[] circle = new int[100];
+		for (int i=0;i<numOfChromosome;i++) isChose[i] =false;
+		
+		int[] circle = new int[1000];
 		// tạo bánh xe
 		position =0;
 		int len =0;
@@ -94,27 +130,31 @@ public class Population {
 			// dat len banh xe
 			for (int t=0; t<len;t++)
 				circle[position++] = i;
+				
 		}
 		// dien vao cho trong tren banh xe
-		while (position<100) circle[position++] = bestChromosome; // dien them = con tot nhat
+		while (position<1000) circle[position++] = bestChromosome; // dien them = con tot nhat
 		
 		// lua chon
 		for (int i =0;i<numOfChromosome;i++){
-			ballPosition = ra.nextInt(100);
+			ballPosition = ra.nextInt(1000);
 		//	Log.d("Ball Position", ""+ballPosition + "| " +circle[ballPosition] +"-" + chromosomes[ circle[ballPosition]].gen[0] );
 			p_temp.chromosomes[i] = new Chromosome();
 			p_temp.chromosomes[i].copy( chromosomes[circle[ballPosition]]);
 			
+			isChose[circle[ballPosition]] = true;
 		}
-		// gan lai.
 		
+		for (int i=0;i<numOfChromosome;i++) if (isChose[i]) numOfDiffChromosome++;
+		
+		// gan lai.
 		p_temp.maxFitnessValue = this.maxFitnessValue;
 		p_temp.bestChromosome = this.bestChromosome;
 		
 		// thay the
 		for (int i =0;i<numOfChromosome;i++)
 			this.chromosomes[i].copy(p_temp.chromosomes[i]);
-				
+
 	}
 	
 	// toan tu ghep Crossover // ti le 100% 
@@ -126,23 +166,45 @@ public class Population {
 		int len =Chromosome.numOfGen ;
 		// vi tri lai ghep
 		int position = new Random().nextInt(len);
-		
 		// sao chep doan dau // nguyen ban A - B
 		for (int i=0;i<position;i++){
 			newA.gen[i] = a.gen[i];
 			newB.gen[i] = b.gen[i];
+
+			
 		}
-		
 		// sao chep doan sau // trao doi A - B
 		for (int i=position;i<len;i++){
 			newA.gen[i] = b.gen[i];
 			newB.gen[i] = a.gen[i];
 		}
 		
+		//log
 		// thay doi bo me
 		b.copy(newB);
 		a.copy(newA);
 	}
+	// Dot bien
+	
+		public boolean Mutation (Chromosome s) {
+			boolean f = false;
+			Random r = new Random();
+			int ra;
+			int sign;
+			for (int i =0;i< Chromosome.numOfGen;i++)
+			{
+				ra =(r.nextInt(1000));
+				
+			//    Log.d("Mutation", "Mutationed :"+ ra +" -  " + ProbMutation*1000);
+				if (Math.abs(ra) <=( ProbMutation*1000)){
+					f = true;
+					if (r.nextBoolean())sign = 1; else sign = -1;
+					s.gen[i]= ((r.nextInt() + (int) System.nanoTime()) %Chromosome.RangeofGenValue) * sign;
+				} 
+				
+			}
+			return f;
+		}
 	
 	// tien hoa 
 	public void Evolution () {
@@ -153,6 +215,19 @@ public class Population {
 		this.Reproduction();
 		logPopulation(generation, "Reproduction");
 		
+		// tra ve 0 so luong ca the dot bien
+		
+		numOfMutationChromosome =0;
+		// dot bien
+		for (int i =0;i<numOfChromosome;i++)
+			if (Mutation (chromosomes[i])) {
+				mutationChromosome[numOfMutationChromosome++] = i;
+			}
+		// ghi log dot bien
+		logPopulation(generation, "Mutation");
+		
+		
+		numOfDiffChromosome =0;
 		// mang kiem tra
 		boolean check [] = new boolean [numOfChromosome];
 		// reset mang 
@@ -160,26 +235,56 @@ public class Population {
 		
 		Random ra = new Random(); // ngau nhien
 		int id_a,id_b=0; // hai ca the lai ghep
-		
+		int chose=0;
 		// lai ghep  100% cac ca the cua quan the tao ra quan the moi
 		for (int i =0; i<numOfChromosome/2;i++) {
 			
 			id_a = ra.nextInt(numOfChromosome);
 			while (check[id_a]  )id_a = ra.nextInt(numOfChromosome);
+			// chon ID B tranh ID A
+			id_b = ra.nextInt(numOfChromosome);
+			while (check[id_b] || compareChromosome(chromosomes[id_a], chromosomes[id_b])) id_b = ra.nextInt(numOfChromosome);
+			
+			// kiem tra lan nua cho chac an	
+			if (!check[id_a] && !check[id_b] && !compareChromosome(chromosomes[id_a], chromosomes[id_b]) ) 
+				{
+				CrossOver(chromosomes[id_a], chromosomes[id_b]); 
+				check[id_a]= true; check[id_b] = true;
+				chose+=2;
+				}
+		}
+		
+		// xu ly nhung con con lai
+		while (chose<numOfChromosome) {
+			id_a = ra.nextInt(numOfChromosome);
+			while (check[id_a]  )id_a = ra.nextInt(numOfChromosome);
+			// chon ID B tranh ID A
 			id_b = ra.nextInt(numOfChromosome);
 			while (check[id_b]) id_b = ra.nextInt(numOfChromosome);
 			
-			// kiem tra lan nua cho chac an
-			if (!check[id_a] && !check[id_b]) CrossOver(chromosomes[id_a], chromosomes[id_b]); 
+			// kiem tra lan nua cho chac an	
+			if (!check[id_a] && !check[id_b] ) 
+				{
+				chromosomes[id_b] = Chromosome.generateChromosome();
+				CrossOver(chromosomes[id_a], chromosomes[id_b]); 
+				check[id_a]= true; check[id_b] = true;
+				chose+=2;
+				}
 			
-			check[id_a]= true; check[id_b] = true;
 		}
+		
 		
 		logPopulation(generation, "CrossOver");
 		
 		// thay doi thong so the he
 		generation++; // tang the he tiep theo
 		
+	}
+	
+	public boolean compareChromosome (Chromosome a, Chromosome b){
+		for (int i =0; i<Chromosome.numOfGen;i++)
+			if (a.gen[i]!=b.gen[i]) return false;
+		return true;
 	}
 	
 	// name : REPRODUCTION - CROSSOVER
@@ -217,8 +322,8 @@ public class Population {
 					ChromosomeStat += " Chromosome " +Integer.toString(i) +":" ;
 					// thong so gen
 					for (int k =0; k<Chromosome.numOfGen;k++)
-						ChromosomeStat +=  Integer.toString( chromosomes[i].gen[k])+ " | "  ;
-					
+						ChromosomeStat +=  Integer.toString( chromosomes[i].gen[k])+ " , "  ;
+					ChromosomeStat += ";"  ;
 					// thong so
 					ChromosomeStat +="\n FITNESS VALUE :" +  Integer.toString( chromosomes[i].fitnessValue) ;
 					ChromosomeStat +=" ||PERCENT FIT :" +  Integer.toString( chromosomes[i].pecentFit) ;
@@ -230,10 +335,21 @@ public class Population {
 			outer.write("Max Fitness Value : " +Integer.toString (maxFitnessValue) +"\n");
 			outer.write("Best Chromosome : " +Integer.toString (bestChromosome) +"\n");
 			outer.write("Sum of  Fitness Value : " +Integer.toString (sumOfFitnessValue) +"\n");
-			
+			outer.write("num of Difference Chromosome : " +Integer.toString (numOfDiffChromosome) +"\n");
 			outer.write(" ========== END GENERATION  "+ Integer.toString(generation) +" STATISTIC =========== :\n");
 			
+			if (name =="Mutation") {
+				outer.write(" ========== MUTATION  "+ Integer.toString(generation) +" STATISTIC =========== :\n");
+				for (int i =0;i<numOfMutationChromosome;i++) {
+					ChromosomeStat += " Chromosome " +Integer.toString(mutationChromosome[i]) +"\n" ;
+						outer.write(ChromosomeStat);
+					ChromosomeStat= "";
+				}
+				
+			}
+			
 			outer.write("\n\n NOTE GEN \n " +
+					" BOARD : 10x20, Chromosome : 50 - range : -1000, gen 14 co dot bien10%  "+
 					"1/ The Height of the TALLEST column // chieu cao cao nhat\n" +
 					"2/ Hole Count // so lo  \n" +
 					"3/ Lines cleared  // so dong duoc xoa\n" +
@@ -241,7 +357,9 @@ public class Population {
 					"5/ Deepest hole // do sau cua lo thap nhat \n" +
 					"6/ total dept of holes // tong chieu sau cua cac lo  \n" +
 					"7/ Horizontal Roughness // do nham be mat ngang \n" +
-					"8/ Sum of Height // tong chieu cao \n");
+					"8/ Sum of Height // tong chieu cao \n"+
+					"9/ TouchBlock \n"+
+					"10/ Ho Sau Nhat \n");
 			
 		} catch (IOException e) {
 			e.printStackTrace();
