@@ -26,7 +26,7 @@ public class HillClimbingScreen extends Screen {
 	Music music;
 	int countChromosome;
 	boolean isStop ;
-	int limitChromosome = 15;
+	int limitChromosome = 20;
 	int countlimit = 0;
 	boolean isAlive ;
 	Chromosome currentChromosome;
@@ -103,6 +103,7 @@ public class HillClimbingScreen extends Screen {
 		//music.play();
 		Sound.appVolume = 0f;
 		Block.generateBlock ();
+		Block.isLearn = true;
 	}
 	
 	@Override
@@ -134,12 +135,20 @@ public class HillClimbingScreen extends Screen {
 	g.drawImage(Asset.btn_rotate);
 	g.drawImage(Asset.btn_down);
 	g.drawImage(Asset.btn_pause);
+	//draw Level
+	drawLevel( level);
+
 	// icon
 	
 	// draw NextBlock bg
 	g.drawImage(Asset.bg_nextBlock);
 	// draw boar statistic
 	g.drawImage(Asset.bg_scoreBoard);
+	drawBoard(board);
+	// ve current Block
+	//drawBlock (board.currentBlock, 24, -4*24);
+	// ve next Block
+	drawBlock (board.nextBlock, 15*24, 5*24);
 	
 	
 	// draw GEn
@@ -153,8 +162,6 @@ public class HillClimbingScreen extends Screen {
 	
 	// drawLines
 	drawStringNumber(board.lines,360,240+5);
-	//draw Level
-	drawLevel( level);
 	// draw Time
 	drawStringNumber(countChromosome,360,307);
 	// draw Limit chromosome nhay vot
@@ -164,11 +171,6 @@ public class HillClimbingScreen extends Screen {
 		drawBonus(board.getBonus());
 	}
 	
-	drawBoard(board);
-	// ve current Block
-	//drawBlock (board.currentBlock, 24, -4*24);
-	// ve next Block
-	drawBlock (board.nextBlock, 15*24, 5*24);
 	
 	//drawBlock (board.shadowBlock, 24, -4*24);
 	
@@ -306,7 +308,7 @@ public class HillClimbingScreen extends Screen {
 	
 		if (board.gameOver  ) 
 			{
-			if ( board.lines>1  ) isAlive = true;
+			if ( board.lines>100  ) isAlive = true;
 			
 				if (isAlive){
 					if (board.lines<=1000000 ){
@@ -647,7 +649,28 @@ public class HillClimbingScreen extends Screen {
 		randomW = (((int)System.nanoTime() + ra.nextInt())%Chromosome.RangeofGenValue);
 		if (ra.nextBoolean())  sign = -1; else sign =1; 
 		sign = -1;
-		currentChromosome.gen[currentChromosome.genIndex] =randomW *sign;
+		randomW= randomW *sign;
+
+		if (countlimit<limitChromosome/2) {
+			while (randomW<currentValueofCurrentGen){
+				randomW = (((int)System.nanoTime() + ra.nextInt())%Chromosome.RangeofGenValue);
+				if (ra.nextBoolean())  sign = -1; else sign =1; 
+				sign = -1;
+				randomW= randomW *sign;
+			}
+			
+		}
+		else {
+			while (randomW>currentValueofCurrentGen){
+				randomW = (((int)System.nanoTime() + ra.nextInt())%Chromosome.RangeofGenValue);
+				if (ra.nextBoolean())  sign = -1; else sign =1; 
+				sign = -1;
+				randomW= randomW *sign;
+			}
+			
+		}
+		
+		currentChromosome.gen[currentChromosome.genIndex] =randomW;
 	}
 	
 	// better Chromosome

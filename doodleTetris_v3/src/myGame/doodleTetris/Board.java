@@ -277,7 +277,7 @@ public class Board {
 	"7/ Horizontal Roughness // do nham be mat ngang "
 	"8/ sum of height // tong chieu cao "
 	*/
-	public long rankBoard( Block b, Chromosome currentChromosome ) {
+	public int rankBoard( Block b, Chromosome currentChromosome ) {
 		
 		Board temp = new Board(this); 
 		
@@ -285,24 +285,24 @@ public class Board {
 		temp.addBlock(shadow);
 		
 		
-		long result= 0;
+		int result= 0;
 	
-		long heightest =0;
-		long shortest = 300;
-		long holes=0;
-		long clearLine=0;
-		long maxDiffHeight=0;
-		long deepestOfHole=0;
-		long totalDeptOfhHole=0;
-		long HorizontalRoughness =0 ; // do nham be mat
-		long sumHeight =0;
-		long touchBlock=0;
-		long maxWellDedth=-1;
-		long sumOfAllWell =0;
-		long rowTransition =0;
-		long colTransition =0;
-		long numOfWell=0;
-		long weightedBlock=0;
+		int heightest =0;
+		int shortest = 300;
+		int holes=0;
+		int clearLine=0;
+		int maxDiffHeight=0;
+		int deepestOfHole=0;
+		int totalDeptOfhHole=0;
+		int HorizontalRoughness =0 ; // do nham be mat
+		int sumHeight =0;
+		int touchBlock=0;
+		int maxWellDedth=-1;
+		int sumOfAllWell =0;
+		int rowTransition =0;
+		int colTransition =0;
+		int numOfWell=0;
+		int weightedBlock=0;
 		
 		boolean f = true;
 		// tim clear row
@@ -495,7 +495,7 @@ public class Board {
 		}
 		else {
 			result = 
-					   heightest *currentChromosome.gen[i++]+
+					     heightest *currentChromosome.gen[i++]+
 						 holes*currentChromosome.gen[i++]+
 						 clearLine*currentChromosome.gen[i++]+
 						 maxDiffHeight*currentChromosome.gen[i++]+

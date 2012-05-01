@@ -392,6 +392,7 @@ public class Block {
 		 
 	 }
 	 public static int next=1;
+	 static boolean  isLearn = false;
 	 public static int Next_Block_id() {
 		Random r = new Random();
 		int ra = r.nextInt(100);
@@ -399,8 +400,10 @@ public class Block {
 		//ra = (next++)%7;
 		
 		//return ra;
+		if (isLearn)
 		return  Math.abs( blockArray[(++next)%10000]);
-	//	return  (++next)%7;
+		else 
+		return ra;
 	 }
 	 
 	

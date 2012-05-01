@@ -73,8 +73,7 @@ public class ClassicGameScreen extends Screen {
 		Board.TICK_DECREMENT=0.05f;
 		Board.BOARD_HEIGHT = 32;
 		Board.BOARD_WIDTH=13;
-	//	board.addNewLine();board.addNewLine();board.addNewLine();board.addNewLine();board.addNewLine();
-	//	board.addNewLine();board.addNewLine();
+
 	}
 	
 	enum GameState {
