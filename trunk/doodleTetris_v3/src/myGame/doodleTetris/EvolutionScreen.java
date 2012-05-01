@@ -94,6 +94,7 @@ public class EvolutionScreen extends Screen {
 		//music.play();
 		Sound.appVolume = 0f;
 		Block.generateBlock ();
+		Block.isLearn = true;
 	}
 	
 	@Override
@@ -142,6 +143,11 @@ public class EvolutionScreen extends Screen {
 	g.drawImage(Asset.icon_music_dis);
 	g.drawImage(Asset.icon_sound_dis);
 	g.drawImage(Asset.icon_star_dis);
+	
+	// draw GEn
+		for (int i=0;i<Chromosome.numOfGen;i++){
+			drawStringNumber(population.chromosomes[currentChromosome].gen[i], 10*24+3,i*48);
+		}
 	
 	// draw Score
 	// drawLines
@@ -298,7 +304,7 @@ public class EvolutionScreen extends Screen {
 	void updateRunning (float deltaTime){
 		
 		if (board.gameOver  ) {
-	//		if ( population.generation!=0 || board.lines >=30)
+		//	if ( population.generation!=0 || board.lines >=30)
 			{
 					if (population.maxFitnessValue<=100000 ){
 					strScore = ""+currentScore; //Asset.sound_gameOver.play(); 
@@ -320,10 +326,12 @@ public class EvolutionScreen extends Screen {
 					population.findBestFitness();
 					// tien hoa
 					population.Evolution();
+					// khoi tao lai quan the
+				//	population.generatePopulation();
 					//ca the dau tien cua the he tiep theo
 					currentChromosome =0;
 					// resetnextBlock
-					Block.generateBlock () ;
+				//	Block.generateBlock () ;
 					numAlive =0;
 					}
 					}
@@ -551,12 +559,12 @@ public class EvolutionScreen extends Screen {
 	
 	int bestX = -3;
 	Block.blockDirection bestDirection =null;
-	long maxRank=0 ;
+	int maxRank=0 ;
 	
 	void bestMove (){
 		 Block blockTemp = new Block(board.currentBlock);
-		 maxRank = -9000000000000000000L ;
-		 long tempRank =0;
+		 maxRank = -2000000000 ;
+		 int tempRank =0;
 	
 		// xoay 4 vi tri
 		for (int i =0; i <=4; i++) {
@@ -603,5 +611,22 @@ public class EvolutionScreen extends Screen {
 		return k;
 		
 	}
-	
+	// ve chuoi so s tai vi tri bat dau X, Y
+		void drawStringNumber (int s, int startX, int startY) {
+			if (s<0)
+			{
+				game.getGraphics().drawImage(Asset.minues.bitmap, startX, startY);
+				
+				s=s*-1;
+			}
+			
+			String str = ""+s;
+			startX+=24;
+			int len  = str.length();
+			int UNIT_CHAR = 24;
+			for (int i=0;i<len;i++){
+				drawNumber(str.charAt(i),startX+UNIT_CHAR*i,startY);
+			}
+		}
+
 }

@@ -32,10 +32,11 @@ public class Chromosome extends ChromosomeInfo {
 		Random ra = new Random();
 		int randomW, sign=1;
 		for (int i=0; i<numOfGen;i++) {
-		 randomW = (((int)System.nanoTime() + ra.nextInt())%RangeofGenValue);
+	 randomW =  ((ra.nextInt() + ra.nextInt())%RangeofGenValue);
+	
 	//	 Log.d("RANDOM","RANDOM" + randomW);
 		if (ra.nextBoolean())  sign = -1; else sign =1; 
-		 sign = -1;
+	//	 sign = 1;// luon duong
 		s.gen[i] = randomW*sign;
 		}
 		// special gen 2; dương

@@ -11,7 +11,7 @@ import android.os.Environment;
 import android.util.Log;
 
 public class Population {
-	public static int numOfChromosome = 50; // lage is good
+	public static int numOfChromosome = 100; // lage is good
 	public static int numOfGeneration = 100;
 	public static float ProbCross  = 1.0f;
 	public static float ProbMutation  = 0.01f;
@@ -158,7 +158,7 @@ public class Population {
 	}
 	
 	// toan tu ghep Crossover // ti le 100% 
-	public void CrossOver (Chromosome a, Chromosome b) {
+	public boolean CrossOver (Chromosome a, Chromosome b) {
 		// hai con moi
 		Chromosome newA, newB;
 		newA = new Chromosome(); newB = new Chromosome();
@@ -166,23 +166,32 @@ public class Population {
 		int len =Chromosome.numOfGen ;
 		// vi tri lai ghep
 		int position = new Random().nextInt(len);
+		
+		boolean f=true;
 		// sao chep doan dau // nguyen ban A - B
 		for (int i=0;i<position;i++){
+			if ( a.gen[i]!=b.gen[i]) f =false;
 			newA.gen[i] = a.gen[i];
 			newB.gen[i] = b.gen[i];
 
 			
 		}
+		if (f) return false;
+		f = true;
 		// sao chep doan sau // trao doi A - B
 		for (int i=position;i<len;i++){
+			if ( a.gen[i]!=b.gen[i]) f =false;
 			newA.gen[i] = b.gen[i];
 			newB.gen[i] = a.gen[i];
 		}
 		
-		//log
+		if (f) return false;
+		
 		// thay doi bo me
 		b.copy(newB);
 		a.copy(newA);
+		
+		return true;
 	}
 	// Dot bien
 	
@@ -199,7 +208,7 @@ public class Population {
 				if (Math.abs(ra) <=( ProbMutation*1000)){
 					f = true;
 					if (r.nextBoolean())sign = 1; else sign = -1;
-					s.gen[i]= ((r.nextInt() + (int) System.nanoTime()) %Chromosome.RangeofGenValue) * sign;
+					s.gen[i]=  ((r.nextInt() + (int) System.nanoTime()) %Chromosome.RangeofGenValue) * sign;
 				} 
 				
 			}
@@ -234,27 +243,25 @@ public class Population {
 		for (int i=0;i<numOfChromosome;i++) check [i] = false;
 		
 		Random ra = new Random(); // ngau nhien
-		int id_a,id_b=0; // hai ca the lai ghep
+	//	int id_a,id_b=0; // hai ca the lai ghep
 		int chose=0;
 		// lai ghep  100% cac ca the cua quan the tao ra quan the moi
-		for (int i =0; i<numOfChromosome/2;i++) {
-			
-			id_a = ra.nextInt(numOfChromosome);
-			while (check[id_a]  )id_a = ra.nextInt(numOfChromosome);
-			// chon ID B tranh ID A
-			id_b = ra.nextInt(numOfChromosome);
-			while (check[id_b] || compareChromosome(chromosomes[id_a], chromosomes[id_b])) id_b = ra.nextInt(numOfChromosome);
-			
-			// kiem tra lan nua cho chac an	
-			if (!check[id_a] && !check[id_b] && !compareChromosome(chromosomes[id_a], chromosomes[id_b]) ) 
+		
+		for (int id_a = 0;id_a< numOfChromosome-1;id_a++)
+			for (int id_b = id_a+1 ;id_b< numOfChromosome;id_b++)
+			{
+				// kiem tra lan nua cho chac an	
+			if (!check[id_a] && !check[id_b] ) 
 				{
-				CrossOver(chromosomes[id_a], chromosomes[id_b]); 
+				if (CrossOver(chromosomes[id_a], chromosomes[id_b])){
 				check[id_a]= true; check[id_b] = true;
 				chose+=2;
+					}
 				}
 		}
-		
-		// xu ly nhung con con lai
+		int id_a,id_b=0; // hai ca the lai ghep
+		String str1="", str2="";
+		// xu ly nhung con con lai : trung nhau - anh em
 		while (chose<numOfChromosome) {
 			id_a = ra.nextInt(numOfChromosome);
 			while (check[id_a]  )id_a = ra.nextInt(numOfChromosome);
@@ -265,15 +272,30 @@ public class Population {
 			// kiem tra lan nua cho chac an	
 			if (!check[id_a] && !check[id_b] ) 
 				{
-				chromosomes[id_b] = Chromosome.generateChromosome();
-				CrossOver(chromosomes[id_a], chromosomes[id_b]); 
-				check[id_a]= true; check[id_b] = true;
+				// thay the con co gia tri thich nghi thap hon
+				for (int i=0;i<Chromosome.numOfGen;i++) {
+					str1 += "" + chromosomes[id_a].gen[i]+ " | ";
+					str2 += "" + chromosomes[id_b].gen[i]+ " | ";
+				}
+				str1+="\n";
+				str2+="\n";
+				if (chromosomes[id_a].fitnessValue> chromosomes[id_b].fitnessValue)
+				{
+					while (!CrossOver(chromosomes[id_a], chromosomes[id_b]))
+						 id_b = ra.nextInt(numOfChromosome);
+				}
+				else 
+				{	
+					while (!CrossOver(chromosomes[id_a], chromosomes[id_b]))
+					 id_a = ra.nextInt(numOfChromosome);
+				}
 				chose+=2;
 				}
 			
 		}
 		
-		
+		// xu ly nhung con anh em
+		logString(str1 +"\n"+str2,"CHEC KPARENT");
 		logPopulation(generation, "CrossOver");
 		
 		// thay doi thong so the he
@@ -378,4 +400,51 @@ public class Population {
 			
 		}
 	}
+
+	// name : REPRODUCTION - CROSSOVER
+		public void logString (String content, String fileName){
+			File root = Environment.getExternalStorageDirectory();
+			String path = root+"/DoodleTetris/";
+			boolean exists = (new File(path).exists());
+			if (!exists) {new File(path).mkdirs();}
+			
+			File mapInfo = new File(path+ "Generation_"+ Integer.toString(generation)+"_"+fileName + "_Log.txt" );
+			if (!mapInfo.exists()){
+			try {
+				mapInfo.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			FileWriter info = null ;
+			try {
+				info = new FileWriter(mapInfo);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			BufferedWriter outer = new BufferedWriter(info);
+			// Write log entries to file
+			
+			try {
+					outer.write(content);
+			
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("Cannot create files");
+			}
+			
+			try {
+				outer.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			}
+			else {
+				Log.d("exst", "exst");
+				
+			}
+		}
+		
 }
