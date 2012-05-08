@@ -5,8 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import myGame.doodleTetris.framework.Game;
-
 import android.content.Context;
 
 public class Setting {
@@ -16,14 +14,13 @@ public class Setting {
 	{
 		this.context = context;
 	}
-	public void saveSetting(boolean music, int volMusic, boolean sound, int volSound,boolean engLanguage){
+	public void saveSetting(boolean music, int volMusic, boolean sound, int volSound){
 		try {
 			FileOutputStream fos = context.openFileOutput("setting",Context.MODE_WORLD_READABLE);
 			fos.write((music+" ").getBytes());
 			fos.write((volMusic+" ").getBytes());
 			fos.write((sound+" ").getBytes());
 			fos.write((volSound+" ").getBytes());
-			fos.write((engLanguage+"").getBytes());
 			fos.close();
 			
 		} catch (FileNotFoundException e) {

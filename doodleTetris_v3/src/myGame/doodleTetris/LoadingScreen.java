@@ -46,6 +46,7 @@ public class LoadingScreen extends Screen {
 		// bg_board
 		Asset.bg_board = new Image (g.newBitmap("Background/bg_board.png"),0,0);
 		Asset.bg_main = new Image (g.newBitmap("Background/bg_main.png"),0,0);
+		Asset.bg_highScore = new Image (g.newBitmap("Background/hiscore_background.jpg"),0,0);
 		Asset.bg_scoreBoard = new Image (g.newBitmap("Button/board.png"),0,0);
 		Asset.bg_nextBlock = new Image (g.newBitmap("Button/bg_nextBlock.png"),0,0);
 		
@@ -57,7 +58,7 @@ public class LoadingScreen extends Screen {
 		Asset.slide_level_lock = new  ImgButton(g.newBitmap("Button/btn_level_info_lock.png"),0,0	);
 		Asset.icon_star = new  Image(g.newBitmap("Button/icon_star.png"),0,0	);
 		Asset.icon_star_dis = new  Image(g.newBitmap("Button/icon_star_dis.png"),0,0	);
-		
+		Asset.slide_level = new  ImgButton(g.newBitmap("Button/slide_hiscore.png"),0,0	);
 		
 		// set UI
 		Asset.UI_Pause = new ImgButton(g.newBitmap("StateUI/pauseUI.png"),48,120	);

@@ -263,7 +263,12 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 	@Override
 	
 	void updateGameOver (){
-		music.stop();
+		try {
+			music.stop();	
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
 			if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
