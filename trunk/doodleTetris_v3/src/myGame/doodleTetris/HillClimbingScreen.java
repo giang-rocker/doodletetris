@@ -440,7 +440,7 @@ public class HillClimbingScreen extends Screen {
 		}
 		// kiem tra xac nhan bam
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
-		//	game.setScreen(new MainMenu(game));
+			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
 			{ board = new Board(); gameState = GameState.Running; }
 	}

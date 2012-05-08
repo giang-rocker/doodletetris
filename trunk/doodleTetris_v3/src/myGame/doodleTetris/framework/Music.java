@@ -6,7 +6,7 @@ import android.media.MediaPlayer;
 
 public class Music {
 	MediaPlayer mediaPlay;
-	public static float appVolume;
+	public static float appVolume=1;
 	public Music (Context context, int resid){
 		mediaPlay = MediaPlayer.create(context, resid);
 		mediaPlay.setVolume(appVolume, appVolume);

@@ -23,7 +23,7 @@ public class ClassicGameScreen extends Screen {
 	Setting setting;
 	String nameMusic[]={"bg_track_midi","bg_track_midi1","bg_track_midi2","bg_track_midi3"};
 	Music music;
-
+	HighScore highscore;
 	Chromosome bestChromosome;
 	boolean isAutoPlay;
 
@@ -161,8 +161,9 @@ public class ClassicGameScreen extends Screen {
 	@Override
 	public void update(float deltaTime) {
 		// TODO Auto-generated method stub
-		if (gameState == GameState.Running)
+		if (gameState == GameState.Running){
 			updateRunning(deltaTime);
+		}
 		if (gameState == GameState.Paused)
 			updatePause();
 		if (gameState == GameState.GameOver)
@@ -238,7 +239,12 @@ public class ClassicGameScreen extends Screen {
 		// TODO Auto-generated method stub
 		if (gameState == GameState.Running)
 			gameState = GameState.Exit;
-		    music.stop();
+		try {
+			music.stop();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		    
 	}
 
 	@Override
@@ -445,7 +451,7 @@ public class ClassicGameScreen extends Screen {
 		}
 		
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
-		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
+		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; updateHighScore(); return;}
 
 		board.update(deltaTime);
 		
@@ -492,6 +498,7 @@ public class ClassicGameScreen extends Screen {
 			game.setScreen(new ClassicGameScreen(game));
 	}
 	
+	
 	// stage Clean mode
 	public void updateStageClean () {
 	}
@@ -529,8 +536,18 @@ public class ClassicGameScreen extends Screen {
 		g.drawImage(Asset.btn_playAgain);
 		drawStringNumber (""+currentScore, 84,192);
 		drawTime (time, 192, 192);
-		
 	}
+	
+	//check highscore
+	void updateHighScore(){
+		highscore = new HighScore(game.getContext());
+		highscore.setFirstData();
+		if(highscore.checkHighScore(currentScore)){
+			highscore.resetData(currentScore+"", level+"", time+"");
+			highscore.saveHighScore();
+		}
+	}
+	
 	//StaeClean mode;
 	
 	void drawStageCleanUI (){

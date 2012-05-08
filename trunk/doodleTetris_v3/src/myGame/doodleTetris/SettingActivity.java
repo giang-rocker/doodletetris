@@ -1,5 +1,6 @@
 package myGame.doodleTetris;
 
+import myGame.doodleTetris.framework.AndroidGame;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,12 +39,8 @@ public class SettingActivity extends Activity {
 		final TextView percentVolMusic = (TextView) findViewById(R.id.tvPercentVolMusic);
 		final TextView percentVolSound = (TextView) findViewById(R.id.tvPercentVolSound);
 		
-		RadioGroup radGroup =(RadioGroup) findViewById(R.id.radGroupOptionLanguage);
-		final RadioButton radEnglish = (RadioButton) findViewById(R.id.languageEng);
-		RadioButton radVietnamese =(RadioButton) findViewById(R.id.languageViet);
 		
 		Button btnSave = (Button) findViewById(R.id.btnSave);
-		Button btnReset = (Button) findViewById(R.id.btnReset);
 		Button btnMenuGame = (Button) findViewById(R.id.btnMenuGame);
 		
 		
@@ -71,10 +68,7 @@ public class SettingActivity extends Activity {
 		seekbarSound.setProgress(Integer.parseInt(data[3]));
 		percentVolSound.setText(data[3]+" %");
 		
-		if(data[4].equals("false")){
-			radVietnamese.setChecked(true);
-			engLanguage = false;
-		}
+		
 
 		
 		chkMusic.setOnClickListener(new OnClickListener() {
@@ -135,25 +129,15 @@ public class SettingActivity extends Activity {
 			}
 		});
 		
-		radGroup.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			
-			public void onCheckedChanged(RadioGroup group, int checkedId) {
-				// TODO Auto-generated method stub
-				if(radEnglish.isChecked())
-					engLanguage =true;
-				else
-					engLanguage =false;
-				
-			}
-		});
+		
 		
 		btnSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stu
 				//try {
 					setting = new Setting(SettingActivity.this);
-					setting.saveSetting(music,seekbarMusic.getProgress(), sound,seekbarSound.getProgress(), engLanguage);
-					Toast.makeText(getBaseContext(), "Ä�Ã£ lÆ°u thÃ nh cÃ´ng", 1000).show();
+					setting.saveSetting(music,seekbarMusic.getProgress(), sound,seekbarSound.getProgress());
+					Toast.makeText(getBaseContext(), "Success", 1000).show();
 					//if(setting.loadSetting()){
 					//	data = setting.getData();
 					//}
@@ -163,6 +147,15 @@ public class SettingActivity extends Activity {
 					//Toast.makeText(getBaseContext(),"Loi: "+ e+" ", 1000).show();
 			//	}
 				
+			}
+		});
+		btnMenuGame.setOnClickListener(new OnClickListener() {
+			
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//Intent mainMenu = new Intent(getBaseContext(),MainMenu.class);
+				//startActivityForResult(mainMenu, 0);
+				//game.setScreen(new MainMenu(game));
 			}
 		});
 	}

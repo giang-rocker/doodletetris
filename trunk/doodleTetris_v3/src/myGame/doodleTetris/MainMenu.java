@@ -31,6 +31,8 @@ public class MainMenu extends Screen  {
 		this.screenName = "MainMenu";
 		// TODO Auto-generated constructor stub
 		setupButton();
+		
+		
 		Log.d("myTag","MainMenu is createed");
 	}
 
@@ -61,11 +63,10 @@ public class MainMenu extends Screen  {
 		if ( Asset.btn_autoPlay_B.isTouch(TouchEvent)   )
 			game.setScreen(new AutoPlayScreen(game));
 		
-	
+		if(Asset.btn_record.isTouch(TouchEvent))
+			game.setScreen(new HighScoreScreen(game));
 
 		}
-			
-
 	}
 
 	@Override

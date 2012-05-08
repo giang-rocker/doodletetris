@@ -17,6 +17,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static Image bg_board;
 	public static Image bg_scoreBoard;
 	public static Image bg_nextBlock;
+	public static Image bg_highScore;
 	
 	//select level
 	public static Image bg_selectLevel_main;
@@ -26,6 +27,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton slide_level_lock;
 	public static Image icon_star;
 	public static Image icon_star_dis;
+	public static ImgButton slide_hiscore;
 		
 	// UI
 	public static ImgButton UI_Pause;
