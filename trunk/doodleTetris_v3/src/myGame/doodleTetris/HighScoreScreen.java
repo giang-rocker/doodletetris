@@ -10,35 +10,28 @@ import myGame.doodleTetris.framework.Screen;
 public class HighScoreScreen extends Screen {
 	Canvas canvas;
 	HighScore highscore;
-	int startY = 96;
+	int startY = 160;
 	int startX = 0;
 	int moveY =0;
 	String minus,second;
 	public void showList(){
 		startY = startY + moveY*10;
 		AndroidGraphics g = game.getGraphics();
-		int height_unit=72;
-		int space_line=12;
-		drawString("ID", (int)startX+24+12, (int)startY+64);
-		
-		drawString("Score", (int)startX+24+120, (int)startY+64);
-		// draw scoreRecord
-		drawString("Level", (int)startX+240,(int) startY+72);
-		// draw timeRecord
-		drawString("Level", (int)startX+342,(int)startY+72);
-		
+		int height_unit=96;
+		int space_line=12;		
 		for (int i=0;i<5;i++) {
 			float X = startX;
 			float Y = startY + (height_unit+space_line)*i +moveY;
-		//g.drawImage(Asset.slide_hiscore.getBitmap(),(int)X,(int)Y)	;
-		// draw ID
-		drawStringNumber((i+1)+"", (int)X+12, (int)Y+64);
 		
-		drawStringNumber(highscore.data[0][i].trim(), (int)X+100, (int)Y+64);
+			g.drawImage(Asset.slide_hiscore.getBitmap(),(int)X,(int)Y)	;
+		// draw ID
+		drawStringNumber((i+1)+"", (int)X+12+24+12, (int)Y+64);
+		
+		drawStringNumber(highscore.data[0][i].trim(), (int)X+100+24, (int)Y+64+3);
 		// draw scoreRecord
-		drawStringNumber(highscore.data[1][i].trim(), (int)X+260,(int) Y+64);
+		drawStringNumber(highscore.data[1][i].trim(),(int) X+360 +24,(int) Y+64+3);
 		// draw timeRecord
-		drawTime(Integer.parseInt(highscore.data[2][i].trim()),(int) X+320, (int)Y+64);
+		drawTime(Integer.parseInt(highscore.data[2][i].trim()),(int)X+260-24, (int)Y+64+3);
 		}
 	}
 	public void drawNumber(Character c, int x, int y){
@@ -68,11 +61,6 @@ void drawStringNumber (String s, int startX, int startY) {
 			drawStringNumber (minus,StartX,StartY);
 			drawStringNumber (":",StartX+48,StartY);
 			drawStringNumber (second,StartX+44+12,StartY);
-		}
-		void drawString(String text, int StartX, int StartY){
-			//Canvas canvas = new Canvas();
-			//Paint p = new Paint(Color.BLACK);
-			//canvas.drawText(text, StartX, StartY,p);
 		}
 	public HighScoreScreen(Game game) {
 		super(game);

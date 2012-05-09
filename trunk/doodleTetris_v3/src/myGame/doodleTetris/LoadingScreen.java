@@ -58,7 +58,7 @@ public class LoadingScreen extends Screen {
 		Asset.slide_level_lock = new  ImgButton(g.newBitmap("Button/btn_level_info_lock.png"),0,0	);
 		Asset.icon_star = new  Image(g.newBitmap("Button/icon_star.png"),0,0	);
 		Asset.icon_star_dis = new  Image(g.newBitmap("Button/icon_star_dis.png"),0,0	);
-		Asset.slide_level = new  ImgButton(g.newBitmap("Button/slide_hiscore.png"),0,0	);
+		Asset.slide_hiscore = new  ImgButton(g.newBitmap("Button/slide_hiscore.png"),0,0	);
 		
 		// set UI
 		Asset.UI_Pause = new ImgButton(g.newBitmap("StateUI/pauseUI.png"),48,120	);
@@ -150,7 +150,7 @@ public class LoadingScreen extends Screen {
 		Asset.sound_star = new Sound ((Context)game, R.raw.sound_star);
 		Asset.sound_stageClean = new Sound ((Context)game, R.raw.stage_clean);
 		// load track
-		Asset.bg_track = new Music((Context) game, R.raw.bg_track);
+		Asset.bg_track = new Music((Context) game, R.raw.bg_track_midi1);
 		
 		
 		// load auto play
