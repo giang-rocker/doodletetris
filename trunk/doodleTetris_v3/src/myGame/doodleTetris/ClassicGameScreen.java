@@ -4,6 +4,7 @@ import java.util.Random;
 
 import android.util.Log;
 
+
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.Block.blockDirection;
 import myGame.doodleTetris.framework.AndroidGraphics;
@@ -50,6 +51,7 @@ public class ClassicGameScreen extends Screen {
 		Asset.icon_dynamite.setPosition(384,360+72);
 		Asset.icon_rocket.setPosition(384,360+72+72);
 		Asset.btn_autoPlay.setPosition(384,360+72+72+24);
+		Asset.btn_disAutoPlay.setPosition(384,360+72+72+24);
 		
 		Asset.icon_music.setPosition(360,12);
 		Asset.icon_sound.setPosition(360+48,12);
@@ -59,21 +61,23 @@ public class ClassicGameScreen extends Screen {
 		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
 		 
 		bestChromosome = new Chromosome();
-	//	bestChromosome.gen = new int[] {-1 , -2 , 1 , 0 , 0 , 0 , -1 , -5 ,0,0,0,0,0,0 };
-	//	bestChromosome.gen = new int[] {-62709, -30271, -48621, +35395,0,0,0,0,0,-12,-43810,-44262,-5832,-4041};
-	//	bestChromosome.gen = new int[] {-698 , -995 , 463 , 745 , 916 , -350 , -579 , 497 , 834 , -456 , 380 , -196 , -279 , -444 };
-		//bestChromosome.gen = new int[] {950 , -835 , 498 , 708 , 0 , 0 , -1 , -712, -86 , 575 , -33 , -451 ,-932 , -572 };
-		bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
-	//	bestChromosome.gen = new int[] {-9 , -9 , 5 , -5 , -9 , -6 , -1 , -4 , -6 , -3 };
-	//	bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
+		bestChromosome.gen = new int[] {-1351909,
+				-5469854,
+				-5348580,
+				-2087609,
+				268127,
+				-4144480,
+				-7453775,
+				23919};
 			
 		Chromosome.numOfGen = bestChromosome.gen.length;
 			isAutoPlay= false;
 		Block.generateBlock();
 		Board.TICK_DECREMENT=0.05f;
+		Board.TICK_INTIAL=0.5f;
 		Board.BOARD_HEIGHT = 32;
 		Board.BOARD_WIDTH=13;
-
+		nextBlocktemp = new Block();
 	}
 	
 	enum GameState {
@@ -179,6 +183,9 @@ public class ClassicGameScreen extends Screen {
 	// int bonus image duration present
 	int bonusDuration = 250000000;
 	int startDrawBonus =-1;
+	
+	Block nextBlocktemp ;
+	
 	@Override
 	public void present(float deltaTime) {
 		// TODO Auto-generated method stub
@@ -194,8 +201,10 @@ public class ClassicGameScreen extends Screen {
 	g.drawImage(Asset.icon_boomb);
 	g.drawImage(Asset.icon_dynamite);
 //	g.drawImage(Asset.icon_rocket);
-	
+	if (isAutoPlay)
 	g.drawImage(Asset.btn_autoPlay);
+	else
+	g.drawImage(Asset.btn_disAutoPlay);
 	
 	// draw NextBlock bg
 	g.drawImage(Asset.bg_nextBlock);
@@ -216,6 +225,8 @@ public class ClassicGameScreen extends Screen {
 		drawBonus(board.getBonus());
 	}
 	
+	drawBlockShadow ( board.currentBlock.setShadow(board), 24, -4*24  );
+	
 	drawBoard(board);
 	// ve current Block
 	drawBlock (board.currentBlock, 24, -4*24);
@@ -223,6 +234,8 @@ public class ClassicGameScreen extends Screen {
 	drawBlock (board.nextBlock, 15*24, 5*24);
 	//
 	
+
+
 	if (gameState == GameState.Paused )
 		{drawPauseUI(); }
 	
@@ -273,6 +286,17 @@ public class ClassicGameScreen extends Screen {
 	}
 	
 	// ve Block ()
+	void drawBlockShadow (Block block, int startX, int startY) {
+		AndroidGraphics g = game.getGraphics();
+		int unit_cell = Block.UNIT_CELL;
+		for (int i=0;i<Block.BLOCK_HEIGHT;i++){
+			for (int j=0;j<Block.BLOCK_HEIGHT;j++) {
+				if (block.status[i][j])
+				g.drawImage(Asset.block_shadow.bitmap,(block.x+i)*unit_cell +startX ,(block.y+j)*unit_cell +startY);
+				}// for j
+			}//for i
+	}
+	
 	void drawBlock (Block block, int startX, int startY) {
 		int unit_cell = Block.UNIT_CELL;
 		for (int i=0;i<Block.BLOCK_HEIGHT;i++){
@@ -361,7 +385,7 @@ public class ClassicGameScreen extends Screen {
 	float blockRank =0;
 	float boardRank =0;
 	void updateRunning (float deltaTime){
-		
+	
 		
 		if (isAutoPlay) {
 			// tinh toan bestMove
@@ -373,8 +397,12 @@ public class ClassicGameScreen extends Screen {
 			while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
 			//tu dong di xuong
 			while (board.currentBlock.goDown(board)) ;
+		
 			}
 		}
+		
+		
+		
 		
 		SingleTouch TouchEvent = game.getTouchEvent();
 		int duration = 100000000;
@@ -394,10 +422,6 @@ public class ClassicGameScreen extends Screen {
 			if ( Asset.btn_autoPlay.isTouchDown(TouchEvent)   )
 			{isAutoPlay = !isAutoPlay; 
 			
-			if (!isAutoPlay)
-			{Asset.btn_autoPlay.setBitmap( game.getGraphics().newBitmap("Button/btn_autoplay_dis.png"));}
-			else  {Asset.btn_autoPlay.setBitmap( game.getGraphics().newBitmap("Button/btn_autoplay.png"));
-			}
 			
 			}
 			
@@ -457,6 +481,7 @@ public class ClassicGameScreen extends Screen {
 		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; updateHighScore(); return;}
 
 		board.update(deltaTime);
+		
 		
 		
 		if (currentScore != board.score){
@@ -623,16 +648,17 @@ public class ClassicGameScreen extends Screen {
 
 	int bestX = -3;
 	Block.blockDirection bestDirection =null;
+	int bestXNext = -3;
+	Block.blockDirection bestDirectionNext =null;
 	long maxRank = 0;
-	
+	long maxRankNext = 0;
 	void bestMove (){
 		 Block blockTemp = new Block(board.currentBlock);
-		 maxRank = -9000000000000000000L ;
+		 maxRank = -99999999999999999L ;
 		 long tempRank =0;
 	
-	
 		// xoay 4 vi tri
-		for (int i =0; i <5; i++) {
+		for (int i =0; i <=4; i++) {
 			
 			// di chuyen qua trai het muc
 			while (blockTemp.goLeft(board));
@@ -650,15 +676,15 @@ public class ClassicGameScreen extends Screen {
 			while (blockTemp.goRight(board));
 			blockTemp.setPosition( Board.BOARD_WIDTH/2-2,0);
 			blockTemp.rotation(board);
-			
 		
 		}///end for rotation 4 direction
 		
-		Log.d ("BEST ", "maxRank : " + Float.toString(maxRank) +" = best X : "+  Integer.toString( bestX) + " BEST DIrection :  " + getDirection(bestDirection)) ;
+		//Log.d ("BEST ", "maxRank : " + Float.toString(maxRank) +" = best X : "+  Integer.toString( bestX) + " BEST DIrection :  " + getDirection(bestDirection)) ;
 
 		
 		board.currentBlock.isBestPosition = true;
 	}// end function
+		
 	String getDirection (blockDirection d) {
 		String k = "";
 		switch (d) {

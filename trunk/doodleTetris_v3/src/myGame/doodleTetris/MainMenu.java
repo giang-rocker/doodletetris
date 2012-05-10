@@ -65,7 +65,11 @@ public class MainMenu extends Screen  {
 		
 		if(Asset.btn_record.isTouch(TouchEvent))
 			game.setScreen(new HighScoreScreen(game));
-
+		
+		if(Asset.btn_about.isTouch(TouchEvent))
+			game.setScreen(new AboutScreen(game));
+		
+		
 		}
 	}
 

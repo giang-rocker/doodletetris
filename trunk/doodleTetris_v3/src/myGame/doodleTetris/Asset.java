@@ -14,10 +14,15 @@ import myGame.doodleTetris.framework.Sound;
 	public static Image bg_loading;
 	public static Image bg_gameScreen;
 	public static Image bg_autoPlay;
+	public static Image bg_about;
 	public static Image bg_board;
 	public static Image bg_scoreBoard;
 	public static Image bg_nextBlock;
+
+	public static Image bg_hiscore;
+	public static ImgButton slide_hiscore;
 	public static Image bg_highScore;
+
 	
 	//select level
 	public static Image bg_selectLevel_main;
@@ -27,7 +32,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton slide_level_lock;
 	public static Image icon_star;
 	public static Image icon_star_dis;
-	public static ImgButton slide_hiscore;
+
 		
 	// UI
 	public static ImgButton UI_Pause;
@@ -45,6 +50,10 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton btn_genetic;
 	public static ImgButton btn_hillClimbing;
 	public static ImgButton btn_chromosomeSlide;
+	public static ImgButton btn_slow;
+	public static ImgButton btn_fast;
+	public static ImgButton btn_slow_dis;
+	public static ImgButton btn_fast_dis;
 	//string
 	public static Image str_genetic;
 	public static Image str_hillClimbing;
@@ -70,6 +79,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static ImgButton btn_yes;
 	public static ImgButton btn_no;
 	public static ImgButton btn_autoPlay;
+	public static ImgButton btn_disAutoPlay;
 	//block
 	public static Image block_red;
 	public static Image block_green;
@@ -80,6 +90,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static Image block_purple;
 	public static Image block_null;
 	public static Image block_map;
+	public static Image block_shadow;
 	
 	// items
 	public static Image item_boomb;

@@ -23,8 +23,10 @@ public class TestAutoPlay extends Screen {
 	Music music;
 	Chromosome bestChromosome;
 	boolean isAutoPlay;
+	boolean isFast ;
 	public void setup () {
 		// bg
+		isFast = false;
 		Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
 		Asset.bg_nextBlock.setPosition(15*24, 5*24);
 		
@@ -40,10 +42,13 @@ public class TestAutoPlay extends Screen {
 		Asset.btn_playAgain.setPosition(48, 432);
 		
 		// set icon
-		Asset.icon_boomb.setPosition(384,360);
-		Asset.icon_dynamite.setPosition(384,360+72);
-		Asset.icon_rocket.setPosition(384,360+72+72);
-		Asset.btn_autoPlay.setPosition(384,360+72+72+24);
+	//	Asset.icon_boomb.setPosition(384,360);
+		Asset.btn_slow.setPosition(384-24,360+72);
+		Asset.btn_slow_dis.setPosition(384-24,360+72);
+		Asset.btn_fast.setPosition(384-24,360+72+72);
+		Asset.btn_fast_dis.setPosition(384-24,360+72+72);
+		
+		Asset.btn_autoPlay.setPosition(384-24,360+72+72+24);
 		
 		Asset.icon_music.setPosition(360,12);
 		Asset.icon_sound.setPosition(360+48,12);
@@ -53,19 +58,15 @@ public class TestAutoPlay extends Screen {
 		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
 		 
 		bestChromosome = new Chromosome();
-	//	bestChromosome.gen = new int[] {-1 , -2 , 1 , 0 , 0 , 0 , -1 , -5 ,0,0,0,0,0,0 };
-	//	bestChromosome.gen = new int[] {-62709, -30271, -48621, +35395,0,0,0,0,0,-12,-43810,-44262,-5832,-4041};
-	//	bestChromosome.gen = new int[] {-698 , -995 , 463 , 745 , 916 , -350 , -579 , 497 , 834 , -456 , 380 , -196 , -279 , -444 };
-		//bestChromosome.gen = new int[] {950 , -835 , 498 , 708 , 0 , 0 , -1 , -712, -86 , 575 , -33 , -451 ,-932 , -572 };
-	//	bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
-	//	bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -825 ,-634};
-	//	bestChromosome.gen = new int[] {330 , -982 , 503 , 518 , 217 , 115 ,-338 , -425 , -944 ,-248};
+
+		bestChromosome.gen = new int[] {2 , -7 , -4 , 5 , -9 , -6 , 1 , -4 , -6 , -3 };
+
 		
-		Chromosome.numOfGen = bestChromosome.gen.length;
 		isAutoPlay= true;
 		Block.generateBlock();
 		Board.TICK_DECREMENT=0.0f;
-		Board.BOARD_HEIGHT = 32;
+		Board.TICK_INTIAL=0.2f;
+		Board.BOARD_HEIGHT = 28;
 		Board.BOARD_WIDTH = 13;
 	}
 	
@@ -104,10 +105,10 @@ public class TestAutoPlay extends Screen {
 		super(game);
 		setup ();
 		board = new Board();
+		Log.d("GEN", ""+Chromosome.numOfGen);
 			// TODO Auto-generated constructor stub
-	//	play track
-//		Asset.bg_track.play ();
-		//Duong update music 12/4/2012
+		Chromosome.numOfGen = chromosome.gen.length;
+		bestChromosome = new Chromosome();
 		Random r = new Random();
 		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
 		music = new Music(game.getContext(), resid);
@@ -147,8 +148,17 @@ public class TestAutoPlay extends Screen {
 	g.drawImage(Asset.btn_down);
 	g.drawImage(Asset.btn_pause);
 	// icon
-	g.drawImage(Asset.icon_boomb);
-	g.drawImage(Asset.icon_dynamite);
+	if (isFast) {
+	g.drawImage(Asset.btn_fast);
+	g.drawImage(Asset.btn_slow_dis);
+	}
+	else 
+	 {
+			g.drawImage(Asset.btn_fast_dis);
+			g.drawImage(Asset.btn_slow);
+	}
+	
+	
 //	g.drawImage(Asset.icon_rocket);
 	
 //	g.drawImage(Asset.btn_autoPlay);
@@ -172,10 +182,11 @@ public class TestAutoPlay extends Screen {
 	if (!timeExpired(startDrawBonus, bonusDuration)){
 		drawBonus(board.getBonus());
 	}
+	drawBlockShadow ( board.currentBlock.setShadow(board), 24, 0  );
 	
 	drawBoard(board);
 	// ve current Block
-	drawBlock (board.currentBlock, 24, -4*24);
+	drawBlock (board.currentBlock, 24, 0);
 	// ve next Block
 	drawBlock (board.nextBlock, 15*24, 5*24);
 	//
@@ -216,8 +227,8 @@ public class TestAutoPlay extends Screen {
 		
 		// ve board
 		for (int i=0;i<Board.BOARD_WIDTH;i++){
-			for (int j=4;j<Board.BOARD_HEIGHT;j++) {
-				drawCell(board.statusBoard[i][j],(i+1)*unit_cell,(j-4)*unit_cell);
+			for (int j=0;j<Board.BOARD_HEIGHT;j++) {
+				drawCell(board.statusBoard[i][j],(i+1)*unit_cell,(j)*unit_cell);
 				}// for j
 			}//for i
 		
@@ -315,50 +326,32 @@ public class TestAutoPlay extends Screen {
 	void updateRunning (float deltaTime){
 		
 		
-		if (isAutoPlay) {
+
 			// tinh toan bestMove
 			if (board.currentBlock.isBestPosition == false){
 				bestMove();
-				// auto di chuyen
-			while (board.currentBlock.direction != bestDirection) {board.currentBlock.rotation(board);}
-			while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); }
-			while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
-			//tu dong di xuong
-			while (board.currentBlock.goDown(board)) ;
 			}
-		}
+				// auto di chuyen
+			if (board.currentBlock.direction != bestDirection) {board.currentBlock.rotation(board);}
+			if (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); }
+			if (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
+			//tu dong di xuong
+			
+	
 		
 		SingleTouch TouchEvent = game.getTouchEvent();
-		int duration = 100000000;
-		if (timeExpired(start,duration) )	{
-			start = (int)System.nanoTime();
-			
-			if ( Asset.btn_rotate.isTouchDown(TouchEvent)  )
-				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); Log.d("CURRENT DIRECTION", getDirection(board.currentBlock.direction)); Log.d("SCORE CURRENT", ""+board.rankBoard(board.currentBlock, bestChromosome));}
-				
-			
-			if ( Asset.btn_left.isTouchDown(TouchEvent)   )
-			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play();Log.d("SCORE CURRENT", ""+board.rankBoard(board.currentBlock, bestChromosome));}
-			
-			if ( Asset.btn_right.isTouchDown(TouchEvent)   )
-				{board.currentBlock.goRight(board); 	 Asset.sound_move.play();Log.d("SCORE CURRENT", ""+board.rankBoard(board.currentBlock, bestChromosome));}
-			
-			if ( Asset.btn_autoPlay.isTouchDown(TouchEvent)   )
-			{isAutoPlay = !isAutoPlay; 
-			
-			if (!isAutoPlay)
-			{Asset.btn_autoPlay.setBitmap( game.getGraphics().newBitmap("Button/btn_autoplay_dis.png"));}
-			else  {Asset.btn_autoPlay.setBitmap( game.getGraphics().newBitmap("Button/btn_autoplay.png"));
-			}
-			
-			}
-			
-		}
 	
-		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
-			board.currentBlock.goDown(board);
 		
-		
+			if (Asset.btn_fast.isTouchDown(TouchEvent)){
+				isFast = true;
+			
+			}
+			if (Asset.btn_slow.isTouchDown(TouchEvent)){
+				isFast = false;
+			}
+
+	
+	
 		AndroidGraphics g = game.getGraphics();
 		// check touch item
 		if ( Block.item ==-1){
@@ -405,8 +398,24 @@ public class TestAutoPlay extends Screen {
 		if (Asset.btn_pause.isTouch(TouchEvent)) {gameState = GameState.Paused; return;}
 		if (board.gameOver) { strScore = ""+currentScore; Asset.sound_gameOver.play();   gameState = GameState.GameOver; return;}
 
-		board.update(Board.TICK_INTIAL);
+		if (isFast) 
+			board.update(Board.TICK_INTIAL);
+		else 
+			board.update(deltaTime);
 		
+		if ((board.currentBlock.direction != bestDirection || bestX != board.currentBlock.x) && !isFast){
+			try {
+				
+				Thread.sleep((int)(Board.TICK_INTIAL*1000));
+				
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			
+			
+		}
 		
 		if (currentScore != board.score){
 			// kiem tra level
@@ -431,11 +440,14 @@ public class TestAutoPlay extends Screen {
 			gameState = GameState.Running;
 	//			Music.startMusic();
 		}
+		
 		// kiem tra xac nhan bam
-		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
+		if ( Asset.btn_mainMenu.isTouchDown(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
-		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
-			game.setScreen(new TestAutoPlay(game, (ChromosomeInfo) bestChromosome));
+		if ( Asset.btn_playAgain.isTouchDown(TouchEvent)   ){
+			board = new Board(); gameState = GameState.Running;
+		}
+
 	}
 
 	// kiem tra trang thai on game over
@@ -446,8 +458,10 @@ public class TestAutoPlay extends Screen {
 			game.setScreen(new MainMenu(game));
 		if ( Asset.btn_mainMenu.isTouch(TouchEvent)   )
 			game.setScreen(new MainMenu(game));
-		if ( Asset.btn_playAgain.isTouch(TouchEvent)   )
-			game.setScreen(new TestAutoPlay(game, (ChromosomeInfo) bestChromosome));
+		if ( Asset.btn_playAgain.isTouch(TouchEvent)   ){
+			board = new Board(); gameState = GameState.Running;
+		}
+	
 	}
 	
 	// stage Clean mode
@@ -462,7 +476,7 @@ public class TestAutoPlay extends Screen {
 			
 			System.gc();
 			// try to kill this process
-			game.setScreen(new MainMenu(game));
+			game.setScreen(new AutoPlayScreen(game));
 			}
 			else if (Asset.btn_no.isTouch(TouchEvent))  {
 				gameState  = GameState.Paused;
@@ -613,4 +627,16 @@ public class TestAutoPlay extends Screen {
 		return k;
 		
 	}
+	
+	void drawBlockShadow (Block block, int startX, int startY) {
+		AndroidGraphics g = game.getGraphics();
+		int unit_cell = Block.UNIT_CELL;
+		for (int i=0;i<Block.BLOCK_HEIGHT;i++){
+			for (int j=0;j<Block.BLOCK_HEIGHT;j++) {
+				if (block.status[i][j])
+				g.drawImage(Asset.block_shadow.bitmap,(block.x+i)*unit_cell +startX ,(block.y+j)*unit_cell +startY);
+				}// for j
+			}//for i
+	}
+	
 }

@@ -5,8 +5,8 @@ import java.util.Random;
 import android.util.Log;
 
 public class Chromosome extends ChromosomeInfo {
-	public static int numOfGen = 10;
-	public static int RangeofGenValue = 1000;// gia tri tong khoang [-5,5];
+	public static int numOfGen = 14;
+	public static int RangeofGenValue = 10000000;// gia tri tong khoang [-5,5];
 	int gen[]; // gia tri trong khoang [-RangeofGenValue,RangeofGenValue];
 	int fitnessValue;
 	int pecentFit ; // * % ngan

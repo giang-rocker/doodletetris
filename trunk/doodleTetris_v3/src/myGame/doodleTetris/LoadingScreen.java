@@ -26,6 +26,8 @@ public class LoadingScreen extends Screen {
 		
 		//loading
 		Asset.bg_loading = new Image (g.newBitmap("Background/bg_loading.jpg"),0,0);
+		Asset.bg_about = new Image (g.newBitmap("Background/bg_about.jpg"),0,0);
+		
 		// set image source
 		Asset.btn_setting = new ImgButton (g.newBitmap("Button/btn_setting.png"),0,0);
 		Asset.btn_record = new ImgButton (g.newBitmap("Button/btn_record.png"),0,0);
@@ -37,7 +39,11 @@ public class LoadingScreen extends Screen {
 		Asset.btn_modeArc = new ImgButton (g.newBitmap("Button/btn_modeArc.png"),0,0);
 		Asset.btn_modeClassic = new ImgButton (g.newBitmap("Button/btn_modeClassic.png"),0,0);
 		
-		
+		Asset.btn_slow = new ImgButton (g.newBitmap("Button/btn_slow.png"),0,0);
+		Asset.btn_fast = new ImgButton (g.newBitmap("Button/btn_fast.png"),0,0);
+		Asset.btn_slow_dis = new ImgButton (g.newBitmap("Button/btn_slow_dis.png"),0,0);
+		Asset.btn_fast_dis = new ImgButton (g.newBitmap("Button/btn_fast_dis.png"),0,0);
+
 		// set bg main;
 		Asset.list_bg = new Image[1];
 		for (int i =0; i< Asset.list_bg.length;i++)
@@ -46,7 +52,12 @@ public class LoadingScreen extends Screen {
 		// bg_board
 		Asset.bg_board = new Image (g.newBitmap("Background/bg_board.png"),0,0);
 		Asset.bg_main = new Image (g.newBitmap("Background/bg_main.png"),0,0);
+
+		Asset.bg_hiscore = new Image (g.newBitmap("Background/bg_hiscore.png"),0,0);
+		Asset.slide_hiscore = new ImgButton (g.newBitmap("Background/slide_hiscore.png"),0,0);
+
 		Asset.bg_highScore = new Image (g.newBitmap("Background/hiscore_background.jpg"),0,0);
+
 		Asset.bg_scoreBoard = new Image (g.newBitmap("Button/board.png"),0,0);
 		Asset.bg_nextBlock = new Image (g.newBitmap("Button/bg_nextBlock.png"),0,0);
 		
@@ -72,7 +83,8 @@ public class LoadingScreen extends Screen {
 		Asset.btn_rotate = new ImgButton (g.newBitmap("Button/btn_rotate.png"),0,0);
 		Asset.btn_down = new ImgButton (g.newBitmap("Button/btn_down.png"),0,0);
 		Asset.btn_pause = new ImgButton (g.newBitmap("Button/btn_pause.png"),0,0);
-		Asset.btn_autoPlay = new ImgButton (g.newBitmap("Button/btn_autoplay_dis.png"),0,0);
+		Asset.btn_autoPlay = new ImgButton (g.newBitmap("Button/btn_autoplay.png"),0,0);
+		Asset.btn_disAutoPlay = new ImgButton (g.newBitmap("Button/btn_autoplay_dis.png"),0,0);
 		
 		// button game menu Button
 		Asset.btn_mainMenu = new ImgButton (g.newBitmap("Button/btn_mainMenu.png"),0,0);
@@ -93,6 +105,7 @@ public class LoadingScreen extends Screen {
 		Asset.block_orange = new Image (g.newBitmap("Block/block_orange.png"),0,0);
 		Asset.block_null = new Image (g.newBitmap("Block/block_null.png"),0,0);
 		Asset.block_map = new Image(g.newBitmap("Block/block_map.png"), 0, 0);
+		Asset.block_shadow = new Image(g.newBitmap("Block/block_shadowc.png"), 0, 0);
 		
 		//items
 		Asset.item_boomb = new Image (g.newBitmap("Items/item_boomb.png"),0,0);

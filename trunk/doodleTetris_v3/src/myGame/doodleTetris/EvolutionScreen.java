@@ -60,6 +60,9 @@ public class EvolutionScreen extends Screen {
 		Board.TICK_DECREMENT=0.0f;
 		Board.BOARD_HEIGHT = 24;
 		Board.BOARD_WIDTH=10;
+		
+		
+		
 		}
 	
 	enum GameState {
@@ -157,7 +160,7 @@ public class EvolutionScreen extends Screen {
 	// draw Time
 	drawStringNumber(""+population.generation,360,307);
 	drawStringNumber(""+currentChromosome,360+24+24,307);
-	drawStringNumber(""+numAlive,360,307+200);
+	drawStringNumber(""+bestFitness,360,307+200);
 	
 	
 	if (!timeExpired(startDrawBonus, bonusDuration)){
@@ -301,6 +304,7 @@ public class EvolutionScreen extends Screen {
 	
 	int start = (int) System.nanoTime();
 	int numAlive = 0;
+	int bestFitness =0;
 	void updateRunning (float deltaTime){
 		
 		if (board.gameOver  ) {
@@ -311,7 +315,7 @@ public class EvolutionScreen extends Screen {
 				
 				// gan gia tri thich nghi
 				population.chromosomes[currentChromosome].fitnessValue = board.lines;
-				if (board.lines >0) numAlive++;
+				if (board.lines>bestFitness) bestFitness = board.lines;
 				currentChromosome++;
 				Block.next =0;
 				board = new Board();
@@ -326,8 +330,6 @@ public class EvolutionScreen extends Screen {
 					population.findBestFitness();
 					// tien hoa
 					population.Evolution();
-					// khoi tao lai quan the
-				//	population.generatePopulation();
 					//ca the dau tien cua the he tiep theo
 					currentChromosome =0;
 					// resetnextBlock
@@ -559,12 +561,12 @@ public class EvolutionScreen extends Screen {
 	
 	int bestX = -3;
 	Block.blockDirection bestDirection =null;
-	int maxRank=0 ;
+	long maxRank=0 ;
 	
 	void bestMove (){
 		 Block blockTemp = new Block(board.currentBlock);
-		 maxRank = -2000000000 ;
-		 int tempRank =0;
+		 maxRank = -999999999999999L ;
+		 long tempRank =0;
 	
 		// xoay 4 vi tri
 		for (int i =0; i <=4; i++) {

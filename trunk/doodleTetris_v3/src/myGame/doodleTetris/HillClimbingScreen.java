@@ -8,7 +8,7 @@ import java.util.Random;
 
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.Block.blockDirection;
-import myGame.doodleTetris.framework.AndroidGame;
+import myGame.doodleTetris.HillClimbingScreen1.GameState;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.Music;
@@ -130,48 +130,43 @@ public class HillClimbingScreen extends Screen {
 	AndroidGraphics g = game.getGraphics();
 	g.drawImage(Asset.bg_gameScreen);
 	g.drawImage(Asset.bg_board.bitmap, (int )Asset.bg_board.x,(int ) Asset.bg_board.y);
-	g.drawImage(Asset.btn_left);
-	g.drawImage(Asset.btn_right);
-	g.drawImage(Asset.btn_rotate);
-	g.drawImage(Asset.btn_down);
+//	g.drawImage(Asset.btn_left);
+//	g.drawImage(Asset.btn_right);
+//	g.drawImage(Asset.btn_rotate);
+//	g.drawImage(Asset.btn_down);
 	g.drawImage(Asset.btn_pause);
 	//draw Level
 	drawLevel( level);
 
 	// icon
 	
-	// draw NextBlock bg
-	g.drawImage(Asset.bg_nextBlock);
 	// draw boar statistic
-	g.drawImage(Asset.bg_scoreBoard);
-	drawBoard(board);
-	// ve current Block
-	//drawBlock (board.currentBlock, 24, -4*24);
-	// ve next Block
-	drawBlock (board.nextBlock, 15*24, 5*24);
+	g.drawImage(Asset.bg_scoreBoard.bitmap,240+4*24,552-48);
+ 	drawBoard(board);
 	
 	
 	// draw GEn
 	for (int i=0;i<Chromosome.numOfGen;i++){
 		drawStringNumber(currentChromosome.gen[i], 10*24+3,i*48);
-	if (i==currentChromosome.genIndex)
-		drawStringNumber(currentValueofCurrentGen, 10*24+3+24*3,i*48);
+		
+	if (i==currentChromosome.genIndex){
+		drawStringNumber(i, 60,525+48+24);
+		drawStringNumber(currentValueofCurrentGen, 120,525+48+24);
+	}
 	}
 	
 	drawStringNumber(currentChromosome.fitnessValue,120,552);
 	
 	// drawLines
-	drawStringNumber(board.lines,360,240+5);
+	drawStringNumber(board.lines,360,525+5);
 	// draw Time
-	drawStringNumber(countChromosome,360,307);
+	drawStringNumber(countChromosome,360,585);
 	// draw Limit chromosome nhay vot
-	drawStringNumber(countlimit,360,307+24+24);
+	drawStringNumber(countlimit,360,585+24+24);
+	//dongbang
+	drawStringNumber(countDongBang,360,585+24+24+48);
 	
-	if (!timeExpired(startDrawBonus, bonusDuration)){
-		drawBonus(board.getBonus());
-	}
-	
-	
+
 	//drawBlock (board.shadowBlock, 24, -4*24);
 	
 	if (gameState == GameState.Paused )
@@ -304,14 +299,21 @@ public class HillClimbingScreen extends Screen {
 	int start = (int) System.nanoTime();
 	int numAlive = 0;
 	int currentValueofCurrentGen=0;
+	boolean isDongBang=true ;
+	int countDongBang = 0 ;
+	int bestFitnessValue = 0;
+	boolean isClimb= false;
 	void updateRunning (float deltaTime){
-	
+
 		if (board.gameOver  ) 
 			{
-			if ( board.lines>100  ) isAlive = true;
+			
+			if (board.lines>=100) isAlive = true;
 			
 				if (isAlive){
-					if (board.lines<=1000000 ){
+					if (board.lines<=100000 ){
+						
+						
 						//  co vi tri tot hon // neu gia tri tot hon thi tiep tuc voi gen tiep theo
 						if (board.lines> currentChromosome.fitnessValue) {
 							countlimit =0;
@@ -321,11 +323,13 @@ public class HillClimbingScreen extends Screen {
 							// luu gia tri gen hien tai
 							currentValueofCurrentGen = currentChromosome.gen[currentChromosome.genIndex];
 					//			logPopulation (currentChromosome);
+							isClimb= true;
 						}
 						
-						else
+						else{
 						countlimit++;
-						
+						isClimb = false;
+						}
 						// leo doi voi gen hien tai
 						hillClimbing (currentChromosome);
 						
@@ -339,22 +343,40 @@ public class HillClimbingScreen extends Screen {
 							countlimit=0;
 						}
 					
-					logPopulation (currentChromosome);
+					logPopulation (currentChromosome,isClimb);
+					
+					//dem dong bang
+					if (board.lines != currentChromosome.fitnessValue)
+					{
+						countDongBang =0;
+					}
+						else {
+						countDongBang++;
+					}
+					
+					
+					if (countDongBang== limitChromosome*(Chromosome.numOfGen+1))
+					{
+						currentChromosome = Chromosome.generateChromosome();
+						isAlive = false;
+					}
+					
 					}
 					else {
 					currentChromosome.fitnessValue = board.lines;
-					logPopulation (currentChromosome);
+					
+					logPopulation (currentChromosome,isClimb);
+					
 					gameState = GameState.GameOver; return;	
 					}
 				} // if is alive
 			// neu chua ton tai thi tao moi
 				else
 					currentChromosome = Chromosome.generateChromosome();
-			
-			
-					countChromosome++;
-					Block.next =0;
-					board = new Board();
+				
+				countChromosome++;
+				Block.next =0;
+				board = new Board();
 			}
 
 		
@@ -366,11 +388,10 @@ public class HillClimbingScreen extends Screen {
 			//Log.d ("CURRENT ", "Score : " + Float.toString(tempRank) +" = current X : "+  Integer.toString( board.currentBlock.x) + " CURRENT DIrection :  " + getDirection( board.currentBlock.direction)) ;
 	
 			// auto di chuyen
-		while (board.currentBlock.direction != bestDirection){
-		//	//Log.d("Rotating to the best directon","Current : " + getDirection(board.currentBlock.direction) + "to best " + getDirection(bestDirection) );
-				board.currentBlock.rotation(board);
+		while (board.currentBlock.direction != bestDirection)
+		board.currentBlock.rotation(board);
 			
-		}
+		
 		
 		while (bestX > board.currentBlock.x) { board.currentBlock.goRight(board); }
 		while (bestX < board.currentBlock.x) { board.currentBlock.goLeft(board); }
@@ -382,31 +403,7 @@ public class HillClimbingScreen extends Screen {
 		SingleTouch TouchEvent = game.getTouchEvent();
 		
 		
-		int duration = 100000000;
-		if (timeExpired(start,duration) )	{
-			start = (int)System.nanoTime();
-			
-			if ( Asset.btn_rotate.isTouchDown(TouchEvent)  )
-				{ board.currentBlock.rotation(board); 		 Asset.sound_move.play(); 
-		
-				}
-				
-			
-			if ( Asset.btn_left.isTouchDown(TouchEvent)   )
-			{	board.currentBlock.goLeft(board);	 Asset.sound_move.play();
-		
-			}
-			
-			if ( Asset.btn_right.isTouchDown(TouchEvent)   )
-				{board.currentBlock.goRight(board); 	 Asset.sound_move.play();
-			
-				}
-			
-		
-		}
 	
-		if ( Asset.btn_down.isTouchDown(TouchEvent)   )
-			board.currentBlock.goDown(board);
 		
 		board.shadowBlock = board.currentBlock.setShadow(board);	
 	
@@ -425,6 +422,7 @@ public class HillClimbingScreen extends Screen {
 		
 		if (tempScore<currentScore-5) { tempScore+=5; strScore = "" + tempScore;}
 		else { tempScore=currentScore; strScore = "" + tempScore;}
+		
 		
 		
 		// finis all
@@ -594,7 +592,7 @@ public class HillClimbingScreen extends Screen {
 	
 	void bestMove (){
 		 Block blockTemp = new Block(board.currentBlock);
-		 maxRank = -9000000000000000000L ;
+		 maxRank = -99999999999999999L ;
 		 long tempRank =0;
 	
 		// xoay 4 vi tri
@@ -648,23 +646,21 @@ public class HillClimbingScreen extends Screen {
 		int randomW, sign=1;
 		randomW = (((int)System.nanoTime() + ra.nextInt())%Chromosome.RangeofGenValue);
 		if (ra.nextBoolean())  sign = -1; else sign =1; 
-		sign = -1;
 		randomW= randomW *sign;
 
-		if (countlimit<limitChromosome/2) {
-			while (randomW<currentValueofCurrentGen){
+		
+		if (countlimit>limitChromosome/2) {
+			while (randomW<=currentValueofCurrentGen){
 				randomW = (((int)System.nanoTime() + ra.nextInt())%Chromosome.RangeofGenValue);
 				if (ra.nextBoolean())  sign = -1; else sign =1; 
-				sign = -1;
 				randomW= randomW *sign;
 			}
 			
 		}
 		else {
-			while (randomW>currentValueofCurrentGen){
+			while (randomW>=currentValueofCurrentGen){
 				randomW = (((int)System.nanoTime() + ra.nextInt())%Chromosome.RangeofGenValue);
 				if (ra.nextBoolean())  sign = -1; else sign =1; 
-				sign = -1;
 				randomW= randomW *sign;
 			}
 			
@@ -674,13 +670,17 @@ public class HillClimbingScreen extends Screen {
 	}
 	
 	// better Chromosome
-	 void logPopulation (Chromosome currentChromosome){
+	 void logPopulation (Chromosome currentChromosome, boolean isClimb){
 		File root = Environment.getExternalStorageDirectory();
 		String path = root+"/DoodleTetris/";
 		boolean exists = (new File(path).exists());
 		if (!exists) {new File(path).mkdirs();}
+		File mapInfo = null;
+		if (!isClimb)
+		mapInfo = new File(path+ "Chromosome"+ Integer.toString(countChromosome)+"_Log.txt" );
+		else 
+		mapInfo = new File(path+ "Chromosome"+ Integer.toString(countChromosome)+"_Log_CLIMB.txt" );
 		
-		File mapInfo = new File(path+ "Chromosome"+ Integer.toString(countChromosome)+"_Log.txt" );
 		if (!mapInfo.exists()){
 		try {
 			mapInfo.createNewFile();

@@ -1,9 +1,15 @@
 package myGame.doodleTetris;
 
 import myGame.doodleTetris.framework.AndroidGame;
+import myGame.doodleTetris.framework.Sound;
+import android.R.anim;
 import android.app.Activity;
+import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings.System;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -130,7 +136,6 @@ public class SettingActivity extends Activity {
 		});
 		
 		
-		
 		btnSave.setOnClickListener(new OnClickListener() {
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stu
@@ -152,14 +157,25 @@ public class SettingActivity extends Activity {
 		btnMenuGame.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent mainMenu = new Intent("android.intent.action.MAIN");
-				startActivity(mainMenu);
-				Game game = new Game();
-				//startActivityForResult(mainMenu, 0);
-				game.setScreen(new MainMenu(game));
-			}
+			
+				Intent i = getBaseContext().getPackageManager()
+			             .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+				startActivity(i);
+				 }
+
+			
 		});
+	}
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		
+		if (keyCode == KeyEvent.KEYCODE_BACK ){
+			Intent i = getBaseContext().getPackageManager()
+            .getLaunchIntentForPackage( getBaseContext().getPackageName() );
+			startActivity(i);
+		}
+			       
+	return true;
 	}
 	
 }

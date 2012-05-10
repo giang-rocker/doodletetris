@@ -377,21 +377,21 @@ public class Block {
 			 
 		 }
 	 
-	 public static int blockArray [] = new int[10000];
+	 public static int blockArray [] = new int[100000];
 	 
 	 public static void generateBlock () {
 		 next=0;
 		 Random r = new Random();
 			int ra ;
-		 for (int i =0;i<10000;i++) {
-			 ra = r.nextInt(10000);
+		 for (int i =0;i<100000;i++) {
+			 ra = r.nextInt();
 			 ra = ra%7;
-			 blockArray[i] = ra;
+			 blockArray[i] = Math.abs(ra);
 			 
 		 }
 		 
 	 }
-	 public static int next=1;
+	 public static int next=0;
 	 static boolean  isLearn = false;
 	 public static int Next_Block_id() {
 		Random r = new Random();
@@ -401,7 +401,7 @@ public class Block {
 		
 		//return ra;
 		if (isLearn)
-		return  Math.abs( blockArray[(++next)%10000]);
+		return   blockArray[(++next)%100000];
 		else 
 		return ra;
 	 }
