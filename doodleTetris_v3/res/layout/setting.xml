@@ -126,6 +126,7 @@
             />
           <Button 
             android:id="@+id/btnReset" 
+            android:layout_width="80dp"
             android:layout_height="wrap_content" 
             android:text="@string/reset" 
             android:visibility="invisible"

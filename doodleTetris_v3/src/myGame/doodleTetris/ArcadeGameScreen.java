@@ -111,14 +111,15 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		{
 			if (isMusic){
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
+				isMusic = !isMusic;
 				music.stop();
 			}
 			else{
 				Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
+				isMusic = !isMusic;
 	            setMusic();
 			}
 			
-			isMusic = !isMusic;
 		}
 	
 		if ( Asset.icon_sound.isTouchDown(TouchEvent)   ){

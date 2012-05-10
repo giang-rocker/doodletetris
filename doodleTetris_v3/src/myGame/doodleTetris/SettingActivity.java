@@ -153,9 +153,11 @@ public class SettingActivity extends Activity {
 			
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				//Intent mainMenu = new Intent(getBaseContext(),MainMenu.class);
+				Intent mainMenu = new Intent("android.intent.action.MAIN");
+				startActivity(mainMenu);
+				Game game = new Game();
 				//startActivityForResult(mainMenu, 0);
-				//game.setScreen(new MainMenu(game));
+				game.setScreen(new MainMenu(game));
 			}
 		});
 	}
