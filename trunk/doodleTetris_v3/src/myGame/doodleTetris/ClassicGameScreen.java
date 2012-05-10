@@ -110,9 +110,9 @@ public class ClassicGameScreen extends Screen {
 			isMusic=false;
 		}
 		AndroidGraphics g = game.getGraphics();
+		setMusic();
 		if (isMusic){
 			Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music.png"));
-			setMusic();
 		}
 		else{
 			Asset.icon_music.setBitmap(g.newBitmap("Button/icon_music_dis.png"));
@@ -155,7 +155,9 @@ public class ClassicGameScreen extends Screen {
 		Random r = new Random();
 		int resid = game.getContext().getResources().getIdentifier(nameMusic[r.nextInt(nameMusic.length)], "raw", game.getContext().getPackageName());
 		music = new Music(game.getContext(), resid);
-		music.play();
+		if(isMusic){
+			music.play();
+		}
 	}
 	
 	@Override
@@ -437,6 +439,7 @@ public class ClassicGameScreen extends Screen {
 			{
 				Asset.icon_sound.setBitmap(g.newBitmap("Button/icon_sound_dis.png"));
 		//		Sound.unloadSound();
+				Sound.appVolume =0;
 			}
 			else 
 			{
