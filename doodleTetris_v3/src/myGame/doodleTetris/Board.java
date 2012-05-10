@@ -4,6 +4,7 @@ import java.util.Random;
 
 import android.test.IsolatedContext;
 import android.util.Log;
+
 import myGame.doodleTetris.Block.BlockType;
 import myGame.doodleTetris.Block.blockName;
 
@@ -277,7 +278,7 @@ public class Board {
 	"7/ Horizontal Roughness // do nham be mat ngang "
 	"8/ sum of height // tong chieu cao "
 	*/
-	public int rankBoard( Block b, Chromosome currentChromosome ) {
+	public long rankBoard( Block b, Chromosome currentChromosome ) {
 		
 		Board temp = new Board(this); 
 		
@@ -285,7 +286,7 @@ public class Board {
 		temp.addBlock(shadow);
 		
 		
-		int result= 0;
+		long result= 0;
 	
 		int heightest =0;
 		int shortest = 300;
@@ -306,18 +307,33 @@ public class Board {
 		
 		boolean f = true;
 		// tim clear row
-		
+		int cellInrow=0;
+		int numline=0;
 		// clear row first
 		// check clearow
 				for (int i=0; i< Board.BOARD_HEIGHT;i++) {
 						f = true;
+						cellInrow=0;
 					for (int j=0; j< Board.BOARD_WIDTH;j++) {
 						if (temp.statusBoard[j][i]== BlockType.NULL)
 							{f = false; break;}
 					}
-					if (f) {temp.clearRow(i) ;clearLine++;}
+					if (f) {temp.clearRow(i) ;
+					numline++;
+					// kiem tra so cell
+					for (int k=0;k<Block.BLOCK_HEIGHT;k++) {
+						if (shadow.y+k==i) {
+							for (int z=0;z<Block.BLOCK_WIDTH;z++) 
+							if (shadow.status[z][k])
+								cellInrow++;
+							
+						}
+						
+					}
+					
+					}
 				}
-				
+				clearLine = numline*cellInrow;
 
 		
 		// kiem tra touchBlock
@@ -348,7 +364,6 @@ public class Board {
 		// tao mang luu chieu cao
 		int heightOfCol[] = new int [BOARD_WIDTH+2];
 		// hai bien
-		heightOfCol[0] = 500;	heightOfCol[BOARD_WIDTH+1] = 500;
 		
 		for (int i=0; i< Board.BOARD_WIDTH;i++){
 			maxY = -1;
@@ -362,17 +377,7 @@ public class Board {
 			curHeight = (Board.BOARD_HEIGHT- maxY ) ;
 			// luu chieu cao
 			heightOfCol[i+1] = curHeight;
-			// co ho
-			if (heightOfCol[(i+1)] > heightOfCol[(i+1)-1] && heightOfCol[(i+1)-2]>heightOfCol[(i+1)-1]) {
-				if (heightOfCol[((i+1)+1)]>heightOfCol[((i+1)+1)-2]  )
-				{ curWellDepth = heightOfCol[(i+1)-2]  - heightOfCol[(i+1)-1] ;numOfWell ++;}
-				else  { curWellDepth = heightOfCol[(i+1)]  - heightOfCol[(i+1)-1]  ;numOfWell ++;}
-			
-				sumOfAllWell += curWellDepth;
-				
-				if (curWellDepth > maxWellDedth) maxWellDedth = curWellDepth;
-				
-			}
+		
 			
 			// tinh chieu cao cao nhat va thap nhat
 			if (curHeight > heightest) heightest =curHeight; // chieu cao cao nhat
@@ -406,9 +411,42 @@ public class Board {
 			}	// if (maxY!=-1)
 		}//for i
 		
+		heightOfCol[0] = 500;	heightOfCol[BOARD_WIDTH+1] = 500;
 		
-	
-		
+		for (int i=0; i< Board.BOARD_WIDTH;i++){
+			
+					if (heightOfCol[(i+1)-1] > heightOfCol[(i+1)] && heightOfCol[(i+1)+1]>heightOfCol[(i+1)]) {
+				Log.d("current","VO DAY ROI NE");
+						if (heightOfCol[((i+1)-1)]>heightOfCol[((i+1))+1]  )
+						{ curWellDepth = heightOfCol[(i+1)+1]  - heightOfCol[(i+1)] ;numOfWell ++;}
+						else  
+						{ curWellDepth = heightOfCol[(i+1)-1]  - heightOfCol[(i+1)]  ;numOfWell ++;}
+					
+						sumOfAllWell += curWellDepth;
+						
+						if (curWellDepth > maxWellDedth) maxWellDedth = curWellDepth;
+						
+					}
+			
+		}
+		/*
+			Log.d ("current H", ""+ heightOfCol[0]+
+					 " "+ heightOfCol[1]+
+					 " "+ heightOfCol[2]+
+					 " "+ heightOfCol[3]+
+					 " "+ heightOfCol[4]+
+					 " "+ heightOfCol[5]+
+					 " "+ heightOfCol[6]+
+					 " "+ heightOfCol[7]+
+					 " "+ heightOfCol[8]+
+					 " "+ heightOfCol[9]+
+					 " "+ heightOfCol[10]+
+					 " "+ heightOfCol[11]+
+					 " "+ heightOfCol[12]+
+					 " "+ heightOfCol[13]+
+					 " "+ heightOfCol[14]
+					);
+		*/
 		maxDiffHeight = heightest- shortest;
 		
 		// tinh Row Transision
@@ -456,22 +494,7 @@ public class Board {
 		
 		// log stat
 		
-		Log.d ("current stat", "heightest:"+heightest
-					+"-holes:"+holes
-					+"-clearLine:"+clearLine
-					+"-maxDiffHeight:"+maxDiffHeight
-					+"-deepestOfHole:"+deepestOfHole
-					+"-totalDeptOfhHole:"	+totalDeptOfhHole
-					+"-sumHeight:"	+sumHeight 
-					+"-touchBlock:"	+touchBlock 
-					+"-maxWellDedth:"	+maxWellDedth 
-					+"-sumOfAllWell:"	+sumOfAllWell 
-					+"-numOfWell:"	+numOfWell
-					+"-rowTransition:"	+rowTransition 
-					+"-colTransition:"	+colTransition
-					+"-weightedBlock:"	+weightedBlock
-				
-				);
+	
 		
 		int i =0;
 		if (Chromosome.numOfGen==14){
@@ -493,27 +516,77 @@ public class Board {
 					 0
 					 ;
 		}
-		else {
-			result = 
-					     heightest *currentChromosome.gen[i++]+
-						 holes*currentChromosome.gen[i++]+
-						 clearLine*currentChromosome.gen[i++]+
-						 maxDiffHeight*currentChromosome.gen[i++]+
-						// deepestOfHole*currentChromosome.gen[i++]+
-						 //totalDeptOfhHole*currentChromosome.gen[i++]+
-					 	 //HorizontalRoughness*currentChromosome.gen[i++]+
-						 (sumHeight) *currentChromosome.gen[i++]+
-						 //touchBlock *currentChromosome.gen[i++]+
-						 maxWellDedth *currentChromosome.gen[i++]+
-						 sumOfAllWell *currentChromosome.gen[i++] +
-						 rowTransition *currentChromosome.gen[i++]+
-						 colTransition *currentChromosome.gen[i++]+
-						 weightedBlock *currentChromosome.gen[i++]+
-						 0
-						 ;
-			
+		else if (Chromosome.numOfGen==8) {
+			result =  
+					heightest *currentChromosome.gen[i++]+
+					 holes*currentChromosome.gen[i++]+
+					 clearLine*currentChromosome.gen[i++]+
+				//	 maxDiffHeight*currentChromosome.gen[i++]+
+					// (sumHeight) *currentChromosome.gen[i++]+
+					 maxWellDedth *currentChromosome.gen[i++]+
+					 sumOfAllWell *currentChromosome.gen[i++] +
+					 rowTransition *currentChromosome.gen[i++]+
+					 colTransition *currentChromosome.gen[i++]+
+					 weightedBlock *currentChromosome.gen[i++]+
+					 0
+					 ;
 		}
-		removeBlock(shadow);
+		else if (Chromosome.numOfGen==10) {
+			result =  
+					heightest *currentChromosome.gen[i++]+
+					 holes*currentChromosome.gen[i++]+
+					 clearLine*currentChromosome.gen[i++]+
+					 maxDiffHeight*currentChromosome.gen[i++]+
+					 (sumHeight) *currentChromosome.gen[i++]+
+					 maxWellDedth *currentChromosome.gen[i++]+
+					 sumOfAllWell *currentChromosome.gen[i++] +
+					 rowTransition *currentChromosome.gen[i++]+
+					 colTransition *currentChromosome.gen[i++]+
+					 weightedBlock *currentChromosome.gen[i++]+
+					 0
+					 ;
+		}
+		else if (Chromosome.numOfGen==6){
+			result =  
+					 heightest *currentChromosome.gen[i++]+
+					 holes*currentChromosome.gen[i++]+
+					 clearLine*currentChromosome.gen[i++]+
+					 sumOfAllWell *currentChromosome.gen[i++] +
+					 rowTransition *currentChromosome.gen[i++]+
+					 colTransition *currentChromosome.gen[i++]+
+					 0
+					 ;
+		}
+		
+		Log.d ("current stat", "heightest:"+(Board.BOARD_HEIGHT- shadow.y)
+				+"-holes:"+holes
+				+"-clearLine:"+clearLine
+				//+"-maxDiffHeight:"+maxDiffHeight
+				//+"-deepestOfHole:"+deepestOfHole
+				//+"-totalDeptOfhHole:"	+totalDeptOfhHole
+				+"-sumHeight:"	+sumHeight 
+				//+"-touchBlock:"	+touchBlock 
+				//+"-maxWellDedth:"	+maxWellDedth 
+				+"-sumOfAllWell:"	+sumOfAllWell 
+				+"-numOfWell:"	+numOfWell
+				+"-rowTransition:"	+rowTransition 
+				+"-colTransition:"	+colTransition
+				+"-weightedBlock:"	+weightedBlock
+				+"-TOTAL:"	+result
+				
+			);
+		/*
+		Log.d ("current stat", "gen 0:"+currentChromosome.gen[0]
+				+"-gen 1:"+currentChromosome.gen[1]
+				+"-gen 2:"+currentChromosome.gen[2]
+				+"-gen 3:"+currentChromosome.gen[3]
+				+"-gen 4:"+currentChromosome.gen[4]
+				+"-gen 5:"+currentChromosome.gen[5]
+				+"-gen 6:"+currentChromosome.gen[6]
+				+"-gen 7:"+currentChromosome.gen[7]
+				
+			);
+		*/
 		return result;
 		
 	}

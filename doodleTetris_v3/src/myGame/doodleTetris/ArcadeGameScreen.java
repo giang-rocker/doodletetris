@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Random;
 
 import myGame.doodleTetris.Block.BlockType;
+import myGame.doodleTetris.ClassicGameScreen.GameState;
 import myGame.doodleTetris.framework.AndroidGraphics;
 import myGame.doodleTetris.framework.Game;
 import myGame.doodleTetris.framework.Music;
@@ -261,8 +262,61 @@ public class ArcadeGameScreen extends ClassicGameScreen {
 		drawTime (time, 192, 192);
 		
 	}
-	@Override
 	
+	@Override
+	public void pause() {
+		// TODO Auto-generated method stub
+		if (gameState == GameState.Running)
+			gameState = GameState.Exit;
+		try {
+			music.stop();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		    
+	}
+	
+	public void updateExit () {
+		gameState  = GameState.Exit;
+		SingleTouch TouchEvent = game.getTouchEvent();
+		{
+		if (Asset.btn_yes.isTouch(TouchEvent)){
+			
+			System.gc();
+			// try to kill this process
+			game.setScreen(new SelectLevelScreen(game));
+			}
+			else if (Asset.btn_no.isTouch(TouchEvent))  {
+				gameState  = GameState.Paused;
+			}
+		}
+	}
+	
+	//check highscore
+	void updateHighScore(){
+		highscore = new HighScore(game.getContext());
+		highscore.setFirstData();
+		if(highscore.checkHighScore(currentScore)){
+			highscore.resetData(currentScore+"", level+"", time+"");
+			highscore.saveHighScore();
+		}
+	}
+	
+	//StaeClean mode;
+	
+
+	void drawExitUI (){
+		Asset.btn_yes.setPosition(144, 288);
+		Asset.btn_no.setPosition(240, 288);
+		AndroidGraphics g = game.getGraphics();
+		g.drawImage(Asset.UI_Exit);
+		g.drawImage(Asset.btn_yes);
+		g.drawImage(Asset.btn_no);
+	}
+
+	
+	
+	@Override
 	void updateGameOver (){
 		try {
 			music.stop();	

@@ -25,7 +25,7 @@ public class Game  extends AndroidGame{
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		
 		if (keyCode == KeyEvent.KEYCODE_BACK )
-			if (getCurrentScreen().screenName == "selectLevel"){
+			if (getCurrentScreen().screenName == "selectLevel" || getCurrentScreen().screenName == "hiscore" || getCurrentScreen().screenName == "autoPlay" || getCurrentScreen().screenName == "About"  ){
 				this.setScreen( new MainMenu(this));
 				return true;
 			}
@@ -49,7 +49,7 @@ public class Game  extends AndroidGame{
 			      
 			       if ( Sound.appVolume>1)  Sound.appVolume=1;
 			       if ( Sound.appVolume<0)  Sound.appVolume=0;
-					Log.d("volume ",Float.toString(Sound.appVolume));		    
+				
 			       
 	return true;
 	}

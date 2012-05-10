@@ -120,7 +120,7 @@ public class Population {
 		boolean[] isChose = new boolean[numOfChromosome];
 		
 		for (int i=0;i<numOfChromosome;i++) isChose[i] =false;
-		
+		String content ="";
 		int[] circle = new int[1000];
 		// tạo bánh xe
 		position =0;
@@ -128,12 +128,16 @@ public class Population {
 		for (int i =0;i<numOfChromosome;i++){
 			len =  (chromosomes[i].pecentFit);
 			// dat len banh xe
-			for (int t=0; t<len;t++)
+			for (int t=0; t<len;t++){
 				circle[position++] = i;
-				
+				content+= "" + i;		
+			}
 		}
 		// dien vao cho trong tren banh xe
-		while (position<1000) circle[position++] = bestChromosome; // dien them = con tot nhat
+		while (position<1000){ circle[position++] = bestChromosome;content+= "" + bestChromosome;		} // dien them = con tot nhat }
+		
+		
+		logString(content,"circle");
 		
 		// lua chon
 		for (int i =0;i<numOfChromosome;i++){
@@ -144,6 +148,8 @@ public class Population {
 			
 			isChose[circle[ballPosition]] = true;
 		}
+		
+		
 		
 		for (int i=0;i<numOfChromosome;i++) if (isChose[i]) numOfDiffChromosome++;
 		
@@ -247,6 +253,7 @@ public class Population {
 		int chose=0;
 		// lai ghep  100% cac ca the cua quan the tao ra quan the moi
 		
+		// khi ko trao doi dc con nao thi tao moi
 		for (int id_a = 0;id_a< numOfChromosome-1;id_a++)
 			for (int id_b = id_a+1 ;id_b< numOfChromosome;id_b++)
 			{
@@ -258,6 +265,14 @@ public class Population {
 				chose+=2;
 					}
 				}
+		}
+		// neu toan la anh em, bo sung 1/2 ca the moi
+		if (chose==0){
+			for (int id_b = 0 ;id_b< numOfChromosome/2;id_b++)
+			{
+				chromosomes[id_b] = Chromosome.generateChromosome();
+			}
+			
 		}
 		int id_a,id_b=0; // hai ca the lai ghep
 		String str1="", str2="";
@@ -272,6 +287,7 @@ public class Population {
 			// kiem tra lan nua cho chac an	
 			if (!check[id_a] && !check[id_b] ) 
 				{
+				check[id_a] = true; check[id_b] = true;
 				// thay the con co gia tri thich nghi thap hon
 				for (int i=0;i<Chromosome.numOfGen;i++) {
 					str1 += "" + chromosomes[id_a].gen[i]+ " | ";

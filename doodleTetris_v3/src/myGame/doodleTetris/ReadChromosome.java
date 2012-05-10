@@ -14,10 +14,12 @@ public class ReadChromosome {
 	public  InputStreamReader inputreader;
 	public  BufferedReader buffreader;
 	public  int dataRow[] = new int[13];
+	int len =0;
 public Game game;
 	
 	public ReadChromosome (Game game) {
 		this.game = game;
+		
 		
 	}
 	public  void accessFile(String path){
@@ -40,6 +42,7 @@ public Game game;
 	}
 	
 	public  void readFile() throws IOException{
+		len =0;
 		String strRow="";
 		//resetMap();
 		try {
@@ -48,10 +51,9 @@ public Game game;
 			while(strRow!=null){
 				String[] row=strRow.split(",");		
 				strRow = buffreader.readLine();
-				Log.d("lengt", "" + row.length);
 				for(int i = 0;i<row.length;i++){
 					dataRow[i] = Integer.parseInt(row[i].trim());
-					
+					len++;
 				}
 				//System.out.println("strRow: "+strRow);
 			}
@@ -67,6 +69,9 @@ public Game game;
 	
 	
 	public ChromosomeInfo setChromosome(){
+		
+		Log.d("GEN", ""+len);
+		Chromosome.numOfGen = len-2;
 		ChromosomeInfo s = new ChromosomeInfo();
 		s.typeChromosome = dataRow[0];
 		for (int i=0;i<Chromosome.numOfGen;i++){

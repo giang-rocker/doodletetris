@@ -64,12 +64,15 @@ void drawStringNumber (String s, int startX, int startY) {
 		}
 	public HighScoreScreen(Game game) {
 		super(game);
+		this.screenName="hiscore";
 		highscore = new HighScore(game.getContext());
-		highscore.loadHighScore();
+		 highscore.setFirstData();
 		highscore.sort();
 		// TODO Auto-generated constructor stub
 	}
 
+	
+	
 	@Override
 	public void update(float deltaTime) {
 		// TODO Auto-generated method stub

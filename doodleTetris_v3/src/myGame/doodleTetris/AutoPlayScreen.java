@@ -38,7 +38,7 @@ public class AutoPlayScreen extends Screen {
 		// Giang - bo static
 		assetManager = game.getContext().getAssets();
 		//Duong cap nhat set select level
-		screenName ="selectLevel";
+		screenName ="autoPlay";
 		try {
 			list= assetManager.list("Chromosome");
 		} catch (IOException e) {
