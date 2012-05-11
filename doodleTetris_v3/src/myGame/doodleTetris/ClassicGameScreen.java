@@ -49,7 +49,7 @@ public class ClassicGameScreen extends Screen {
 		// set icon
 		Asset.icon_boomb.setPosition(384,360);
 		Asset.icon_dynamite.setPosition(384,360+72);
-		Asset.icon_rocket.setPosition(384,360+72+72);
+		Asset.icon_rocket.setPosition(-5000,-5000);
 		Asset.btn_autoPlay.setPosition(384,360+72+72+24);
 		Asset.btn_disAutoPlay.setPosition(384,360+72+72+24);
 		

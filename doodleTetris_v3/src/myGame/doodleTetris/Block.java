@@ -403,6 +403,10 @@ public class Block {
 		int ra = r.nextInt(100);
 		ra = ra%7;
 		//ra = (next++)%7;
+		if (item!=-1){ra = item; item=-1; return ra%10;}
+		
+		if (ra == 47 || ra ==48 || ra ==49) return ra%10;
+		
 		
 		//return ra;
 		if (isLearn)
