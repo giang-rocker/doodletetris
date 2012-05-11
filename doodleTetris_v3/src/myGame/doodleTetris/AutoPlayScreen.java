@@ -89,7 +89,7 @@ public class AutoPlayScreen extends Screen {
 		}
 		else moveY =0;
 		int id = checkListLevelTouch();
-		if(id!=-1) game.setScreen(new TestAutoPlay(game, listChromosome[id]));
+		if(id!=-1) { if(id==4) Block.isDemo = true; game.setScreen(new TestAutoPlay(game, listChromosome[id]));}
 	}
 		
 

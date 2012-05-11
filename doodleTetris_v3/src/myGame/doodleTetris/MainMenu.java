@@ -69,6 +69,8 @@ public class MainMenu extends Screen  {
 		if(Asset.btn_about.isTouch(TouchEvent))
 			game.setScreen(new AboutScreen(game));
 		
+		if(Asset.btn_help.isTouch(TouchEvent))
+			game.setScreen(new HelpScreen(game));
 		
 		}
 	}
@@ -81,7 +83,7 @@ public class MainMenu extends Screen  {
 		g.drawImage(Asset.btn_modeClassic);
 		g.drawImage(Asset.btn_modeArc);
 		g.drawImage(Asset.btn_modeAdv);
-		g.drawImage(Asset.btn_sound);
+	//	g.drawImage(Asset.btn_sound);
 		g.drawImage(Asset.btn_setting);
 		g.drawImage(Asset.btn_help);
 		g.drawImage(Asset.btn_record);

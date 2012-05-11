@@ -61,7 +61,8 @@ public class ClassicGameScreen extends Screen {
 		Asset.bg_gameScreen = Asset.list_bg[r.nextInt(Asset.list_bg.length)];
 		 
 		bestChromosome = new Chromosome();
-		bestChromosome.gen = new int[] {-1351909,
+		bestChromosome.gen = new int[] {
+				-1351909,
 				-5469854,
 				-5348580,
 				-2087609,

@@ -52,8 +52,11 @@ public class LoadingScreen extends Screen {
 		// bg_board
 		Asset.bg_board = new Image (g.newBitmap("Background/bg_board.png"),0,0);
 		Asset.bg_main = new Image (g.newBitmap("Background/bg_main.png"),0,0);
-
+		
+		
 		Asset.bg_hiscore = new Image (g.newBitmap("Background/bg_hiscore.png"),0,0);
+		Asset.bg_help = new Image (g.newBitmap("Background/bg_help.jpg"),0,0);
+		
 		Asset.slide_hiscore = new ImgButton (g.newBitmap("Background/slide_hiscore.png"),0,0);
 
 		Asset.bg_highScore = new Image (g.newBitmap("Background/hiscore_background.jpg"),0,0);

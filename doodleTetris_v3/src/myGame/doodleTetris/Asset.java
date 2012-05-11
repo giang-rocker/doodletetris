@@ -22,7 +22,7 @@ import myGame.doodleTetris.framework.Sound;
 	public static Image bg_hiscore;
 	public static ImgButton slide_hiscore;
 	public static Image bg_highScore;
-
+	public static Image bg_help;
 	
 	//select level
 	public static Image bg_selectLevel_main;

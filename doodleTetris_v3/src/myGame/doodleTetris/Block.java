@@ -2,7 +2,7 @@ package myGame.doodleTetris;
 
 import java.util.Random;
 
-import android.util.Log;
+
 
 public class Block {
 	public static int BLOCK_WIDTH = 4;
@@ -380,6 +380,7 @@ public class Block {
 	 public static int blockArray [] = new int[100000];
 	 
 	 public static void generateBlock () {
+		
 		 next=0;
 		 Random r = new Random();
 			int ra ;
@@ -389,10 +390,14 @@ public class Block {
 			 blockArray[i] = Math.abs(ra);
 			 
 		 }
-		 
+		 blckArr = new BlockArray();
+		 blckArr.setup1();
 	 }
 	 public static int next=0;
 	 static boolean  isLearn = false;
+	 static BlockArray blckArr;
+	 public static int ar = 1;
+	 public static boolean isDemo=false;
 	 public static int Next_Block_id() {
 		Random r = new Random();
 		int ra = r.nextInt(100);
@@ -402,11 +407,17 @@ public class Block {
 		//return ra;
 		if (isLearn)
 		return   blockArray[(++next)%100000];
-		else 
+		else if (isDemo) {
+			
+			if (next ==  blckArr.blockArray1.length-1 && ar==1) { blckArr.setup2(); ar = 2; next = -1;}
+			if (next ==  blckArr.blockArray1.length-1 && ar==2) { blckArr.setup1(); ar = 1; next = -1;}
+			
+			return   blckArr.blockArray1[(++next)];
+		
+		}
 		return ra;
 	 }
 	 
-	
 	 
 		public Block setShadow (Board currentBoardStatus){
 			Block shadow = new Block (this);
