@@ -308,7 +308,7 @@ public class HillClimbingScreen extends Screen {
 		if (board.gameOver  ) 
 			{
 			
-			if (board.lines>=100) isAlive = true;
+			if (board.lines>=10) isAlive = true;
 			
 				if (isAlive){
 					if (board.lines<=100000 ){

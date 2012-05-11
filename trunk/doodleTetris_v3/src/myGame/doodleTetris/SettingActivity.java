@@ -157,7 +157,7 @@ public class SettingActivity extends Activity {
 		btnMenuGame.setOnClickListener(new OnClickListener() {
 			
 			public void onClick(View v) {
-			
+				java.lang.System.gc();
 				Intent i = getBaseContext().getPackageManager()
 			             .getLaunchIntentForPackage( getBaseContext().getPackageName() );
 				startActivity(i);

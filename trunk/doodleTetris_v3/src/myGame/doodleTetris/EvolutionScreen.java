@@ -26,28 +26,29 @@ public class EvolutionScreen extends Screen {
 	
 		public void setup () {
 		// bg
-		Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
-		Asset.bg_nextBlock.setPosition(15*24, 5*24);
-		
-		// set game button arrow
-		Asset.btn_right.setPosition(216, 696);
-		Asset.btn_left.setPosition(48, 696);
-		Asset.btn_rotate.setPosition(360, 696);
-		Asset.btn_down.setPosition(360, 600);
-		Asset.btn_pause.setPosition(384, 60);
-		
-		// set menu button
-		Asset.btn_mainMenu.setPosition(48, 312);
-		Asset.btn_playAgain.setPosition(48, 432);
-		
-		// set icon
-		Asset.icon_music.setPosition(360,360);
-		Asset.icon_sound.setPosition(360,360+48);
-		Asset.icon_star.setPosition(360,360+48+48);
-		
-		Asset.icon_music_dis.setPosition(360 + 48 ,360);
-		Asset.icon_sound_dis.setPosition(360 + 48 ,360+48);
-		Asset.icon_star_dis.setPosition(360 + 48 ,360+48+48);
+			// bg
+			Asset.bg_scoreBoard.setPosition(14*24+3, 9*24);
+			Asset.bg_nextBlock.setPosition(15*24, 5*24);
+			
+			// set game button arrow
+			Asset.btn_right.setPosition(216, 696);
+			Asset.btn_left.setPosition(48, 696);
+			Asset.btn_rotate.setPosition(360, 696);
+			Asset.btn_down.setPosition(360, 600);
+			Asset.btn_pause.setPosition(384, 60);
+			
+			// set menu button
+			Asset.btn_mainMenu.setPosition(48, 312);
+			Asset.btn_playAgain.setPosition(48, 432);
+			
+			// set icon
+			Asset.icon_music.setPosition(360,360);
+			Asset.icon_sound.setPosition(360,360+48);
+			Asset.icon_star.setPosition(360,360+48+48);
+			
+			Asset.icon_music_dis.setPosition(360 + 48 ,360);
+			Asset.icon_sound_dis.setPosition(360 + 48 ,360+48);
+			Asset.icon_star_dis.setPosition(360 + 48 ,360+48+48);
 		
 		// random bg
 		Random r = new Random ();
@@ -123,7 +124,7 @@ public class EvolutionScreen extends Screen {
 		// TODO Auto-generated method stub
 	AndroidGraphics g = game.getGraphics();
 	g.drawImage(Asset.bg_gameScreen);
-	g.drawImage(Asset.bg_board.bitmap, (int )Asset.bg_board.x,(int ) Asset.bg_board.y);
+	
 	g.drawImage(Asset.btn_left);
 	g.drawImage(Asset.btn_right);
 	g.drawImage(Asset.btn_rotate);
@@ -132,21 +133,13 @@ public class EvolutionScreen extends Screen {
 	// icon
 	
 	
-	
+	g.drawImage(Asset.bg_scoreBoard.bitmap,240+4*24,552-48);
 	// draw NextBlock bg
 	g.drawImage(Asset.bg_nextBlock);
 	// draw boar statistic
-	g.drawImage(Asset.bg_scoreBoard);
+//	g.drawImage(Asset.bg_scoreBoard);
 	
 
-	g.drawImage(Asset.icon_music);
-	g.drawImage(Asset.icon_sound);
-	g.drawImage(Asset.icon_star);
-	
-	g.drawImage(Asset.icon_music_dis);
-	g.drawImage(Asset.icon_sound_dis);
-	g.drawImage(Asset.icon_star_dis);
-	
 	// draw GEn
 		for (int i=0;i<Chromosome.numOfGen;i++){
 			drawStringNumber(population.chromosomes[currentChromosome].gen[i], 10*24+3,i*48);
@@ -154,13 +147,13 @@ public class EvolutionScreen extends Screen {
 	
 	// draw Score
 	// drawLines
-	drawStringNumber(""+board.lines,360,240+5);
+		drawStringNumber(board.lines,360,525+5);
 	//draw Level
 	drawLevel( level);
 	// draw Time
-	drawStringNumber(""+population.generation,360,307);
-	drawStringNumber(""+currentChromosome,360+24+24,307);
-	drawStringNumber(""+bestFitness,360,307+200);
+	drawStringNumber(""+population.generation,360,585);
+	drawStringNumber(""+currentChromosome,360+24+24,585);
+	drawStringNumber(""+bestFitness,360,585+200);
 	
 	
 	if (!timeExpired(startDrawBonus, bonusDuration)){
